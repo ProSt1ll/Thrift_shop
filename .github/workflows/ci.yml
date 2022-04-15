@@ -7,7 +7,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - run: ls
-    - run: cmake ../ThriftShop/interface_bd
+    - run: cmake interface_bd/
     - run: make 
     - run: ./tests
     

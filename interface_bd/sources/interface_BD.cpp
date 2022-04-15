@@ -10,34 +10,37 @@ BI::~BI(){
         sqlite3_close(DB);
 }
 
-void BI::set_product(Categories category, Product prod){
+// добавляем всё, кроме ссылки и цены(они в отдельной таблице), в таблицу с именем category. Если товар уже есть то обновляется запись
+        void set_product(Categories category, Product prod, Parametrs param){
 
-}
+        }
 
-void BI::set_price(Categories category, std::string name, float price){
+        // добавляем ссылку на товар и цену в таблицу catagory_url_price связанную с таблицой category:один(товар) ко многим(ссылкам+ценам). 
+        void set_url_product_price(Categories category, std::size_t price = -1, std::string url_product = "NULL"){
+            
+        }
 
-}
+        // Возвращает все записи из данной категории 
+        Product* get_products(Categories category){
+            
+        }
 
-void BI::set_url_image(Categories category, std::string name, std::string url_image){
+        // Возвращает все записи из данной категории с ценой меньше или равной указанной
+        Product* search_down_price(Categories category, float price){
+            
+        }
 
-}
+        // Возвращает все записи из данной категории с определёнными параметрами
+        Product* search_parametrs(Categories category, Parametrs param){
+            
+        }
 
-void BI::set_url_product(Categories category, std::string name, std::string url_product){
+        // В таблице пользователей создаёт запись об избранном товаре(отношение многие ко многим)
+        void set_user_chosen(std::string user_id, Categories category, std::size_t product_id){
+            
+        }
 
-}
-
-void BI::set_parametrs(Categories category, std::string name, Parametrs param){
-
-}
-
-Product* BI::get_products(Categories category){
-
-}
-
-Product* BI::search_price(Categories category, float price){
-
-}
-
-Product* BI::search_parametrs(Categories category, Parametrs param){
-
-}
+        // Возвращает избранное пользователем
+        std::string* get_user_chosen(std::string user_id){
+            
+        }

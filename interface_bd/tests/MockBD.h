@@ -8,14 +8,14 @@ class MockBI : public BI {
 public:
     MockBI() : BI() {}
 
-    MOCK_METHOD(void,set_product,(Categories, Product));
-    MOCK_METHOD(void,set_price,(Categories, std::string, float));
-    MOCK_METHOD(void,set_url_image,(Categories, std::string, std::string));
-    MOCK_METHOD(void,set_url_product,(Categories, std::string, std::string));
-    MOCK_METHOD(void,set_parametrs,(Categories, std::string, Parametrs));
+    MOCK_METHOD(void,set_product,(Categories, Product, Parametrs));
+    MOCK_METHOD(void,set_url_product_price,(Categories,void(std::size_t price),void(std::string url_product)));
 
     MOCK_METHOD(Product*,get_products,(Categories));
     MOCK_METHOD(Product*,search_price,(Categories, float));
     MOCK_METHOD(Product*,search_parametrs,(Categories, Parametrs));
+
+    MOCK_METHOD(void,set_user_chosen,(std::string, Categories, std::size_t));
+    MOCK_METHOD(std::string*,get_user_chosen,(std::string));
 
 };

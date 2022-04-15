@@ -2,6 +2,7 @@
 #define INTERFACE_BD_H
 #include <sqlite3.h>
 #include <string>
+#include <vector>
 
 #define PATH_DB " "
 
@@ -18,7 +19,7 @@ namespace bd {
         // 0 == NULL
         Colors color;
         // None == NULL
-        std::string brand;
+        std::vector<std::string> brand;
         // "NULL"== NULL
     } Parametrs;
 
@@ -63,7 +64,7 @@ namespace bd {
         void set_user_chosen(std::string user_id, Categories category, std::size_t product_id);
 
         // Возвращает избранное пользователем
-        std::string* get_user_chosen(std::string user_id);
+        Product* get_user_chosen(std::string user_id);
     };
 
 }

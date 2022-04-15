@@ -16,6 +16,6 @@ public:
     MOCK_METHOD(Product*,search_parametrs,(Categories, Parametrs));
 
     MOCK_METHOD(void,set_user_chosen,(std::string, Categories, std::size_t));
-    MOCK_METHOD(std::string*,get_user_chosen,(std::string));
+    MOCK_METHOD(Product*,get_user_chosen,(std::string));
 
 };

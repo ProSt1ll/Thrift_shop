@@ -41,6 +41,6 @@ BI::~BI(){
         }
 
         // Возвращает избранное пользователем
-        std::string* get_user_chosen(std::string user_id){
+        Product* get_user_chosen(std::string user_id){
             
         }

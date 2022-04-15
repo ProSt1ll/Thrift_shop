@@ -3,7 +3,6 @@ on: push
 jobs:
   check:
     runs-on: ubuntu-latest
-    container: mike5535/cmake_clang-format:third
     steps:
       - uses: actions/checkout@v2 
       - run: make check
@@ -11,7 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     container: mike5535/cmake_clang-format:third
     steps:
-    - uses: actions/checkout@v2 
+    - uses: actions/checkout@v2
+    - run: ls
     - run: cmake ../ThriftShop/interface_bd
     - run: make 
     - run: ./tests

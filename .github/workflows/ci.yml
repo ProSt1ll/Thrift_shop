@@ -5,8 +5,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - run: ls
+    - run: sudo apt-get update -y
+    - run: sudo apt-get install -y google-mock
     - run: cmake interface_bd/
     - run: make 
     - run: ./tests
-    

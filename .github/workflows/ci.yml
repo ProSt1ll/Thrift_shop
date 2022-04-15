@@ -8,6 +8,7 @@ jobs:
     - run: sudo apt-get update -y
     - run: sudo apt-get install -y google-mock
     - run: sudo apt-get install libgtest-dev
+    - run: sudo apt-get install libgmock-dev
     - run: cmake interface_bd/
     - run: make 
     - run: ./tests

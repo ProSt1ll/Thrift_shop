@@ -3,7 +3,6 @@ on: push
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: mike5535/cmake_clang-format:third
     steps:
     - uses: actions/checkout@v2
     - run: ls

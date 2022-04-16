@@ -1,4 +1,4 @@
-#include <gmock/gmock.h>find_package(GTest REQUIRED)
+#include <gmock/gmock.h>
 
 #include "../include/MenuController.h"
 #include "../include/Server.h"
@@ -10,7 +10,7 @@
 #define TGBOT_MOCKS_H
 
 class MockServer {
-public:find_package(GTest REQUIRED)
+public:find_package
 
     MOCK_METHOD( void, start_accept, ());
     MOCK_METHOD(nlohmann::json, get_response, ());

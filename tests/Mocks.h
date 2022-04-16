@@ -10,7 +10,7 @@
 #define TGBOT_MOCKS_H
 
 class MockServer {
-public:find_package
+public:
 
     MOCK_METHOD( void, start_accept, ());
     MOCK_METHOD(nlohmann::json, get_response, ());

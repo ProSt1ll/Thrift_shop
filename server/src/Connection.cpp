@@ -2,7 +2,7 @@
 // Created by ivan on 16.04.22.
 //
 
-#include "Connection.h"
+#include "../include/Connection.h"
 
 Connection::Connection(tcp::socket &&socket): stream(std::move(socket)) {
 

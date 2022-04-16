@@ -5,8 +5,7 @@
 #include <boost/beast/core.hpp>
 #include <boost/beast/http.hpp>
 #include <boost/beast/version.hpp>
-#include <boost/asio/dispatch.hpp>
-#include <boost/asio/strand.hpp>
+#include <boost/asio/dispatch.hpp>#include <boost/asio/strand.hpp>
 #include <boost/config.hpp>
 
 #include "Crawler.h"

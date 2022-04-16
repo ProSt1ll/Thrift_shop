@@ -1,27 +1,24 @@
-cmake_minimum_required(VERSION 3.22)
+cmake_minimum_required(VERSION 3.20)
 
-project(Thrift_shop)
+project(ThriftShop_server)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Обработка ворнингов
 add_compile_options(-g -O0 -Wextra -Wall -Wextra -Wpedantic -lgcov --coverage)
 add_link_options( -O0 -lgcov --coverage)
 
-# Поиск файлов в директории server/src
-include_directories(server/src)
+file(GLOB SOURCE "server/src/*.cpp")
+file(GLOB INCLUDE "server/include/*.h")
 
-add_subdirectory(server/src)
-
-# Пакет без которого все крашится
 find_package (Threads REQUIRED)
 add_compile_options(-pthread)
+find_package(Boost REQUIRED)
 
-find_package(Boost CONFIG REQUIRED)
-include_directories(${Boost_INCLUDE_DIR})
+include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
+add_library(lib ${INCLUDE} ${SOURCE} )
 
 add_executable(main.out server/main.cpp)
-target_link_libraries(main.out ${Boost_LIBRARIES})
+target_link_libraries(main.out lib ${Boost_LIBRARIES})
 
 

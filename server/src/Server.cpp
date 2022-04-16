@@ -2,7 +2,7 @@
 // Created by ivan on 16.04.22.
 //
 
-#include "Server.h"
+#include "../include/Server.h"
 
 Server::Server(const std::string &address, const std::string &port,
                std::size_t thread_pool_size): acceptor(net::make_strand(io_context)),

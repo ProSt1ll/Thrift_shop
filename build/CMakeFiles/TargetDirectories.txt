@@ -1,6 +1,0 @@
-/home/ilnur/Technopark/Thrift_shop/build/CMakeFiles/lib.dir
-/home/ilnur/Technopark/Thrift_shop/build/CMakeFiles/main.dir
-/home/ilnur/Technopark/Thrift_shop/build/CMakeFiles/tests.dir
-/home/ilnur/Technopark/Thrift_shop/build/CMakeFiles/test.dir
-/home/ilnur/Technopark/Thrift_shop/build/CMakeFiles/edit_cache.dir
-/home/ilnur/Technopark/Thrift_shop/build/CMakeFiles/rebuild_cache.dir

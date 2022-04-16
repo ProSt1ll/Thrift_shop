@@ -1,4 +1,0 @@
-/snap/clion/189/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/snap/clion/189/bin/ninja/linux/ninja -G Ninja -S /home/ilnur/Technopark/Thrift_shop -B /home/ilnur/Technopark/Thrift_shop/build
--- Configuring done
--- Generating done
--- Build files have been written to: /home/ilnur/Technopark/Thrift_shop/build

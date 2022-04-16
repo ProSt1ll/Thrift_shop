@@ -1,0 +1,12 @@
+# ninja log v5
+2	42698	1650065926732924421	CMakeFiles/lib.dir/src/MainMenu.cpp.o	61b8f9a7128b46a9
+2	33652	1650065917744066323	CMakeFiles/lib.dir/src/Managment.cpp.o	f84ebb247e6f11d6
+44785	45132	1650065929253165061	tests	2af62ee741ec8f40
+0	70	1650068489775129348	build.ninja	2423deed5ccb645a
+0	400	1650063157198273500	CMakeFiles/tests.dir/tests/Tests.cpp.o	b108c91f4f6d5e84
+6	43873	1650065927981043592	CMakeFiles/lib.dir/src/SearchMenu.cpp.o	ac37c845f2e31146
+44489	44785	1650065928885129919	liblib.a	748f6b923d5859e1
+6	32538	1650065916647961706	CMakeFiles/lib.dir/src/Server.cpp.o	f9c3dcded811f6f9
+3	44488	1650065928597102416	CMakeFiles/lib.dir/src/Menu.cpp.o	b87be01a5bcae189
+5	61	1650062932330452584	CMakeFiles/main.dir/main.cpp.o	a4e591527d756d9c
+5	43798	1650065927901035952	CMakeFiles/lib.dir/src/MenuController.cpp.o	e816b9c3ee9923ca

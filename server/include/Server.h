@@ -14,7 +14,6 @@ public:
 
     void Run();
 
-private:
     void StartAccept();
 
     void HandleAccept();

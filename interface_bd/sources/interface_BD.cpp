@@ -2,14 +2,6 @@
 
 using namespace bd;
 
-BI::BI(){
-    sqlite3_open(PATH_DB, &DB);
-}
-
-BI::~BI(){
-        sqlite3_close(DB);
-}
-
         // добавляем всё, кроме ссылки и цены(их в отдельную таблицу), в таблицу с именем category. Если товар уже есть то обновляется запись
         void set_product(Categories category, Product prod, Parametrs param){
 
@@ -43,4 +35,20 @@ BI::~BI(){
         // Возвращает избранное пользователем
         Product* get_user_chosen(std::string user_id){
             
+        }
+
+        Query_BD::Query_BD(){
+                sqlite3_open(PATH_DB, &DB);
+        }
+
+        Query_BD::~Query_BD(){
+                sqlite3_close(DB);
+        }
+
+        void insert_into(Categories category, std::string query){
+
+        }
+
+        std::string select_from(Categories category, std::string query){
+                
         }

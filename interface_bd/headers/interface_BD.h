@@ -23,7 +23,12 @@ namespace bd {
         // "NULL"== NULL
     } Parametrs;
 
+    enum Categories {
+        Sneakers, Shirts, Tshirts
+    };
+
     typedef struct {
+        Categories category;
         std::string name;
         float price;
         std::string url_image;
@@ -31,22 +36,10 @@ namespace bd {
         Parametrs param;
     } Product;
 
-    enum Categories {
-        Sneakers, Shirts, Tshirts
-    };
-
     class BI {
-    private:
-        sqlite3* DB;
     public:
-        // конструктор будет открывать БД
-        BI();
-
-        // деструктор будет закрывать БД
-        ~BI();
-
         // добавляем всё, кроме ссылки и цены(их в отдельную таблицу), в таблицу с именем category. Если товар уже есть то обновляется запись
-        void set_product(Categories category, Product prod, Parametrs param);
+        void set_product(Product prod, Parametrs param);
 
         // добавляем ссылку на товар и цену в таблицу catagory_url_price связанную с таблицой category:один(товар) ко многим(ссылкам+ценам). 
         void set_url_product_price(Categories category, std::size_t price = -1, std::string url_product = "NULL");
@@ -65,6 +58,21 @@ namespace bd {
 
         // Возвращает избранное пользователем
         Product* get_user_chosen(std::string user_id);
+    };
+
+    class Query_BD{
+        private:
+            sqlite3* DB;
+        public:
+            //устанавливает соединение с БД 
+            Query_BD();
+
+            //разрывает соединение с БД
+            ~Query_BD();
+
+            void insert_into(Categories category, std::string query);
+
+            std::string select_from(Categories category, std::string query);
     };
 
 }

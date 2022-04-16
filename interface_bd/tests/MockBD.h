@@ -6,9 +6,7 @@ using namespace bd;
 
 class MockBI : public BI {
 public:
-    MockBI() : BI() {}
-
-    MOCK_METHOD(void,set_product,(Categories, Product, Parametrs));
+    MOCK_METHOD(void,set_product,(Product, Parametrs));
     MOCK_METHOD(void,set_url_product_price,(Categories,void(std::size_t price),void(std::string url_product)));
 
     MOCK_METHOD(Product*,get_products,(Categories));
@@ -18,4 +16,12 @@ public:
     MOCK_METHOD(void,set_user_chosen,(std::string, Categories, std::size_t));
     MOCK_METHOD(Product*,get_user_chosen,(std::string));
 
+};
+
+class MockQuery_BD : public Query_BD {
+public:
+    MockQuery_BD() : Query_BD() {}
+
+    MOCK_METHOD(void,insert_into,(Categories, std::string));
+    MOCK_METHOD(std::string,select_from,(Categories,std::string));
 };

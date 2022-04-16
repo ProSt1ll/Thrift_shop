@@ -22,9 +22,27 @@ public:
     void TearDown() {
     }
 };
+class TestMenu : public ::testing::Test {
+public:
+
+
+    void SetUp() {
+    }
+
+    void TearDown() {
+    }
+};
 
 
 TEST_F(TestServer, get_response) {
+}
+TEST_F(TestServer, start_accept) {
+}
+TEST_F(TestServer,send_request) {
+}
+TEST_F(TestServer,run) {
+}
+TEST_F(TestServer,stop) {
 }
 
 TEST_F(TestManagment, get_product) {

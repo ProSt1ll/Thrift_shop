@@ -2,4 +2,3 @@
 Server::Server(){
 
 }
-Server::get_response();

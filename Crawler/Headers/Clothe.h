@@ -27,7 +27,7 @@ namespace item {
         Persons person;
         // размер одежды
         Sizes size;
-        // ссылка на картинку
+        // ссылка на изображение
         std::string image;
 
     public:
@@ -36,7 +36,8 @@ namespace item {
 
         Clothe();
 
-        explicit Clothe(int cost_ = 0, const std::string &title_ = "", const std::string &url_ = "",
+
+        explicit Clothe(const std::string &title_, int cost_ = 0, const std::string &url_ = "",
                         Persons person_ = undefinedPerson, Sizes size_ = undefinedSize, const std::string &image_ = "");
 
         Clothe(Clothe const &copyItem);
@@ -72,6 +73,8 @@ namespace item {
         // Перегрузка операторов
 
         Clothe &operator=(const Clothe &copyItem);
+
+        bool operator==(const Clothe &comparableItem);
 
         // Остальные методы
 

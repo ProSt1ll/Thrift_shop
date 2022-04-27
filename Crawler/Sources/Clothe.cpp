@@ -8,9 +8,10 @@ Clothe::Clothe() {
     url = "";
     person = undefinedPerson;
     size = undefinedSize;
+    image = "";
 }
 
-Clothe::Clothe(const int cost_, const std::string &title_, const std::string &url_, const Persons person_,
+Clothe::Clothe(const std::string &title_, const int cost_, const std::string &url_, const Persons person_,
                const Sizes size_, const std::string &image_) {
     cost = cost_;
     title = title_;
@@ -74,12 +75,30 @@ bool Clothe::isEmpty() const {
             image.empty());
 }
 
-std::string item::Clothe::getImage() const {
+std::string Clothe::getImage() const {
     return image;
 }
 
-void item::Clothe::setImage(const std::string &newImage) {
+void Clothe::setImage(const std::string &newImage) {
     image = newImage;
+}
+
+nlohmann::json Clothe::getJson() const {
+    nlohmann::json resultJson;
+
+    resultJson["cost"] = cost;
+    resultJson["title"] = title;
+    resultJson["url"] = url;
+    resultJson["person"] = person;
+    resultJson["size"] = size;
+    resultJson["image"] = image;
+
+    return resultJson;
+}
+
+bool Clothe::operator==(const Clothe &comparableItem) {
+    return (url == comparableItem.url && title == comparableItem.title && image == comparableItem.image &&
+            size == comparableItem.size && person == comparableItem.person && cost == comparableItem.cost);
 }
 
 Clothe &Clothe::operator=(const Clothe &copyItem) = default;

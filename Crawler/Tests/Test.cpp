@@ -164,10 +164,45 @@ TEST_F(TestClothe, getJson) {
 TEST_F(TestTemplateParameters, constructors) {
 }
 
+TEST_F(TestTemplateParameters, operatorComparator) {
+    EXPECT_FALSE(clothe == clotheEmpty);
+
+    clotheEmpty.setCost(cost);
+    clotheEmpty.setImage(image);
+    clotheEmpty.setPerson(person);
+    clotheEmpty.setSize(size);
+    clotheEmpty.setTitle(title);
+    clotheEmpty.setURL(url);
+
+    EXPECT_TRUE(clothe == clotheEmpty);
+}
+
 TEST_F(TestTemplateParameters, gets) {
 }
 
 TEST_F(TestTemplateParameters, sets) {
+}
+
+TEST_F(TestTemplateParameters, getJson) {
+    json emptyJson = {
+            {"cost",   0},
+            {"title",  ""},
+            {"url",    ""},
+            {"person", item::undefinedPerson},
+            {"size",   item::undefinedSize},
+            {"image",  ""}
+    };
+    EXPECT_EQ(emptyJson, clotheEmpty.getJson());
+
+    json notEmptyJson = {
+            {"cost",   cost},
+            {"title",  title},
+            {"url",    url},
+            {"person", person},
+            {"size",   size},
+            {"image",  image}
+    };
+    EXPECT_EQ(notEmptyJson, clothe.getJson());
 }
 
 // TestSite

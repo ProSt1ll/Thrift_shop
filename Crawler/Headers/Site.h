@@ -1,6 +1,7 @@
 #include <string>
 #include <map>
 #include <set>
+#include <vector>
 #include <nlohmann/json.hpp>
 #include "Clothe.h"
 
@@ -33,7 +34,8 @@ namespace siteSearch {
 
         TemplateParameter();
 
-        explicit TemplateParameter(std::string tag_ = "", std::string id_ = "", std::string cssClass_ = "");
+        explicit TemplateParameter(const std::string &tag_, const std::string &id_ = "",
+                                   const std::string &cssClass_ = "");
 
         // get методы
 
@@ -45,12 +47,20 @@ namespace siteSearch {
 
         // set методы
 
-        void setTag(std::string newTag);
+        void setTag(const std::string &newTag);
 
-        void setId(std::string newId);
+        void setId(const std::string &newId);
 
-        void setCssClass(std::string newCssClass);
+        void setCssClass(const std::string &newCssClass);
 
+
+        // перегрузка операторов
+
+        bool operator==(const TemplateParameter &comparableTemplateParameter) const;
+
+        // возвращает json представление класса
+
+        nlohmann::json getJson() const;
     };
 
     class Site {
@@ -65,13 +75,13 @@ namespace siteSearch {
 
         Site();
 
-        Site(nlohmann::json settings);
+        explicit Site(const nlohmann::json &settings);
 
         // get методы
 
-        std::string getChapterUrl(Chapters chapter) const;
+        std::string getChapterUrl(const Chapters &chapter) const;
 
-        TemplateParameter getTemplateParameter(Parameters parameter) const;
+        TemplateParameter getTemplateParameter(const Parameters &parameter) const;
 
         // возвращает все доступные разделы на сайте
         std::set<Chapters> getChapters() const;
@@ -82,10 +92,10 @@ namespace siteSearch {
         // set методы
 
         // изменяет адрес раздела; если раздела не существует, то добавляет его с адресом
-        void setChapterUrl(std::string url);
+        void setChapterUrl(const Chapters &chapter, const std::string &url);
 
         // изменяет шаблон параметра; если параметра нет, то добавляет его с шаблоном
-        void setTemplateParameter(TemplateParameter templateParameter);
+        void setTemplateParameter(const Parameters &parameter, const TemplateParameter &templateParameter);
 
         // перегрузка операторов
         bool operator==(const Site &site);
@@ -93,20 +103,20 @@ namespace siteSearch {
         // delete методы
 
         // удаляет из chapterMap главу по ключу chapter
-        void deleteChapter(Chapters chapter);
+        void deleteChapter(const Chapters &chapter);
 
         // удаляет из parameterMap параметр по ключу parameter
-        void deleteParameter(Parameters parameter);
+        void deleteParameter(const Parameters &parameter);
 
         // основной функционал
 
         // изменяет настройки сайта, принимая json с настройками;
         // возвращает: true в случае успеха и false иначе
-        bool resetSettings(nlohmann::json settings);
+        bool resetSettings(const nlohmann::json &settings);
 
         // ищет на сайте параметры parameters в разделах chapters
         // возвращает json с найденными объектами
-        json crawl(std::set<Parameters> parameters_, std::set<Chapters> chapters_) const;
+        json crawl(const std::set<Parameters> &parameters_, const std::set<Chapters> &chapters_) const;
 
         // возвращает текущие настройки в формате json
         json getSettings() const;

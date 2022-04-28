@@ -1,4 +1,5 @@
 #include "../Headers/Site.h"
+#include <iostream>
 
 using siteSearch::Chapters;
 using siteSearch::Parameters;
@@ -98,12 +99,9 @@ std::map<Parameters, TemplateParameter> siteSearch::Site::getParameterMapFromJso
     std::map<Parameters, TemplateParameter> resultMap;
     for (const auto &element: settings["parameterMap"]) {
         Parameters key = element.at(0);
-        std::string tag, id, cssClass;
-        for (const auto &parameter: element.at(1)) {
-            tag = parameter.at(0);
-            id = parameter.at(1);
-            cssClass = parameter.at(2);
-        }
+        std::string tag = element.at(1)["tag"];
+        std::string id = element.at(1)["id"];
+        std::string cssClass = element.at(1)["cssClass"];
         TemplateParameter templateParameter(tag, id, cssClass);
         resultMap.emplace(std::pair<Parameters, TemplateParameter>{key, templateParameter});
     }
@@ -193,12 +191,17 @@ json siteSearch::Site::getSettings() const {
 
     resultJson["chapterMap"] = chapterMap;
 
-    resultJson["parameterMap"] = nlohmann::json({});
+    resultJson["parameterMap"] = nlohmann::json::object();
+
+    json parameterMapArray = json::array();
 
     for (const auto &element: parameterMap) {
-        std::string key = std::to_string(element.first);
-        resultJson["parameterMap"][key] = element.second.getJson();
+        //Parameters key = element.first;
+        //resultJson["parameterMap"][key] = element.second.getJson();
+        Parameters key = element.first;
+        parameterMapArray[parameterMapArray.size()] = json::array({key, element.second.getJson()});
     }
 
+    resultJson["parameterMap"] = parameterMapArray;
     return resultJson;
 }

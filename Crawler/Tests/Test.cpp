@@ -60,8 +60,54 @@ protected:
 class TestSite : public ::testing::Test {
 public:
 
+    Site siteEmpty;
+    Site site;
+    json settings = {
+            {"chapterMap",   {
+                                     {siteSearch::index, "indexUrl"},
+                                     {siteSearch::man,  "manUrl"},
+                                     {siteSearch::woman, "womanUrl"},
+                                     {siteSearch::boy,    "boyUrl"},
+                                     {siteSearch::girl, "girlUrl"}
+                             }},
+            {"parameterMap", {
+                                     {siteSearch::url,   {
+                                                                 {"tag", "tagUrl"},
+                                                                 {"id", "idUrl"},
+                                                                 {"cssClass", "cssClassUrl"}
+                                                         }},
+                                     {siteSearch::cost, {
+                                                                {"tag", "tagCost"},
+                                                                {"id", "idcCst"},
+                                                                {"cssClass", "cssClassCost"}
+                                                        }},
+                                     {siteSearch::title, {
+                                                                 {"tag", "tagTitle"},
+                                                                 {"id", "idTitle"},
+                                                                 {"cssClass", "cssClassTitle"}
+                                                         }},
+                                     {siteSearch::person, {
+                                                                  {"tag", "tagPerson"},
+                                                                  {"id", "idPerson"},
+                                                                  {"cssClass", "cssClassPerson"}
+                                                          }},
+                                     {siteSearch::size, {
+                                                                {"tag", "tagSize"},
+                                                                {"id", "idSize"},
+                                                                {"cssClass", "cssClassSize"}
+                                                        }},
+                                     {siteSearch::image, {
+                                                                 {"tag", "tagImage"},
+                                                                 {"id", "idImage"},
+                                                                 {"cssClass", "cssClassImage"}
+                                                         }}
+                             }}
+    };
+
 
     void SetUp() {
+        siteEmpty = Site();
+        site = Site(settings);
     }
 
     void TearDown() {
@@ -214,9 +260,6 @@ TEST_F(TestTemplateParameters, getJson) {
 
 // TestSite
 
-TEST_F(TestSite, constructors) {
-}
-
 TEST_F(TestSite, gets) {
 }
 
@@ -233,6 +276,10 @@ TEST_F(TestSite, resetSettings) {
 }
 
 TEST_F(TestSite, getSettings) {
+    EXPECT_EQ(settings, site.getSettings());
+}
+
+TEST_F(TestSite, getJson) {
 }
 
 TEST_F(TestSite, crawl) {

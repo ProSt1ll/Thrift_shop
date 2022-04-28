@@ -48,12 +48,9 @@ int main() {
                              }}
     };
 
-    json newSettings;
-    newSettings["chapterMap"][std::to_string(siteSearch::index)] = "indexUrl";
-
-
-    siteSearch::Site site(settings);
-
-    std::cout << settings << std::endl << site.getSettings() << std::endl << newSettings << std::endl;
+    //json newSettings;
+    //newSettings["chapterMap"][std::to_string(siteSearch::index)] = "indexUrl";
+    //siteSearch::Site site(settings);
+    //std::cout << settings << std::endl << site.getSettings() << std::endl << newSettings << std::endl;
     return 0;
 }

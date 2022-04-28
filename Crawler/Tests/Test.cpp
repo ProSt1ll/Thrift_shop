@@ -62,6 +62,10 @@ public:
 
     Site siteEmpty;
     Site site;
+    json emptySettings = {
+            {"chapterMap",   json::array()},
+            {"parameterMap", json::array()}
+    };
     json settings = {
             {"chapterMap",   {
                                      {siteSearch::index, "indexUrl"},
@@ -261,53 +265,233 @@ TEST_F(TestTemplateParameters, getJson) {
 // TestSite
 
 TEST_F(TestSite, gets) {
+    // getChapterUrl
+    EXPECT_EQ(site.getChapterUrl(siteSearch::index), settings["chapterMap"][siteSearch::index].at(1));
+    EXPECT_EQ(site.getChapterUrl(siteSearch::man), settings["chapterMap"][siteSearch::man].at(1));
+    EXPECT_EQ(site.getChapterUrl(siteSearch::woman), settings["chapterMap"][siteSearch::woman].at(1));
+    EXPECT_EQ(site.getChapterUrl(siteSearch::boy), settings["chapterMap"][siteSearch::boy].at(1));
+    EXPECT_EQ(site.getChapterUrl(siteSearch::girl), settings["chapterMap"][siteSearch::girl].at(1));
+    EXPECT_EQ(siteEmpty.getChapterUrl(siteSearch::man), "");
+
+    // getTemplateParameter
+    EXPECT_EQ(siteEmpty.getTemplateParameter(siteSearch::url), TemplateParameter());
+    json currentSetting = settings["parameterMap"][siteSearch::url];
+    EXPECT_EQ(site.getTemplateParameter(siteSearch::url),
+              TemplateParameter(currentSetting.at(1)["tag"], currentSetting.at(1)["id"],
+                                currentSetting.at(1)["cssClass"]));
+    currentSetting = settings["parameterMap"][siteSearch::cost];
+    EXPECT_EQ(site.getTemplateParameter(siteSearch::cost),
+              TemplateParameter(currentSetting.at(1)["tag"], currentSetting.at(1)["id"],
+                                currentSetting.at(1)["cssClass"]));
+    currentSetting = settings["parameterMap"][siteSearch::title];
+    EXPECT_EQ(site.getTemplateParameter(siteSearch::title),
+              TemplateParameter(currentSetting.at(1)["tag"], currentSetting.at(1)["id"],
+                                currentSetting.at(1)["cssClass"]));
+    currentSetting = settings["parameterMap"][siteSearch::person];
+    EXPECT_EQ(site.getTemplateParameter(siteSearch::person),
+              TemplateParameter(currentSetting.at(1)["tag"], currentSetting.at(1)["id"],
+                                currentSetting.at(1)["cssClass"]));
+    currentSetting = settings["parameterMap"][siteSearch::size];
+    EXPECT_EQ(site.getTemplateParameter(siteSearch::size),
+              TemplateParameter(currentSetting.at(1)["tag"], currentSetting.at(1)["id"],
+                                currentSetting.at(1)["cssClass"]));
+    currentSetting = settings["parameterMap"][siteSearch::image];
+    EXPECT_EQ(site.getTemplateParameter(siteSearch::image),
+              TemplateParameter(currentSetting.at(1)["tag"], currentSetting.at(1)["id"],
+                                currentSetting.at(1)["cssClass"]));
+
+    // getChapters
+    std::set<Chapters> setChapters;
+    EXPECT_EQ(setChapters, siteEmpty.getChapters());
+    for (const auto &element: settings["chapterMap"]) {
+        Chapters currentChapter = element.at(0);
+        setChapters.insert(currentChapter);
+    }
+    EXPECT_EQ(setChapters, site.getChapters());
+
+    // getParameters
+    std::set<Parameters> setParameters;
+    EXPECT_EQ(setParameters, siteEmpty.getParameters());
+    for (const auto &element: settings["parameterMap"]) {
+        Parameters currentParameter = element.at(0);
+        setParameters.insert(currentParameter);
+    }
+    EXPECT_EQ(setParameters, site.getParameters());
 }
 
 TEST_F(TestSite, sets) {
+    // setChapterUrl
+    Chapters chapter = siteSearch::index;
+    json currentSetting = settings["chapterMap"][chapter].at(1);
+    siteEmpty.setChapterUrl(chapter, currentSetting);
+    EXPECT_EQ(siteEmpty.getChapterUrl(chapter), currentSetting);
+
+    chapter = siteSearch::man;
+    currentSetting = settings["chapterMap"][chapter].at(1);
+    siteEmpty.setChapterUrl(chapter, currentSetting);
+    EXPECT_EQ(siteEmpty.getChapterUrl(chapter), currentSetting);
+
+    chapter = siteSearch::woman;
+    currentSetting = settings["chapterMap"][chapter].at(1);
+    siteEmpty.setChapterUrl(chapter, currentSetting);
+    EXPECT_EQ(siteEmpty.getChapterUrl(chapter), currentSetting);
+
+    chapter = siteSearch::boy;
+    currentSetting = settings["chapterMap"][chapter].at(1);
+    siteEmpty.setChapterUrl(chapter, currentSetting);
+    EXPECT_EQ(siteEmpty.getChapterUrl(chapter), currentSetting);
+
+    chapter = siteSearch::girl;
+    currentSetting = settings["chapterMap"][chapter].at(1);
+    siteEmpty.setChapterUrl(chapter, currentSetting);
+    EXPECT_EQ(siteEmpty.getChapterUrl(chapter), currentSetting);
+
+    // setTemplateParameter
+    Parameters parameter = siteSearch::url;
+    currentSetting = settings["parameterMap"][parameter].at(1);
+    TemplateParameter templateParameter(currentSetting["tag"], currentSetting["id"],
+                                        currentSetting["cssClass"]);
+    siteEmpty.setTemplateParameter(parameter, templateParameter);
+    EXPECT_EQ(siteEmpty.getTemplateParameter(parameter), templateParameter);
+
+    parameter = siteSearch::cost;
+    currentSetting = settings["parameterMap"][parameter].at(1);
+    templateParameter = TemplateParameter(currentSetting["tag"], currentSetting["id"],
+                                          currentSetting["cssClass"]);
+    siteEmpty.setTemplateParameter(parameter, templateParameter);
+    EXPECT_EQ(siteEmpty.getTemplateParameter(parameter), templateParameter);
+
+    parameter = siteSearch::title;
+    currentSetting = settings["parameterMap"][parameter].at(1);
+    templateParameter = TemplateParameter(currentSetting["tag"], currentSetting["id"],
+                                          currentSetting["cssClass"]);
+    siteEmpty.setTemplateParameter(parameter, templateParameter);
+    EXPECT_EQ(siteEmpty.getTemplateParameter(parameter), templateParameter);
+
+    parameter = siteSearch::person;
+    currentSetting = settings["parameterMap"][parameter].at(1);
+    templateParameter = TemplateParameter(currentSetting["tag"], currentSetting["id"],
+                                          currentSetting["cssClass"]);
+    siteEmpty.setTemplateParameter(parameter, templateParameter);
+    EXPECT_EQ(siteEmpty.getTemplateParameter(parameter), templateParameter);
+
+    parameter = siteSearch::size;
+    currentSetting = settings["parameterMap"][parameter].at(1);
+    templateParameter = TemplateParameter(currentSetting["tag"], currentSetting["id"],
+                                          currentSetting["cssClass"]);
+    siteEmpty.setTemplateParameter(parameter, templateParameter);
+    EXPECT_EQ(siteEmpty.getTemplateParameter(parameter), templateParameter);
+
+    parameter = siteSearch::image;
+    currentSetting = settings["parameterMap"][parameter].at(1);
+    templateParameter = TemplateParameter(currentSetting["tag"], currentSetting["id"],
+                                          currentSetting["cssClass"]);
+    siteEmpty.setTemplateParameter(parameter, templateParameter);
+    EXPECT_EQ(siteEmpty.getTemplateParameter(parameter), templateParameter);
+
+    EXPECT_TRUE(siteEmpty == site);
 }
 
 TEST_F(TestSite, deletes) {
+    // deleteChapter
+    Chapters chapter = siteSearch::index;
+    site.deleteChapter(chapter);
+    EXPECT_EQ(site.getChapterUrl(chapter), "");
+
+    chapter = siteSearch::man;
+    site.deleteChapter(chapter);
+    EXPECT_EQ(site.getChapterUrl(chapter), "");
+
+    chapter = siteSearch::woman;
+    site.deleteChapter(chapter);
+    EXPECT_EQ(site.getChapterUrl(chapter), "");
+
+    chapter = siteSearch::boy;
+    site.deleteChapter(chapter);
+    EXPECT_EQ(site.getChapterUrl(chapter), "");
+
+    chapter = siteSearch::girl;
+    site.deleteChapter(chapter);
+    EXPECT_EQ(site.getChapterUrl(chapter), "");
+
+    //deleteParameter
+    //url, cost, title, person, size, image
+    Parameters parameter = siteSearch::url;
+    site.deleteParameter(parameter);
+    EXPECT_EQ(site.getTemplateParameter(parameter), TemplateParameter());
+
+    parameter = siteSearch::cost;
+    site.deleteParameter(parameter);
+    EXPECT_EQ(site.getTemplateParameter(parameter), TemplateParameter());
+
+    parameter = siteSearch::title;
+    site.deleteParameter(parameter);
+    EXPECT_EQ(site.getTemplateParameter(parameter), TemplateParameter());
+
+    parameter = siteSearch::person;
+    site.deleteParameter(parameter);
+    EXPECT_EQ(site.getTemplateParameter(parameter), TemplateParameter());
+
+    parameter = siteSearch::size;
+    site.deleteParameter(parameter);
+    EXPECT_EQ(site.getTemplateParameter(parameter), TemplateParameter());
+
+    parameter = siteSearch::image;
+    site.deleteParameter(parameter);
+    EXPECT_EQ(site.getTemplateParameter(parameter), TemplateParameter());
 }
 
 TEST_F(TestSite, operatorEquality) {
+    Site equalitySiteEmpty;
+    Site equalitySite(settings);
+
+    EXPECT_TRUE(equalitySiteEmpty == siteEmpty);
+    EXPECT_TRUE(equalitySite == site);
+
+    EXPECT_FALSE(site == siteEmpty);
 }
 
 TEST_F(TestSite, resetSettings) {
+    site.resetSettings(emptySettings);
+    EXPECT_EQ(emptySettings, site.getSettings());
+
+    site.resetSettings(settings);
+    EXPECT_EQ(settings, site.getSettings());
 }
 
 TEST_F(TestSite, getSettings) {
-    json emptySettings = {
-            {"chapterMap",   json::array()},
-            {"parameterMap", json::array()}
-    };
     EXPECT_EQ(emptySettings, siteEmpty.getSettings());
 
     EXPECT_EQ(settings, site.getSettings());
 }
 
+// TODO
 TEST_F(TestSite, crawl) {
 }
 
 // TestCrawler
 
-TEST_F(TestCrawler, constructors) {
-}
-
+// TODO
 TEST_F(TestCrawler, adds) {
 }
 
+// TODO
 TEST_F(TestCrawler, gets) {
 }
 
+// TODO
 TEST_F(TestCrawler, deletes) {
 }
 
+// TODO
 TEST_F(TestCrawler, getSettigs) {
 }
 
+// TODO
 TEST_F(TestCrawler, resetSettigs) {
 }
 
+// TODO
 TEST_F(TestCrawler, crawl) {
 }
 

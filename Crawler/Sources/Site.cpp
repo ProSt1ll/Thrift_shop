@@ -111,11 +111,15 @@ std::map<Parameters, TemplateParameter> siteSearch::Site::getParameterMapFromJso
 // Get методы
 
 std::string siteSearch::Site::getChapterUrl(const siteSearch::Chapters &chapter) const {
-    return chapterMap.at(chapter);
+    if (chapterMap.count(chapter))
+        return chapterMap.at(chapter);
+    return "";
 }
 
 siteSearch::TemplateParameter siteSearch::Site::getTemplateParameter(const siteSearch::Parameters &parameter) const {
-    return parameterMap.at(parameter);
+    if (parameterMap.count(parameter))
+        return parameterMap.at(parameter);
+    return {};
 }
 
 std::set<Chapters> siteSearch::Site::getChapters() const {
@@ -168,11 +172,13 @@ bool siteSearch::Site::operator==(const siteSearch::Site &site) {
 // delete методы
 
 void siteSearch::Site::deleteChapter(const Chapters &chapter) {
-    chapterMap.erase(chapter);
+    if (chapterMap.count(chapter))
+        chapterMap.erase(chapter);
 }
 
 void siteSearch::Site::deleteParameter(const Parameters &parameter) {
-    parameterMap.erase(parameter);
+    if (parameterMap.count(parameter))
+        parameterMap.erase(parameter);
 }
 
 // основной функционал

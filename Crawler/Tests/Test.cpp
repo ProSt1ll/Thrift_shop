@@ -10,6 +10,7 @@ using item::Sizes;
 using siteSearch::Site;
 using siteSearch::Chapters;
 using siteSearch::Parameters;
+using siteSearch::TemplateParameter;
 
 class TestClothe : public ::testing::Test {
 public:
@@ -39,9 +40,17 @@ protected:
 
 class TestTemplateParameters : public ::testing::Test {
 public:
+    TemplateParameter templateParameterEmpty;
+    TemplateParameter templateParameter;
 
+    std::string tag = "someTag";
+    std::string id = "someId";
+    std::string cssClass = "someCssClass";
 
+protected:
     void SetUp() {
+        templateParameterEmpty = TemplateParameter();
+        templateParameter = TemplateParameter(tag, id, cssClass);
     }
 
     void TearDown() {
@@ -161,19 +170,46 @@ TEST_F(TestClothe, getJson) {
 
 // TestTemplateParameters
 
-TEST_F(TestTemplateParameters, constructors) {
-}
-
 TEST_F(TestTemplateParameters, operatorComparator) {
+    TemplateParameter comparableTemplateParameter(tag, id, cssClass);
+    EXPECT_TRUE(comparableTemplateParameter == templateParameter);
+    EXPECT_FALSE(comparableTemplateParameter == templateParameterEmpty);
 }
 
 TEST_F(TestTemplateParameters, gets) {
+    EXPECT_EQ(templateParameterEmpty.getTag(), "");
+    EXPECT_EQ(templateParameterEmpty.getId(), "");
+    EXPECT_EQ(templateParameterEmpty.getCssClass(), "");
+
+    EXPECT_EQ(templateParameter.getTag(), tag);
+    EXPECT_EQ(templateParameter.getId(), id);
+    EXPECT_EQ(templateParameter.getCssClass(), cssClass);
 }
 
 TEST_F(TestTemplateParameters, sets) {
+    templateParameterEmpty.setTag(tag);
+    templateParameterEmpty.setId(id);
+    templateParameterEmpty.setCssClass(cssClass);
+
+    EXPECT_EQ(templateParameterEmpty.getTag(), tag);
+    EXPECT_EQ(templateParameterEmpty.getId(), id);
+    EXPECT_EQ(templateParameterEmpty.getCssClass(), cssClass);
 }
 
 TEST_F(TestTemplateParameters, getJson) {
+    json emptyJson = {
+            {"tag",      ""},
+            {"id",       ""},
+            {"cssClass", ""}
+    };
+    EXPECT_EQ(emptyJson, templateParameterEmpty.getJson());
+
+    json notEmptyJson = {
+            {"tag",      tag},
+            {"id",       id},
+            {"cssClass", cssClass}
+    };
+    EXPECT_EQ(notEmptyJson, templateParameter.getJson());
 }
 
 // TestSite

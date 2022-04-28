@@ -276,10 +276,13 @@ TEST_F(TestSite, resetSettings) {
 }
 
 TEST_F(TestSite, getSettings) {
-    EXPECT_EQ(settings, site.getSettings());
-}
+    json emptySettings = {
+            {"chapterMap",   json::array()},
+            {"parameterMap", json::array()}
+    };
+    EXPECT_EQ(emptySettings, siteEmpty.getSettings());
 
-TEST_F(TestSite, getJson) {
+    EXPECT_EQ(settings, site.getSettings());
 }
 
 TEST_F(TestSite, crawl) {

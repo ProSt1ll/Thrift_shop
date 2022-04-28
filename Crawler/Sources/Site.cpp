@@ -196,8 +196,6 @@ json siteSearch::Site::getSettings() const {
     json parameterMapArray = json::array();
 
     for (const auto &element: parameterMap) {
-        //Parameters key = element.first;
-        //resultJson["parameterMap"][key] = element.second.getJson();
         Parameters key = element.first;
         parameterMapArray[parameterMapArray.size()] = json::array({key, element.second.getJson()});
     }

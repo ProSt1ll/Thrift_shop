@@ -69,6 +69,15 @@ namespace siteSearch {
         std::map<Chapters, std::string> chapterMap;
         // key - параметр, который ищем; value - класс с шаблоном параметра
         std::map<Parameters, TemplateParameter> parameterMap;
+
+        // получение полей из json настроек
+
+        // возвращает chapterMap из json файла настроек
+        static std::map<Chapters, std::string> getChapterMapFromJson(const nlohmann::json &settings);
+
+        // возвращает parameterMap из json файла настроек
+        static std::map<Parameters, TemplateParameter> getParameterMapFromJson(const nlohmann::json &settings);
+
     public:
 
         // конструкторы
@@ -111,8 +120,7 @@ namespace siteSearch {
         // основной функционал
 
         // изменяет настройки сайта, принимая json с настройками;
-        // возвращает: true в случае успеха и false иначе
-        bool resetSettings(const nlohmann::json &settings);
+        void resetSettings(const nlohmann::json &settings);
 
         // ищет на сайте параметры parameters в разделах chapters
         // возвращает json с найденными объектами

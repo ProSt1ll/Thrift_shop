@@ -2,6 +2,7 @@
 
 using siteSearch::Chapters;
 using siteSearch::Parameters;
+using siteSearch::TemplateParameter;
 
 // TemplateParameter
 
@@ -74,6 +75,39 @@ siteSearch::Site::Site() = default;
 
 siteSearch::Site::Site(const json &settings) {
 
+    chapterMap = getChapterMapFromJson(settings);
+    parameterMap = getParameterMapFromJson(settings);
+
+
+}
+
+
+// получение полей из json настроек
+
+std::map<Chapters, std::string> siteSearch::Site::getChapterMapFromJson(const json &settings) {
+    std::map<Chapters, std::string> resultMap;
+    for (const auto &element: settings["chapterMap"]) {
+        Chapters key = element.at(0);
+        std::string value = element.at(1);
+        resultMap.emplace(std::pair<Chapters, std::string>{key, value});
+    }
+    return resultMap;
+}
+
+std::map<Parameters, TemplateParameter> siteSearch::Site::getParameterMapFromJson(const json &settings) {
+    std::map<Parameters, TemplateParameter> resultMap;
+    for (const auto &element: settings["parameterMap"]) {
+        Parameters key = element.at(0);
+        std::string tag, id, cssClass;
+        for (const auto &parameter: element.at(1)) {
+            tag = parameter.at(0);
+            id = parameter.at(1);
+            cssClass = parameter.at(2);
+        }
+        TemplateParameter templateParameter(tag, id, cssClass);
+        resultMap.emplace(std::pair<Parameters, TemplateParameter>{key, templateParameter});
+    }
+    return resultMap;
 }
 
 // Get методы
@@ -145,8 +179,9 @@ void siteSearch::Site::deleteParameter(const Parameters &parameter) {
 
 // основной функционал
 
-bool siteSearch::Site::resetSettings(const json &settings) {
-    return false;
+void siteSearch::Site::resetSettings(const json &settings) {
+    chapterMap = getChapterMapFromJson(settings);
+    parameterMap = getParameterMapFromJson(settings);
 }
 
 json siteSearch::Site::crawl(const std::set<Parameters> &parameters_, const std::set<Chapters> &chapters_) const {

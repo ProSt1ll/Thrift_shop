@@ -14,33 +14,39 @@ using nlohmann::json;
 class Crawler {
 private:
     // сайты, которые можем обходить
-    std::set<Site> sites;
+    std::set<Site, std::equal_to<Site>> sites;
     // параметры, которые можем искать
     std::set<Parameters> parameters;
     // главы, которые можем искать
     std::set<Chapters> chapters;
+
+    static std::set<Site, std::equal_to<Site>> getSitesFromSettings(const json& settings);
+
+    static std::set<Parameters> getParametersFromSettings(const json& settings);
+
+    static std::set<Chapters> getChaptersFromSettings(const json& settings);
 public:
     // конструкторы
 
     Crawler();
 
     // принимает json с настройками сайтов
-    explicit Crawler(json settings);
+    explicit Crawler(const json &settings);
 
     // add методы
 
     // добавляет параметр для поиска в словарь
-    void addParameter(Parameters parameter);
+    void addParameter(const Parameters &parameter);
 
     // добавляет главу для поиска в словарь
-    void addChapter(Chapters chapter);
+    void addChapter(const Chapters &chapter);
 
     // добавляет сайт для поиска
     void addSite(const Site &site);
 
     // get методы
 
-    std::set<Site> getSites() const;
+    std::set<Site, std::equal_to<Site>> getSites() const;
 
     std::set<Parameters> getParameters() const;
 
@@ -48,21 +54,21 @@ public:
 
     // delete методы
 
-    void deleteSite(Site site);
+    void deleteSite(const Site &site);
 
-    void deleteChapter(Chapters chapter);
+    void deleteChapter(const Chapters &chapter);
 
-    void deleteParameter(Parameters parameter);
+    void deleteParameter(const Parameters &parameter);
 
     // основной функционал
 
     // обходит сайты из sites_ по главам из chapters_ в поиске параметров из parameters_; возвращает json
     // с найденными объектами
-    json crawl(std::set<Site> sites_, std::set<Parameters> parameters_,
-               std::set<Chapters> chapters_) const;
+    json crawl(const std::set<Site> &sites_, const std::set<Parameters> &parameters_,
+               const std::set<Chapters> &chapters_) const;
 
-    // применяет настройки из json; возвращает true, если успешно и false иначе
-    bool resetSettings(json settings);
+    // применяет настройки из json
+    void resetSettings(const json& settings);
 
     // возвращает текущие настройки в формате json
     json getSettings() const;

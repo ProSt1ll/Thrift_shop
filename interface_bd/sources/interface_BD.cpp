@@ -36,19 +36,3 @@ using namespace bd;
         Product* get_user_chosen(std::string user_id){
             
         }
-
-        Query_BD::Query_BD(){
-                sqlite3_open(PATH_DB, &DB);
-        }
-
-        Query_BD::~Query_BD(){
-                sqlite3_close(DB);
-        }
-
-        void insert_into(Categories category, std::string query){
-
-        }
-
-        std::string select_from(Categories category, std::string query){
-                
-        }

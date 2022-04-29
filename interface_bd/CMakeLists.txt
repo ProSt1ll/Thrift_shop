@@ -30,3 +30,8 @@ SET_TARGET_PROPERTIES(lib PROPERTIES LINKER_LANGUAGE CXX)
 add_executable(tests ${EXC_TEST})
 target_link_libraries(tests gmock)
 target_link_libraries(tests lib)
+target_link_libraries(tests -I/usr/include/mysql -L/usr/lib/x86_64-linux-gnu -lmysqlclient -lpthread -ldl -lz -lssl -lcrypto -lresolv -lm -lrt)
+
+add_executable(main ${EXC})
+target_link_libraries(main lib)
+target_link_libraries(main -I/usr/include/mysql -L/usr/lib/x86_64-linux-gnu -lmysqlclient -lpthread -ldl -lz -lssl -lcrypto -lresolv -lm -lrt)

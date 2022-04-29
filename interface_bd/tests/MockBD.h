@@ -1,6 +1,7 @@
 #include <gmock/gmock.h>
 #include <string>
 #include "../headers/interface_BD.h"
+#include "../headers/query_bd.h"
 
 using namespace bd;
 

@@ -1,10 +1,7 @@
 #ifndef INTERFACE_BD_H
 #define INTERFACE_BD_H
-#include <sqlite3.h>
 #include <string>
 #include <vector>
-
-#define PATH_DB " "
 
 namespace bd {
 
@@ -23,9 +20,32 @@ namespace bd {
         // "NULL"== NULL
     } Parametrs;
 
+   #ifndef CATEGORIES
+    #define CATEGORIES
     enum Categories {
         Sneakers, Shirts, Tshirts
     };
+
+    char* CategoriesToString( Categories catagory ) {
+     switch( catagory ){
+     case Sneakers:
+         {
+             return "Sneakers";
+             break;
+         }
+     case Shirts:
+         {
+             return "Shirts";
+             break;
+         }
+     case Tshirts:
+         {
+             return "Tshirts";
+             break;
+         }
+     }
+    }
+    #endif // CATEGORIES
 
     typedef struct {
         Categories category;
@@ -58,21 +78,6 @@ namespace bd {
 
         // Возвращает избранное пользователем
         Product* get_user_chosen(std::string user_id);
-    };
-
-    class Query_BD{
-        private:
-            sqlite3* DB;
-        public:
-            //устанавливает соединение с БД 
-            Query_BD();
-
-            //разрывает соединение с БД
-            ~Query_BD();
-
-            void insert_into(Categories category, std::string query);
-
-            std::string select_from(Categories category, std::string query);
     };
 
 }

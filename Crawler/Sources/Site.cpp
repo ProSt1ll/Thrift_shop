@@ -151,18 +151,17 @@ void siteSearch::Site::setTemplateParameter(const Parameters &parameter,
 
 // перегрузка операторов
 
-bool siteSearch::Site::operator==(const siteSearch::Site &site) {
-
-    if (chapterMap.size() != site.chapterMap.size() || parameterMap.size() != site.parameterMap.size())
+bool siteSearch::operator==(const siteSearch::Site &lhs, const siteSearch::Site &rhs) {
+    if (lhs.chapterMap.size() != rhs.chapterMap.size() || lhs.parameterMap.size() != rhs.parameterMap.size())
         return false;
 
-    for (const auto &element: chapterMap) {
-        if (site.chapterMap.at(element.first) != element.second)
+    for (const auto &element: lhs.chapterMap) {
+        if (rhs.chapterMap.at(element.first) != element.second)
             return false;
     }
 
-    for (const auto &element: parameterMap) {
-        if (!(site.parameterMap.at(element.first) == element.second))
+    for (const auto &element: lhs.parameterMap) {
+        if (!(rhs.parameterMap.at(element.first) == element.second))
             return false;
     }
 
@@ -188,6 +187,7 @@ void siteSearch::Site::resetSettings(const json &settings) {
     parameterMap = getParameterMapFromJson(settings);
 }
 
+// TODO
 json siteSearch::Site::crawl(const std::set<Parameters> &parameters_, const std::set<Chapters> &chapters_) const {
     return nlohmann::json();
 }

@@ -107,7 +107,8 @@ namespace siteSearch {
         void setTemplateParameter(const Parameters &parameter, const TemplateParameter &templateParameter);
 
         // перегрузка операторов
-        bool operator==(const Site &site);
+
+        friend bool operator==(const Site& lhs, const Site& rhs);
 
         // delete методы
 

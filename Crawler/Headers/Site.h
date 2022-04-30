@@ -22,7 +22,8 @@ namespace siteSearch {
 
 // принимает хост, порт, целевую страницу, версию http; возвращает http ответ
     http::response<http::dynamic_body>
-    getWebPage(const std::string &host, const std::string &port, const std::string &target, int version = 11);
+    getWebPage(const std::string &host, const std::string &target = "/", const std::string &port = "80",
+               int version = 11);
 
 // возвращает строковое представление результата http запроса
     std::string getStringFromResponse(const http::response<http::dynamic_body> &response);
@@ -123,12 +124,12 @@ namespace siteSearch {
 
         // перегрузка операторов
 
-        friend bool operator==(const Site& lhs, const Site& rhs);
+        friend bool operator==(const Site &lhs, const Site &rhs);
 
-        friend bool operator!=(const Site& lhs, const Site& rhs);
+        friend bool operator!=(const Site &lhs, const Site &rhs);
 
         // сравнение идет по строке ссылки на index
-        friend bool operator<(const Site& lhs, const Site& rhs);
+        friend bool operator<(const Site &lhs, const Site &rhs);
 
         // delete методы
 

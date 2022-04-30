@@ -174,45 +174,45 @@ public:
     };
 
     json site_2 = {
-            {"chapterMap", {
-                    {siteSearch::index, "indexUrl_2"},
-                    {siteSearch::man, "manUrl_2"},
-                    {siteSearch::woman, "womanUrl_2"},
-                    {siteSearch::boy, "boyUrl_2"},
-                    {siteSearch::girl, "girlUrl_2"}
-            }},
+            {"chapterMap",   {
+                                     {siteSearch::index, "indexUrl_2"},
+                                     {siteSearch::man,  "manUrl_2"},
+                                     {siteSearch::woman, "womanUrl_2"},
+                                     {siteSearch::boy,    "boyUrl_2"},
+                                     {siteSearch::girl, "girlUrl_2"}
+                             }},
             {"parameterMap", {
-                    {siteSearch::url, {
-                            {"tag", "tagUrl_2"},
-                            {"id", "idUrl_2"},
-                            {"cssClass", "cssClassUrl_2"}
-                    }},
-                    {siteSearch::cost, {
-                            {"tag", "tagCost_2"},
-                            {"id", "idcCst_2"},
-                            {"cssClass", "cssClassCost_2"}
-                    }},
-                    {siteSearch::title, {
-                            {"tag", "tagTitle_2"},
-                            {"id", "idTitle_2"},
-                            {"cssClass", "cssClassTitle_2"}
-                    }},
-                    {siteSearch::person, {
-                            {"tag", "tagPerson_2"},
-                            {"id", "idPerson_2"},
-                            {"cssClass", "cssClassPerson_2"}
-                    }},
-                    {siteSearch::size, {
-                            {"tag", "tagSize_2"},
-                            {"id", "idSize_2"},
-                            {"cssClass", "cssClassSize_2"}
-                    }},
-                    {siteSearch::image, {
-                            {"tag", "tagImage_2"},
-                            {"id", "idImage_2"},
-                            {"cssClass", "cssClassImage_2"}
-                    }}
-            }}
+                                     {siteSearch::url,   {
+                                                                 {"tag", "tagUrl_2"},
+                                                                 {"id", "idUrl_2"},
+                                                                 {"cssClass", "cssClassUrl_2"}
+                                                         }},
+                                     {siteSearch::cost, {
+                                                                {"tag", "tagCost_2"},
+                                                                {"id", "idcCst_2"},
+                                                                {"cssClass", "cssClassCost_2"}
+                                                        }},
+                                     {siteSearch::title, {
+                                                                 {"tag", "tagTitle_2"},
+                                                                 {"id", "idTitle_2"},
+                                                                 {"cssClass", "cssClassTitle_2"}
+                                                         }},
+                                     {siteSearch::person, {
+                                                                  {"tag", "tagPerson_2"},
+                                                                  {"id", "idPerson_2"},
+                                                                  {"cssClass", "cssClassPerson_2"}
+                                                          }},
+                                     {siteSearch::size, {
+                                                                {"tag", "tagSize_2"},
+                                                                {"id", "idSize_2"},
+                                                                {"cssClass", "cssClassSize_2"}
+                                                        }},
+                                     {siteSearch::image, {
+                                                                 {"tag", "tagImage_2"},
+                                                                 {"id", "idImage_2"},
+                                                                 {"cssClass", "cssClassImage_2"}
+                                                         }}
+                             }}
     };
 
     json emptySettings = {
@@ -592,6 +592,14 @@ TEST_F(TestSite, getSettings) {
     EXPECT_EQ(emptySettings, siteEmpty.getSettings());
 
     EXPECT_EQ(settings, site.getSettings());
+}
+
+// TODO
+TEST_F(TestSite, getTagContent) {
+    std::string content = "content268  _// 12";
+    std::string tag = "div";
+    std::string fullData = "<" + tag + ">" + content + "</" + tag + ">";
+    EXPECT_EQ(content, siteSearch::getTagContent(fullData, tag));
 }
 
 // TODO

@@ -28,6 +28,9 @@ namespace siteSearch {
 // возвращает строковое представление результата http запроса
     std::string getStringFromResponse(const http::response<http::dynamic_body> &response);
 
+// Возвращает строковое содержание тега tag, начиная с позиции start, в файле file
+    std::string getTagContent(const std::string &htmlFile, const std::string &htmlTag, int pos = 0);
+
     enum Chapters {
         index, man, woman, boy, girl
     };

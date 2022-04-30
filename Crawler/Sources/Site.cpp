@@ -18,28 +18,15 @@ siteSearch::getWebPage(const std::string &host, const std::string &target, const
     auto const results = resolver.resolve(host, port);
 
 // Соединение по IP адресу, полученному с поиска
-    boost::asio::connect(socket, results
-            .
-
-                    begin(), results
-
-                                 .
-
-                                         end()
-
-    );
+    boost::asio::connect(socket, results.begin(), results.end());
 
 // Создание сообщения http запроса
     http::request<http::string_body> req{http::verb::get, target, version};
-    req.
-            set(http::field::host, host
-    );
-    req.
-            set(http::field::user_agent, BOOST_BEAST_VERSION_STRING);
+    req.set(http::field::host, host);
+    req.set(http::field::user_agent, BOOST_BEAST_VERSION_STRING);
 
 // Отправка http запроса
-    http::write(socket, req
-    );
+    http::write(socket, req);
 
 // Объявление буфера для получения http ответа
     boost::beast::flat_buffer buffer;
@@ -48,21 +35,29 @@ siteSearch::getWebPage(const std::string &host, const std::string &target, const
     http::response<http::dynamic_body> result;
 
 // Получение http ответа
-    http::read(socket, buffer, result
-    );
+    http::read(socket, buffer, result);
 
 // Закрытие сокета
-    socket.
-            shutdown(tcp::socket::shutdown_both);
+    socket.shutdown(tcp::socket::shutdown_both);
 
-    return
-            result;
+    return result;
 }
 
 std::string siteSearch::getStringFromResponse(const http::response<http::dynamic_body> &response) {
     std::stringstream ss;
     ss << response;
     return ss.str();
+}
+
+std::string siteSearch::getTagContent(const std::string &htmlFile, const std::string &htmlTag, int pos) {
+    size_t startIndex = htmlFile.find(htmlTag, pos);
+    // учитываем смещение относительно размера тега и закрывающих кавычек ">"
+    startIndex += htmlTag.size() + 1;
+    size_t endIndex = htmlFile.find("/" + htmlTag, startIndex);
+    if (endIndex == std::string::npos || endIndex <= startIndex)
+        return "";
+    // - 1 т.к. нужно учесть открытие закрывающего тега "<"
+    return htmlFile.substr(startIndex, endIndex - startIndex - 1);
 }
 
 // TemplateParameter

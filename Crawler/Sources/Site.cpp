@@ -51,13 +51,14 @@ std::string siteSearch::getStringFromResponse(const http::response<http::dynamic
 
 std::string siteSearch::getTagContent(const std::string &htmlFile, const std::string &htmlTag, int pos) {
     size_t startIndex = htmlFile.find(htmlTag, pos);
-    // учитываем смещение относительно размера тега и закрывающих кавычек ">"
-    startIndex += htmlTag.size() + 1;
+    // учитываем смещение относительно ">"
+    startIndex = htmlFile.find('>', startIndex + 1) + 1;
     size_t endIndex = htmlFile.find("/" + htmlTag, startIndex);
+    // учитываем смещение относительно "<"
+    endIndex -= 1;
     if (endIndex == std::string::npos || endIndex <= startIndex)
         return "";
-    // - 1 т.к. нужно учесть открытие закрывающего тега "<"
-    return htmlFile.substr(startIndex, endIndex - startIndex - 1);
+    return htmlFile.substr(startIndex, endIndex - startIndex);
 }
 
 // TemplateParameter

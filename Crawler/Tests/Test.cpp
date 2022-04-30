@@ -3,6 +3,7 @@
 #include "../Headers/Site.h"
 #include "../Headers/Clothe.h"
 #include "Mocks.h"
+#include <set>
 
 using item::Clothe;
 using item::Persons;
@@ -120,9 +121,126 @@ public:
 
 class TestCrawler : public ::testing::Test {
 public:
+    Crawler crawler;
+    Crawler crawlerEmpty;
+    std::set<Chapters> chapters = {siteSearch::index, siteSearch::man, siteSearch::woman, siteSearch::boy,
+                                   siteSearch::girl};
+    std::set<Parameters> parameters = {siteSearch::url, siteSearch::cost, siteSearch::title, siteSearch::person,
+                                       siteSearch::size, siteSearch::image};
+    std::set<Chapters> chaptersEmpty;
+    std::set<Parameters> parametersEmpty;
+    std::set<Site> sitesEmpty;
 
+    json site_1 = {
+            {"chapterMap",   {
+                                     {siteSearch::index, "indexUrl_1"},
+                                     {siteSearch::man,  "manUrl_1"},
+                                     {siteSearch::woman, "womanUrl_1"},
+                                     {siteSearch::boy,    "boyUrl_1"},
+                                     {siteSearch::girl, "girlUrl_1"}
+                             }},
+            {"parameterMap", {
+                                     {siteSearch::url,   {
+                                                                 {"tag", "tagUrl_1"},
+                                                                 {"id", "idUrl_1"},
+                                                                 {"cssClass", "cssClassUrl_1"}
+                                                         }},
+                                     {siteSearch::cost, {
+                                                                {"tag", "tagCost_1"},
+                                                                {"id", "idcCst_1"},
+                                                                {"cssClass", "cssClassCost_1"}
+                                                        }},
+                                     {siteSearch::title, {
+                                                                 {"tag", "tagTitle_1"},
+                                                                 {"id", "idTitle_1"},
+                                                                 {"cssClass", "cssClassTitle_1"}
+                                                         }},
+                                     {siteSearch::person, {
+                                                                  {"tag", "tagPerson_1"},
+                                                                  {"id", "idPerson_1"},
+                                                                  {"cssClass", "cssClassPerson_1"}
+                                                          }},
+                                     {siteSearch::size, {
+                                                                {"tag", "tagSize_1"},
+                                                                {"id", "idSize_1"},
+                                                                {"cssClass", "cssClassSize_1"}
+                                                        }},
+                                     {siteSearch::image, {
+                                                                 {"tag", "tagImage_1"},
+                                                                 {"id", "idImage_1"},
+                                                                 {"cssClass", "cssClassImage_1"}
+                                                         }}
+                             }}
+    };
+
+    json site_2 = {
+            {"chapterMap", {
+                    {siteSearch::index, "indexUrl_2"},
+                    {siteSearch::man, "manUrl_2"},
+                    {siteSearch::woman, "womanUrl_2"},
+                    {siteSearch::boy, "boyUrl_2"},
+                    {siteSearch::girl, "girlUrl_2"}
+            }},
+            {"parameterMap", {
+                    {siteSearch::url, {
+                            {"tag", "tagUrl_2"},
+                            {"id", "idUrl_2"},
+                            {"cssClass", "cssClassUrl_2"}
+                    }},
+                    {siteSearch::cost, {
+                            {"tag", "tagCost_2"},
+                            {"id", "idcCst_2"},
+                            {"cssClass", "cssClassCost_2"}
+                    }},
+                    {siteSearch::title, {
+                            {"tag", "tagTitle_2"},
+                            {"id", "idTitle_2"},
+                            {"cssClass", "cssClassTitle_2"}
+                    }},
+                    {siteSearch::person, {
+                            {"tag", "tagPerson_2"},
+                            {"id", "idPerson_2"},
+                            {"cssClass", "cssClassPerson_2"}
+                    }},
+                    {siteSearch::size, {
+                            {"tag", "tagSize_2"},
+                            {"id", "idSize_2"},
+                            {"cssClass", "cssClassSize_2"}
+                    }},
+                    {siteSearch::image, {
+                            {"tag", "tagImage_2"},
+                            {"id", "idImage_2"},
+                            {"cssClass", "cssClassImage_2"}
+                    }}
+            }}
+    };
+
+    json emptySettings = {
+            {"chapters",   json::array()},
+            {"parameters", json::array()},
+            {"sites",      json::array()}
+    };
+
+    json settings = {
+            {"chapters",
+                      {siteSearch::index, siteSearch::man,  siteSearch::woman, siteSearch::boy,    siteSearch::girl}},
+            {"parameters",
+                      {siteSearch::url,   siteSearch::cost, siteSearch::title, siteSearch::person, siteSearch::size, siteSearch::image}},
+            {"sites", {site_1,
+                                          site_2
+                      }}
+    };
+
+    std::set<Site> sites = {Site(site_1), Site(site_2)};
 
     void SetUp() {
+        crawlerEmpty = Crawler();
+        crawler = Crawler(settings);
+        sites = {Site(site_1), Site(site_2)};
+        chapters = {siteSearch::index, siteSearch::man, siteSearch::woman, siteSearch::boy,
+                    siteSearch::girl};
+        parameters = {siteSearch::url, siteSearch::cost, siteSearch::title, siteSearch::person,
+                      siteSearch::size, siteSearch::image};
     }
 
     void TearDown() {
@@ -441,7 +559,7 @@ TEST_F(TestSite, deletes) {
     EXPECT_EQ(site.getTemplateParameter(parameter), TemplateParameter());
 }
 
-TEST_F(TestSite, operatorEquality) {
+TEST_F(TestSite, operatorCompare) {
     Site equalitySiteEmpty;
     Site equalitySite(settings);
 
@@ -449,6 +567,17 @@ TEST_F(TestSite, operatorEquality) {
     EXPECT_TRUE(equalitySite == site);
 
     EXPECT_FALSE(site == siteEmpty);
+
+    EXPECT_FALSE(site < siteEmpty);
+    EXPECT_TRUE(siteEmpty < site);
+
+    siteEmpty.setChapterUrl(siteSearch::index, "a" + site.getChapterUrl(siteSearch::index));
+    EXPECT_FALSE(site < siteEmpty);
+    EXPECT_TRUE(siteEmpty < site);
+
+    siteEmpty.setChapterUrl(siteSearch::index, "z");
+    EXPECT_TRUE(site < siteEmpty);
+    EXPECT_FALSE(siteEmpty < site);
 }
 
 TEST_F(TestSite, resetSettings) {
@@ -471,24 +600,56 @@ TEST_F(TestSite, crawl) {
 
 // TestCrawler
 
-// TODO
 TEST_F(TestCrawler, adds) {
+    for (const auto &element: parameters) {
+        crawlerEmpty.addParameter(element);
+    }
+    for (const auto &element: chapters) {
+        crawlerEmpty.addChapter(element);
+    }
+    for (const auto &element: sites) {
+        crawlerEmpty.addSite(element);
+    }
+    EXPECT_EQ(crawlerEmpty.getParameters(), parameters);
+    EXPECT_EQ(crawlerEmpty.getChapters(), chapters);
+    EXPECT_EQ(crawlerEmpty.getSites(), sites);
 }
 
-// TODO
 TEST_F(TestCrawler, gets) {
+    EXPECT_EQ(parametersEmpty, crawlerEmpty.getParameters());
+    EXPECT_EQ(chaptersEmpty, crawlerEmpty.getChapters());
+    EXPECT_EQ(sitesEmpty, crawlerEmpty.getSites());
+
+    EXPECT_EQ(parameters, crawler.getParameters());
+    EXPECT_EQ(chapters, crawler.getChapters());
+    EXPECT_EQ(sites, crawler.getSites());
 }
 
-// TODO
 TEST_F(TestCrawler, deletes) {
+    for (const auto &element: parameters) {
+        crawler.deleteParameter(element);
+    }
+    for (const auto &element: chapters) {
+        crawler.deleteChapter(element);
+    }
+    for (const auto &element: sites) {
+        crawler.deleteSite(element);
+    }
+    EXPECT_EQ(crawlerEmpty.getParameters(), crawler.getParameters());
+    EXPECT_EQ(crawlerEmpty.getChapters(), crawler.getChapters());
+    EXPECT_EQ(crawlerEmpty.getSites(), crawler.getSites());
 }
 
-// TODO
-TEST_F(TestCrawler, getSettigs) {
+TEST_F(TestCrawler, getSettings) {
+    EXPECT_EQ(settings, crawler.getSettings());
+    EXPECT_EQ(emptySettings, crawlerEmpty.getSettings());
 }
 
-// TODO
 TEST_F(TestCrawler, resetSettigs) {
+    crawlerEmpty.resetSettings(settings);
+    crawler.resetSettings(emptySettings);
+    EXPECT_EQ(settings, crawlerEmpty.getSettings());
+    EXPECT_EQ(emptySettings, crawler.getSettings());
 }
 
 // TODO

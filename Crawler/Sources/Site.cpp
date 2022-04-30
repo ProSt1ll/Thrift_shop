@@ -172,6 +172,17 @@ bool siteSearch::operator!=(const siteSearch::Site &lhs, const siteSearch::Site 
     return !siteSearch::operator==(lhs, rhs);
 }
 
+bool siteSearch::operator<(const siteSearch::Site &lhs, const siteSearch::Site &rhs) {
+    siteSearch::Chapters compareParameter = index;
+    if (lhs.chapterMap.count(compareParameter) == 0) {
+        return rhs.chapterMap.count(compareParameter);
+    }
+    if (rhs.chapterMap.count(compareParameter) == 0) {
+        return false;
+    }
+    return lhs.chapterMap.at(compareParameter) < rhs.chapterMap.at(compareParameter);
+}
+
 // delete методы
 
 void siteSearch::Site::deleteChapter(const Chapters &chapter) {

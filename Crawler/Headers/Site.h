@@ -109,7 +109,11 @@ namespace siteSearch {
         // перегрузка операторов
 
         friend bool operator==(const Site& lhs, const Site& rhs);
+
         friend bool operator!=(const Site& lhs, const Site& rhs);
+
+        // сравнение идет по строке ссылки на index
+        friend bool operator<(const Site& lhs, const Site& rhs);
 
         // delete методы
 

@@ -12,7 +12,8 @@ HunterGate(
 project(Crawler)
 
 set(CMAKE_CXX_STANDARD 11)
-#set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-fprofile-arcs -ftest-coverage -fPIC -O0")
+set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "")
+#set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-fprofile-arcs -ftest-coverage -fPIC -O0 -pthread")
 #set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -coverage -lgcov")
 
 ### directories variables ###
@@ -24,17 +25,17 @@ file(GLOB EXC_TEST "Tests/*.cpp")
 
 ### hunter ###
 
-hunter_add_package(Beast)
-hunter_add_package(Boost COMPONENTS program_options)
-hunter_add_package(gumbo)
 hunter_add_package(asio)
+hunter_add_package(Beast)
+hunter_add_package(Boost)
+hunter_add_package(gumbo)
 hunter_add_package(nlohmann_json)
 hunter_add_package(GTest)
 
-find_package(Beast CONFIG REQUIRED)
-find_package(Boost CONFIG REQUIRED program_options)
-find_package(gumbo CONFIG REQUIRED)
 find_package(asio CONFIG REQUIRED)
+find_package(Beast CONFIG REQUIRED)
+find_package(Boost CONFIG REQUIRED)
+find_package(gumbo CONFIG REQUIRED)
 find_package(nlohmann_json CONFIG REQUIRED)
 find_package(GTest CONFIG REQUIRED)
 

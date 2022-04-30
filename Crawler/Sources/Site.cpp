@@ -141,11 +141,19 @@ std::set<Parameters> siteSearch::Site::getParameters() const {
 // Set методы
 
 void siteSearch::Site::setChapterUrl(const Chapters &chapter, const std::string &url) {
+    if (chapterMap.count(chapter)) {
+        chapterMap[chapter] = url;
+        return;
+    }
     chapterMap.insert(std::pair<Chapters, std::string>{chapter, url});
 }
 
 void siteSearch::Site::setTemplateParameter(const Parameters &parameter,
                                             const siteSearch::TemplateParameter &templateParameter) {
+    if (parameterMap.count(parameter)) {
+        parameterMap[parameter] = templateParameter;
+        return;
+    }
     parameterMap.insert(std::pair<Parameters, siteSearch::TemplateParameter>{parameter, templateParameter});
 }
 
@@ -173,7 +181,7 @@ bool siteSearch::operator!=(const siteSearch::Site &lhs, const siteSearch::Site 
 }
 
 bool siteSearch::operator<(const siteSearch::Site &lhs, const siteSearch::Site &rhs) {
-    siteSearch::Chapters compareParameter = index;
+    siteSearch::Chapters compareParameter = siteSearch::index;
     if (lhs.chapterMap.count(compareParameter) == 0) {
         return rhs.chapterMap.count(compareParameter);
     }

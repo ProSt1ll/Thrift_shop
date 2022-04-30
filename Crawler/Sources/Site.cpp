@@ -168,6 +168,10 @@ bool siteSearch::operator==(const siteSearch::Site &lhs, const siteSearch::Site 
     return true;
 }
 
+bool siteSearch::operator!=(const siteSearch::Site &lhs, const siteSearch::Site &rhs) {
+    return !siteSearch::operator==(lhs, rhs);
+}
+
 // delete методы
 
 void siteSearch::Site::deleteChapter(const Chapters &chapter) {

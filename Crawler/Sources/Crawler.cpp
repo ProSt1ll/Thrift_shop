@@ -2,8 +2,8 @@
 
 // получение полей из json с настройками
 
-std::set<Site, std::equal_to<Site>> Crawler::getSitesFromSettings(const json &settings) {
-    std::set<Site, std::equal_to<Site>> resultSet;
+std::set<Site> Crawler::getSitesFromSettings(const json &settings) {
+    std::set<Site> resultSet;
     for (const auto &siteSettings: settings["sites"]) {
         Site site(siteSettings);
         resultSet.insert(Site(siteSettings));
@@ -51,12 +51,12 @@ void Crawler::addChapter(const Chapters &chapter) {
 }
 
 void Crawler::addSite(const Site &site) {
-
+    sites.insert(site);
 }
 
 // get методы
 
-std::set<Site, std::equal_to<Site>> Crawler::getSites() const {
+std::set<Site> Crawler::getSites() const {
     return sites;
 }
 

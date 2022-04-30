@@ -14,13 +14,13 @@ using nlohmann::json;
 class Crawler {
 private:
     // сайты, которые можем обходить
-    std::set<Site, std::equal_to<Site>> sites;
+    std::set<Site> sites;
     // параметры, которые можем искать
     std::set<Parameters> parameters;
     // главы, которые можем искать
     std::set<Chapters> chapters;
 
-    static std::set<Site, std::equal_to<Site>> getSitesFromSettings(const json& settings);
+    static std::set<Site> getSitesFromSettings(const json& settings);
 
     static std::set<Parameters> getParametersFromSettings(const json& settings);
 
@@ -46,7 +46,7 @@ public:
 
     // get методы
 
-    std::set<Site, std::equal_to<Site>> getSites() const;
+    std::set<Site> getSites() const;
 
     std::set<Parameters> getParameters() const;
 

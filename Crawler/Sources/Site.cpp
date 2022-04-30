@@ -5,6 +5,50 @@ using siteSearch::Chapters;
 using siteSearch::Parameters;
 using siteSearch::TemplateParameter;
 
+// Вспомогательные функции
+
+http::response<http::dynamic_body>
+siteSearch::getWebPage(const std::string &host, const std::string &port, const std::string &target, int version) {
+
+    boost::asio::io_context ioc;
+    tcp::resolver resolver{ioc};
+    tcp::socket socket{ioc};
+
+    // Поиск домена
+    auto const results = resolver.resolve(host, port);
+
+    // Соединение по IP адресу, полученному с поиска
+    boost::asio::connect(socket, results.begin(), results.end());
+
+    // Создание сообщения http запроса
+    http::request<http::string_body> req{http::verb::get, target, version};
+    req.set(http::field::host, host);
+    req.set(http::field::user_agent, BOOST_BEAST_VERSION_STRING);
+
+    // Отправка http запроса
+    http::write(socket, req);
+
+    // Объявление буфера для получения http ответа
+    boost::beast::flat_buffer buffer;
+
+    // Объявление контейнера, в котором будет храниться http ответ
+    http::response<http::dynamic_body> result;
+
+    // Получение http ответа
+    http::read(socket, buffer, result);
+
+    // Закрытие сокета
+    socket.shutdown(tcp::socket::shutdown_both);
+
+    return result;
+}
+
+std::string siteSearch::getStringFromResponse(const http::response<http::dynamic_body> &response) {
+    std::stringstream ss;
+    ss << response;
+    return ss.str();
+}
+
 // TemplateParameter
 
 // конструкторы

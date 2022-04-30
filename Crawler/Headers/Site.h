@@ -3,14 +3,29 @@
 #include <set>
 #include <vector>
 #include <nlohmann/json.hpp>
+#include <boost/beast/core.hpp>
+#include <boost/beast/http.hpp>
+#include <boost/beast/version.hpp>
+#include <boost/asio/connect.hpp>
+#include <boost/asio/ip/tcp.hpp>
+
 #include "Clothe.h"
 
 using nlohmann::json;
+using tcp = boost::asio::ip::tcp;
+namespace http = boost::beast::http;
 
 #ifndef CRAWLER_SITE_H
 #define CRAWLER_SITE_H
 
 namespace siteSearch {
+
+// принимает хост, порт, целевую страницу, версию http; возвращает http ответ
+    http::response<http::dynamic_body>
+    getWebPage(const std::string &host, const std::string &port, const std::string &target, int version = 11);
+
+// возвращает строковое представление результата http запроса
+    std::string getStringFromResponse(const http::response<http::dynamic_body> &response);
 
     enum Chapters {
         index, man, woman, boy, girl

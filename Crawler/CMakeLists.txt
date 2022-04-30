@@ -12,7 +12,6 @@ HunterGate(
 project(Crawler)
 
 set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-pthread")
 #set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-fprofile-arcs -ftest-coverage -fPIC -O0 -pthread")
 #set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -coverage -lgcov")
 
@@ -43,7 +42,7 @@ find_package(GTest CONFIG REQUIRED)
 
 add_library(lib ${INCLUDE} ${SOURCES})
 add_executable(main ${EXC})
-target_link_libraries(lib nlohmann_json::nlohmann_json)
+target_link_libraries(lib nlohmann_json::nlohmann_json gumbo::gumbo Beast::Beast asio::asio_headeronly)
 target_link_libraries(main lib)
 
 add_executable(tests ${EXC_TEST})

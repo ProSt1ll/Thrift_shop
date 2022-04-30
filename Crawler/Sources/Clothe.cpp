@@ -96,9 +96,13 @@ nlohmann::json Clothe::getJson() const {
     return resultJson;
 }
 
-bool Clothe::operator==(const Clothe &comparableItem) {
-    return (url == comparableItem.url && title == comparableItem.title && image == comparableItem.image &&
-            size == comparableItem.size && person == comparableItem.person && cost == comparableItem.cost);
+bool item::operator==(const Clothe &lhs, const Clothe &rhs) {
+    return (lhs.url == rhs.url && lhs.title == rhs.title && lhs.image == rhs.image &&
+            lhs.size == rhs.size && lhs.person == rhs.person && lhs.cost == rhs.cost);
+}
+
+bool item::operator!=(const Clothe &lhs, const Clothe &rhs) {
+    return !item::operator==(lhs, rhs);
 }
 
 Clothe &Clothe::operator=(const Clothe &copyItem) = default;

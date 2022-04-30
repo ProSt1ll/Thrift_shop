@@ -74,7 +74,9 @@ namespace item {
 
         Clothe &operator=(const Clothe &copyItem);
 
-        bool operator==(const Clothe &comparableItem);
+        friend bool operator==(const Clothe &lhs, const Clothe &rhs);
+
+        friend bool operator!=(const Clothe &lhs, const Clothe &rhs);
 
         // Остальные методы
 

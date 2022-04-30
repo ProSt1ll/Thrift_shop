@@ -3,8 +3,8 @@ cmake_minimum_required(VERSION 3.14)
 ### hunter ###
 include("hunter/HunterGate.cmake")
 HunterGate(
-        URL "https://github.com/cpp-pm/hunter/archive/v0.23.297.tar.gz"
-        SHA1 "3319fe6a3b08090df7df98dee75134d68e2ef5a3"
+        URL "https://github.com/cpp-pm/hunter/archive/v0.23.278.tar.gz"
+        SHA1 "35fa55bc1dfcf9f4d7264f8bb26cd1759ce1ae07"
 )
 
 ### base settings ###
@@ -24,9 +24,17 @@ file(GLOB EXC_TEST "Tests/*.cpp")
 
 ### hunter ###
 
+hunter_add_package(Beast)
+hunter_add_package(Boost COMPONENTS program_options)
+hunter_add_package(gumbo)
+hunter_add_package(asio)
 hunter_add_package(nlohmann_json)
 hunter_add_package(GTest)
 
+find_package(Beast CONFIG REQUIRED)
+find_package(Boost CONFIG REQUIRED program_options)
+find_package(gumbo CONFIG REQUIRED)
+find_package(asio CONFIG REQUIRED)
 find_package(nlohmann_json CONFIG REQUIRED)
 find_package(GTest CONFIG REQUIRED)
 

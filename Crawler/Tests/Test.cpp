@@ -595,11 +595,65 @@ TEST_F(TestSite, getSettings) {
 }
 
 // TODO
-TEST_F(TestSite, getTagContent) {
-    std::string content = "content268  _// 12";
-    std::string tag = "div";
-    std::string fullData = "<" + tag + ">" + content + "</" + tag + ">";
-    EXPECT_EQ(content, siteSearch::getTagContent(fullData, tag));
+TEST_F(TestSite, checkAttr) {
+
+}
+
+TEST_F(TestSite, getBlockContent) {
+    std::string content, tag, fullData, cssClass, id;
+
+    // тест без вложенности
+    content = "content268  _// 12";
+    tag = "div";
+    fullData = "<" + tag + ">" + content + "</" + tag + ">";
+    EXPECT_EQ(content, siteSearch::getBlockContent(fullData, tag));
+
+    // тест со вложенностью без пересечения названий тегов
+    content = "<someTag> content268  _// 12 </someTag>";
+    tag = "div";
+    fullData = "<" + tag + ">" + content + "</" + tag + ">";
+    EXPECT_EQ(content, siteSearch::getBlockContent(fullData, tag));
+
+    // тест со вложенностью, с классом, без id
+    content = "<someTag> content268  _// 12 </someTag>";
+    tag = "div";
+    cssClass = "someClass";
+    fullData = "<" + tag + "class = \"" + cssClass + "\">" + content + "</" + tag + ">";
+    EXPECT_EQ(content, siteSearch::getBlockContent(fullData, tag));
+    EXPECT_EQ(content, siteSearch::getBlockContent(fullData, tag, cssClass));
+
+    // тест со вложенностью, с классом, с id
+    content = "<someTag> content268  _// 12 </someTag>";
+    tag = "div";
+    id = "someId";
+    cssClass = "someClass";
+    fullData = "<" + tag + "class = \"" + cssClass + "\"" + "id = \"" + id + "\">" + content + "</" + tag + ">";
+    EXPECT_EQ(content, siteSearch::getBlockContent(fullData, tag));
+    EXPECT_EQ(content, siteSearch::getBlockContent(fullData, tag, cssClass));
+    EXPECT_EQ(content, siteSearch::getBlockContent(fullData, tag, cssClass, id));
+    EXPECT_EQ(content, siteSearch::getBlockContent(fullData, tag, "", id));
+
+    // тест на неудавшийся поиск
+    content = "<someTag> content268  _// 12 </someTag>";
+    tag = "div";
+    id = "someId";
+    cssClass = "someClass";
+    fullData = "<" + tag + "class = \"" + cssClass + "\"" + "id = \"" + id + "\">" + content + "</" + tag + ">";
+    EXPECT_EQ("", siteSearch::getBlockContent(fullData, tag + "another"));
+    EXPECT_EQ("", siteSearch::getBlockContent(fullData, tag, cssClass + "another"));
+    EXPECT_EQ("", siteSearch::getBlockContent(fullData, tag, cssClass, id + "another"));
+    EXPECT_EQ("", siteSearch::getBlockContent(fullData, tag, "", id + "another"));
+
+    // тест со вложенностью таких же тегов
+    tag = "div";
+    content = "<" + tag + ">" + "content268  _// 12" + " </" + tag + "> Some out of space data";
+    id = "someId";
+    cssClass = "someClass";
+    fullData = "<" + tag + "class = \"" + cssClass + "\"" + "id = \"" + id + "\">" + content + "</" + tag + ">";
+    EXPECT_EQ(content, siteSearch::getBlockContent(fullData, tag));
+    EXPECT_EQ(content, siteSearch::getBlockContent(fullData, tag, cssClass));
+    EXPECT_EQ(content, siteSearch::getBlockContent(fullData, tag, cssClass, id));
+    EXPECT_EQ(content, siteSearch::getBlockContent(fullData, tag, "", id));
 }
 
 // TODO

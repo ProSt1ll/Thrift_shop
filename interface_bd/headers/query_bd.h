@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdio.h>
+#include <typeinfo>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -14,30 +15,10 @@
 #define database "products"
 
 #ifndef CATEGORIES
-    #define CATEGORIES
+#define CATEGORIES
     enum Categories {
-        Sneakers, Shirts, Tshirts
+        Empty , Sneakers, Shirts, Tshirts
     };
-
-    char* CategoriesToString( Categories catagory ) {
-     switch( catagory ){
-     case Sneakers:
-         {
-             return "Sneakers";
-             break;
-         }
-     case Shirts:
-         {
-             return "Shirts";
-             break;
-         }
-     case Tshirts:
-         {
-             return "Tshirts";
-             break;
-         }
-     }
-    }
 #endif // CATEGORIES
 
 namespace bd{

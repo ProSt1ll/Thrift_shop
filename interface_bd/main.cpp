@@ -3,11 +3,28 @@
 
 using namespace bd;
 
+std::string ColorsToString( Colors color );
+Colors StringToColors( std::string color_string );
+std::string CategoriesToString(Categories catagory);
+
  main() {
         Query_BD instance;
         instance.delete_all_tables();
-        /*instance.create_all_tables();
-        if(instance.insert_into("INSERT INTO Sneakers (name, url_image, brand) VALUES ('Nike Air Force 1 Crater Next Nature','https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/54f2467f-77bb-4aaf-8e87-8b09e4043001/%D0%BA%D1%80%D0%BE%D1%81%D1%81%D0%BE%D0%B2%D0%BA%D0%B8-air-force-1-crater-next-nature-tqRt7B.png','Nike');")){
-           printf("error\n"); 
-        }*/
+        instance.create_all_tables();
+
+        Product prod;
+        prod.category = Sneakers;
+        prod.name = "Nike Air Force 1 Crater Next Nature";
+        prod.price = 10421;
+        prod.url_image = "http";
+        prod.url_product = "http1";
+        prod.param.brand = "Nike";
+        BI interface;
+        interface.set_product(prod);
+      
+        std::vector<Product> answer = interface.search_parametrs(Sneakers,prod.param);
+        std::cout<<"\n"<< CategoriesToString(answer[0].category)<<"\n";
+
+        interface.set_user_chosen("1",Sneakers,1);
+        interface.set_user_chosen("1",Sneakers,2);
     }

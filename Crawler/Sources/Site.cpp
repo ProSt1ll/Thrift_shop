@@ -335,8 +335,33 @@ void siteSearch::Site::resetSettings(const json &settings) {
     parameterMap = getParameterMapFromJson(settings);
 }
 
+//TODO
+std::vector<std::string> siteSearch::Site::getItemsFromHtml(const Chapters &chapter) const {
+    // По параметру itemTemplate достает все предметы из html с их набором и возвращает vector этих предметов
+    return std::vector<std::string>();
+}
+
+//TODO
+std::string siteSearch::Site::singleCrawl(const Parameters &parameter, const std::string &chapter,
+                                          const std::string &htmlItem) const {
+    // просто из html с объектом забирает строковое представление нужного параметра и возвращает его
+    return std::string();
+}
+
+
+//TODO
+json siteSearch::Site::crawlChapter(const std::set<Parameters> &parameters_, const std::string &chapter,
+                                    const std::string &htmlItem) const {
+    // Вызывает singleCrawl для каждого параметра и затем соединяет это в один json файл для своего объекта
+    return nlohmann::json();
+}
+
 // TODO
 json siteSearch::Site::crawl(const std::set<Parameters> &parameters_, const std::set<Chapters> &chapters_) const {
+    // В разделах из chapters сначала берется элемент из большого списка по параметру itemTemplate, затем уже внутри
+    // него идет поиск параметров из parameters и формируется json, содержащий массив items, в каждом из которых
+    // лежит словарь с parameters и значениями этих параметров. По сути, запускает crawlChapter для каждой главы из
+    // chapters и соединяет это все в один json. При этом делает это для каждого предмета из большого списка.
     return nlohmann::json();
 }
 

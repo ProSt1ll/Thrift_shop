@@ -29,7 +29,7 @@ namespace siteSearch {
     std::string getStringFromResponse(const http::response<http::dynamic_body> &response);
 
 // Проверяет, что в открывающем блоке есть аттрибут Attr. start - позиция "<", end - позиция ">"
-    bool checkAttr(size_t start, size_t end, const std::string &attr, const std::string& htmlFile);
+    bool checkAttr(size_t start, size_t end, const std::string &attr, const std::string &htmlFile);
 
 // Возвращает строковое содержание тега tag, начиная с позиции start, в файле file
     std::string
@@ -154,6 +154,17 @@ namespace siteSearch {
 
         // изменяет настройки сайта, принимая json с настройками;
         void resetSettings(const nlohmann::json &settings);
+
+        // из html страницы с предметами достает каждый предмет и возвращает vector с ними
+        std::vector<std::string> getItemsFromHtml(const Chapters &chapter) const;
+
+        // ищет значение параметра в разделе и возвращает строковое значение параметра для предмета в htmlItem
+        std::string
+        singleCrawl(const Parameters &parameter, const std::string &chapter, const std::string &htmlItem) const;
+
+        // ищет значения всех параметров в разделе и возвращает json с параметрами предмета из htmlItem
+        json crawlChapter(const std::set<Parameters> &parameters_, const std::string &chapter,
+                          const std::string &htmlItem) const;
 
         // ищет на сайте параметры parameters в разделах chapters
         // возвращает json с найденными объектами

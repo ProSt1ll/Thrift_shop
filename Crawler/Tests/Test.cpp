@@ -594,7 +594,6 @@ TEST_F(TestSite, getSettings) {
     EXPECT_EQ(settings, site.getSettings());
 }
 
-// TODO
 TEST_F(TestSite, checkAttr) {
     std::string htmlFile, attr;
     std::size_t start, end;
@@ -680,6 +679,18 @@ TEST_F(TestSite, getBlockContent) {
 
 // TODO
 TEST_F(TestSite, crawl) {
+}
+
+// TODO
+TEST_F(TestSite, getItemsFromHtml) {
+}
+
+// TODO
+TEST_F(TestSite, singleCrawl) {
+}
+
+// TODO
+TEST_F(TestSite, crawlChapter) {
 }
 
 // TestCrawler

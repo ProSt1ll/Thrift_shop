@@ -28,8 +28,16 @@ namespace siteSearch {
 // возвращает строковое представление результата http запроса
     std::string getStringFromResponse(const http::response<http::dynamic_body> &response);
 
+// Проверяет, что в открывающем блоке есть аттрибут Attr. start - позиция "<", end - позиция ">"
+    bool checkAttr(size_t start, size_t end, const std::string &attr, const std::string& htmlFile);
+
 // Возвращает строковое содержание тега tag, начиная с позиции start, в файле file
-    std::string getTagContent(const std::string &htmlFile, const std::string &htmlTag, int pos = 0);
+    std::string
+    getBlockContent(const std::string &htmlFile, const std::string &htmlTag, const std::string &htmlClass = "",
+                    const std::string &htmlId = "", size_t pos = 0);
+
+// Находит в строке первое число и возвращает его в виде строки
+    std::string getNumber(const std::string &str);
 
     enum Chapters {
         index, man, woman, boy, girl

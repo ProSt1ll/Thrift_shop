@@ -49,7 +49,70 @@ std::string siteSearch::getStringFromResponse(const http::response<http::dynamic
     return ss.str();
 }
 
-std::string siteSearch::getTagContent(const std::string &htmlFile, const std::string &htmlTag, int pos) {
+bool siteSearch::checkAttr(size_t start, size_t end, const std::string &attr, const std::string &htmlFile) {
+    if (!attr.empty()) {
+        size_t attrPos = htmlFile.find(attr, start);
+        if (attrPos == std::string::npos || attrPos > end)
+            return false;
+    }
+    return true;
+}
+
+std::string
+siteSearch::getBlockContent(const std::string &htmlFile, const std::string &htmlTag, const std::string &htmlClass,
+                            const std::string &htmlId, size_t pos) {
+    // Нужно найти в документе блок с тегом htmlTag. И, при наличии, с классом htmlClass и id htmlId.
+    bool isFound = false;
+    size_t startPos = pos;
+    while (!isFound) {
+        // ищем начало блока по тегу
+        startPos = htmlFile.find(htmlTag, pos);
+        pos = startPos + 1;
+        if (startPos >= 0) {
+            isFound = true;
+        } else {
+            // если в документе, начиная с pos уже нет нужного тега.
+            break;
+        }
+        // ищем конец открывающего блока
+        size_t endPos = htmlFile.find('>', pos);
+
+        // проверка, что в блоке есть нужный класс
+        if (!checkAttr(startPos, endPos, htmlClass, htmlFile)) {
+            isFound = false;
+            continue;
+        }
+
+        // проверка, что в блоке есть нужный id
+        if (!checkAttr(startPos, endPos, htmlId, htmlFile)) {
+            isFound = false;
+            continue;
+        }
+    }
+    // если не нашли даже начала нужного блока
+    if (!isFound)
+        return "";
+
+    // Теперь нужно найти конец блока. Сложность заключается в том, что блоки закрываются по тегу и нужно найти нужный
+    // конец, учитывая, что те же теги могут быть вложенными.
+
+    isFound = false;
+    size_t endPos = pos;
+    size_t searchStartPos = startPos;
+    while (true) {
+        endPos = htmlFile.find("/" + htmlTag, searchStartPos);
+        size_t nextTagPos = htmlFile.find(htmlTag, searchStartPos + 1);
+        if (nextTagPos > endPos || nextTagPos == std::string::npos || nextTagPos < 0) {
+            isFound = true;
+            break;
+        }
+        searchStartPos = nextTagPos + 1;
+    }
+
+    if (!isFound)
+        return "";
+    return htmlFile.substr(startPos, endPos - startPos);
+    /*
     size_t startIndex = htmlFile.find(htmlTag, pos);
     // учитываем смещение относительно ">"
     startIndex = htmlFile.find('>', startIndex + 1) + 1;
@@ -59,6 +122,7 @@ std::string siteSearch::getTagContent(const std::string &htmlFile, const std::st
     if (endIndex == std::string::npos || endIndex <= startIndex)
         return "";
     return htmlFile.substr(startIndex, endIndex - startIndex);
+     */
 }
 
 // TemplateParameter
@@ -245,6 +309,10 @@ bool siteSearch::operator<(const siteSearch::Site &lhs, const siteSearch::Site &
         return false;
     }
     return lhs.chapterMap.at(compareParameter) < rhs.chapterMap.at(compareParameter);
+}
+
+std::string siteSearch::getNumber(const std::string &str) {
+    return std::string();
 }
 
 // delete методы

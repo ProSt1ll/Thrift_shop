@@ -596,6 +596,28 @@ TEST_F(TestSite, getSettings) {
 
 // TODO
 TEST_F(TestSite, checkAttr) {
+    std::string htmlFile, attr;
+    std::size_t start, end;
+
+    htmlFile = R"(<div class = "someClass"id = "someId">someContent</div>)";
+    start = 0;
+    end = htmlFile.size() - 1;
+
+    attr = "someClass";
+    EXPECT_EQ(true, siteSearch::checkAttr(start, end, attr, htmlFile));
+
+    attr = "someId";
+    EXPECT_EQ(true, siteSearch::checkAttr(start, end, attr, htmlFile));
+
+    attr = "someContent";
+    EXPECT_EQ(true, siteSearch::checkAttr(start, end, attr, htmlFile));
+
+    attr = "";
+    EXPECT_EQ(true, siteSearch::checkAttr(start, end, attr, htmlFile));
+
+    attr = "someContent";
+    end = htmlFile.find('>', start);
+    EXPECT_EQ(false, siteSearch::checkAttr(start, end, attr, htmlFile));
 
 }
 

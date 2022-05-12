@@ -68,7 +68,7 @@ siteSearch::getBlockContent(const std::string &htmlFile, const std::string &html
         // ищем начало блока по тегу
         startPos = htmlFile.find(htmlTag, pos);
         pos = startPos + 1;
-        if (startPos >= 0) {
+        if (startPos != -1) {
             isFound = true;
         } else {
             // если в документе, начиная с pos уже нет нужного тега.
@@ -101,28 +101,29 @@ siteSearch::getBlockContent(const std::string &htmlFile, const std::string &html
     size_t searchStartPos = startPos;
     while (true) {
         endPos = htmlFile.find("/" + htmlTag, searchStartPos);
-        size_t nextTagPos = htmlFile.find(htmlTag, searchStartPos + 1);
-        if (nextTagPos > endPos || nextTagPos == std::string::npos || nextTagPos < 0) {
+        // ищем конец открывающего блока
+        size_t blockOpenEndPos = htmlFile.find('>', searchStartPos);
+        // следующий тег с тем же названием, который может быть вложенный, из-за чего нужно искать закрытие тега дальше
+        size_t nextTagPos = htmlFile.find(htmlTag, blockOpenEndPos);
+        if (endPos == -1)
+            break;
+        if (nextTagPos > endPos || nextTagPos == std::string::npos || nextTagPos == -1) {
             isFound = true;
             break;
         }
-        searchStartPos = nextTagPos + 1;
+        // на следующей итерации поиск производится после вложенного закрывающего тега
+        ++endPos;
+        searchStartPos = endPos;
     }
 
-    if (!isFound)
+    // ищем начало содержания блока, для этого ищем конец открывающего блока
+    startPos = htmlFile.find('>', startPos);
+    ++startPos;
+
+    if (!isFound || endPos <= startPos)
         return "";
-    return htmlFile.substr(startPos, endPos - startPos);
-    /*
-    size_t startIndex = htmlFile.find(htmlTag, pos);
-    // учитываем смещение относительно ">"
-    startIndex = htmlFile.find('>', startIndex + 1) + 1;
-    size_t endIndex = htmlFile.find("/" + htmlTag, startIndex);
-    // учитываем смещение относительно "<"
-    endIndex -= 1;
-    if (endIndex == std::string::npos || endIndex <= startIndex)
-        return "";
-    return htmlFile.substr(startIndex, endIndex - startIndex);
-     */
+    // учитываем "<"
+    return htmlFile.substr(startPos, endPos - startPos - 1);
 }
 
 // TemplateParameter

@@ -247,20 +247,50 @@ using namespace bd;
                 instance.insert_into(query_user.c_str());
         }
 
+        void help_func_get_us(std::string &conditions, std::vector<std::string> &products_id, int i){
+                if(i==0)
+                        conditions += products_id[i+1] + ".id  = " + products_id[i];
+                else
+                        conditions += " OR " + products_id[i+1] + ".id  = " + products_id[i];
+        }
+
         // Возвращает избранное пользователем
-        std::vector<Product> get_user_chosen(std::string user_id){
+        std::vector<Product> BI::get_user_chosen(std::string user_id){
                 Query_BD instance;
-                std::string temp_query = "SELECT Users_chosen.id_product FROM Users INNER JOIN Users_chosen ON Users.id = Users_chosen.user_id WHERE Users_chosen.category = 'Sneakers' AND Users.tg_id ='" + user_id + "';";
+                std::string temp_query = "SELECT Users_chosen.id_product,Users_chosen.category FROM Users INNER JOIN Users_chosen ON Users.id = Users_chosen.user_id WHERE Users.id ='" + user_id + "';";
                 std::vector<std::string> products_id = instance.select_from(temp_query.c_str());
-                               
+                std::cout << products_id[0] << products_id[1];           
+                std::string conditions_sneakers = " WHERE ";
+                std::string conditions_shirts = " WHERE ";
+                std::string conditions_tshirts = " WHERE ";
+                for(int i = 0; i < products_id.size(); i+=2){
+                        if(products_id[i+1] == CategoriesToString(Sneakers))
+                                help_func_get_us(conditions_sneakers, products_id, i);
+                        if(products_id[i+1] == CategoriesToString(Shirts))
+                                help_func_get_us(conditions_shirts, products_id, i);
+                        if(products_id[i+1] == CategoriesToString(Tshirts))
+                                help_func_get_us(conditions_tshirts, products_id, i);
+                }
+
+                std::cout << "\n" << conditions_sneakers;
+
                 BI interface;
                 std::vector<Product> result;
-                std::string conditions = " WHERE ";
-                for(int i = 0; i < products_id.size(); i++){
-                        if(i==0)
-                                conditions += "Sneakers" + products_id[i];
-                        else
-                                conditions += products_id[i];
+                std::vector<Product> result1;
+                std::vector<Product> result2; 
+                std::vector<Product> result3; 
+                if(conditions_sneakers != " WHERE "){
+                        result1 = interface.get_products(Sneakers, conditions_sneakers);
+                        result.insert(result.end(),std::make_move_iterator(result1.begin()),std::make_move_iterator(result1.end()));
                 }
-                get_products(Categories category, std::string conditions = " ");
+                if(conditions_shirts != " WHERE "){
+                        result2 = interface.get_products(Sneakers, conditions_shirts);
+                        result.insert(result.end(),std::make_move_iterator(result2.begin()),std::make_move_iterator(result2.end()));
+                }
+                if(conditions_tshirts != " WHERE "){
+                        result3 = interface.get_products(Sneakers, conditions_tshirts);
+                        result.insert(result.end(),std::make_move_iterator(result3.begin()),std::make_move_iterator(result3.end()));
+                }
+                
+                return result;
         }

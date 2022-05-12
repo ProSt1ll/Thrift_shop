@@ -2,6 +2,7 @@
 #define INTERFACE_BD_H
 #include <string>
 #include <vector>
+#include <iterator>
 
 #include <iostream>
 

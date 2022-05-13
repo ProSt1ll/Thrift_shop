@@ -4,8 +4,10 @@
 #include <boost/beast/core.hpp>
 #include <boost/beast/http.hpp>
 #include <boost/beast/version.hpp>
+
 #include <boost/asio/dispatch.hpp>
 #include <boost/asio/strand.hpp>
+
 #include <boost/config.hpp>
 #include <algorithm>
 #include <cstdlib>
@@ -17,6 +19,7 @@
 #include <vector>
 
 #include "Router.h"
+#include "Handler.h"
 
 namespace beast = boost::beast;         // from <boost/beast.hpp>
 namespace http = beast::http;           // from <boost/beast/http.hpp>
@@ -26,35 +29,39 @@ using tcp = boost::asio::ip::tcp;       // from <boost/asio/ip/tcp.hpp>
 class Connection: public std::enable_shared_from_this<Connection>
 {
 public:
-    // Construct a connection with the given io_context.
-    explicit Connection(tcp::socket&& socket);
+    // Создание соединения с заданным io_context.
+    explicit Connection(tcp::socket&& socket, Handlers &handlers);
 
 
-    // Start the first asynchronous operation for the connection.
+    // Запуск первой асинхронной операции для Connection.
     void start();
 
 private:
+    // Чтение)
     void do_read();
 
-    // Handle completion of a read operation.
-    void handle_read(beast::error_code e,
+    // Обработка завершения операции асинхронного чтения.
+    void handle_read(beast::error_code error,
                      std::size_t bytes_transferred);
 
-    // Handle completion of a write operation.
+    // Обработка завершения операции асинхронной записи.
     void handle_write(bool close,
                       beast::error_code e,
                       std::size_t bytes_transferred);
 
+    // Закрытие)
     void do_close();
 
 private:
-    // The handler used to process the incoming request.
-    // Router<Response(*)(const Request &request)> &requestRouter_;
+    // Обработчик, используемый для обработки входящего запроса request_.
+    // Router<Response(*)(const Request &request_)> &requestRouter_;
 
-    beast::tcp_stream stream;
-    beast::flat_buffer buffer;
-    http::request<http::string_body> request;
+    beast::tcp_stream stream_;
+    Handlers &handlers_;
+    beast::flat_buffer buffer_;
+    http::request<http::string_body> request_;
     std::shared_ptr<void> res_;
+    // нужен парсер
 };
 
 

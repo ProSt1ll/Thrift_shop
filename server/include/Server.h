@@ -9,21 +9,30 @@
 
 class Server : public std::enable_shared_from_this<Server> {
 public:
+    // Инициализируем на каком хосте и порту будем работать
     explicit Server(const std::string &address, const std::string &port,
                     std::size_t thread_pool_size);
 
-    void Run();
-
-    void StartAccept();
-
-    void HandleAccept();
-
-    void HandleStop();
+    // Запускаем цикл io_context сервера.
+    void run();
 
 private:
-    net::io_context io_context;
-    tcp::acceptor acceptor;
-    std::size_t thread_pool_size;
+    // Подготовка сокета, который будет испьзоваться для прослушивания
+    void start_accept();
+
+    // Обработка завершения асинхронной операции принятия.
+    void handle_accept(beast::error_code error, tcp::socket socket);
+
+    // Обработка запроса на остановку сервера.
+    void handle_stop();
+
+    // io_context, используемый для выполнения асинхронных операций.
+    net::io_context io_context_;
+    // Приемщик, используемый для прослушивания входящих соединений.
+    tcp::acceptor acceptor_;
+    // Количество потоков, которые будут вызывать io_context::run().
+    std::size_t thread_pool_size_;
+
 };
 
 

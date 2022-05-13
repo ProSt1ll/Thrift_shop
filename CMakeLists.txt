@@ -14,12 +14,14 @@ file(GLOB INCLUDE "server/include/*.h")
 find_package (Threads REQUIRED)
 add_compile_options(-pthread)
 find_package(Boost REQUIRED)
+find_package(nlohmann_json CONFIG REQUIRED)
 
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 add_library(server_lib ${INCLUDE} ${SOURCE} )
 
 add_executable(main.out server/main.cpp)
-target_link_libraries(main.out server_lib ${Boost_LIBRARIES})
+target_link_libraries(main.out server_lib nlohmann_json::nlohmann_json ${Boost_LIBRARIES})
+#target_link_libraries(main.out server_lib ${Boost_LIBRARIES})
 
 enable_testing()
 find_package(GTest REQUIRED)

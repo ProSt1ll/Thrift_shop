@@ -711,8 +711,89 @@ TEST_F(TestSite, getItemsFromHtml) {
     EXPECT_EQ(resultItems, site.getItemsFromHtml(htmlFile));
 }
 
-// TODO
 TEST_F(TestSite, singleCrawl) {
+    // в этом тесте сначала создаем сайт с нужным шаблоном под предмет, затем создаем html предмета и проверяем функцию
+    site = siteEmpty;
+    const int parametersAmount = 6;
+    TemplateParameter templateParameter;
+    std::vector<std::string> tags;
+    std::vector<std::string> ids;
+    std::vector<std::string> classes;
+    std::vector<std::string> contents;
+
+    std::string tagUrl = "TagUrl";
+    std::string idUrl = "IdUrl";
+    std::string cssClassUrl = "ClassUrl";
+    templateParameter = TemplateParameter(tagUrl, idUrl, cssClassUrl);
+    site.setTemplateParameter(siteSearch::url, templateParameter);
+    tags.push_back(tagUrl);
+    ids.push_back(idUrl);
+    classes.push_back(cssClassUrl);
+    contents.push_back("UrlContent");
+
+    std::string tagCost = "TagCost";
+    std::string idCost = "IdCost";
+    std::string cssClassCost = "itemClass";
+    templateParameter = TemplateParameter(tagCost, idCost, cssClassCost);
+    site.setTemplateParameter(siteSearch::cost, templateParameter);
+    tags.push_back(tagCost);
+    ids.push_back(idCost);
+    classes.push_back(cssClassCost);
+    contents.push_back("CostContent");
+
+    std::string tagTitle = "TagTitle";
+    std::string idTitle = "IdTitle";
+    std::string cssClassTitle = "itemClassTitle";
+    templateParameter = TemplateParameter(tagTitle, idTitle, cssClassTitle);
+    site.setTemplateParameter(siteSearch::title, templateParameter);
+    tags.push_back(tagTitle);
+    ids.push_back(idTitle);
+    classes.push_back(cssClassTitle);
+    contents.push_back("TitleContent");
+
+    std::string tagPerson = "TagPerson";
+    std::string idPerson = "IdPerson";
+    std::string cssClassPerson = "itemClassPerson";
+    templateParameter = TemplateParameter(tagPerson, idPerson, cssClassPerson);
+    site.setTemplateParameter(siteSearch::person, templateParameter);
+    tags.push_back(tagPerson);
+    ids.push_back(idPerson);
+    classes.push_back(cssClassPerson);
+    contents.push_back("PersonContent");
+
+    std::string tagSize = "TagSize";
+    std::string idSize = "IdSize";
+    std::string cssClassSize = "itemClassSize";
+    templateParameter = TemplateParameter(tagSize, idSize, cssClassSize);
+    site.setTemplateParameter(siteSearch::size, templateParameter);
+    tags.push_back(tagSize);
+    ids.push_back(idSize);
+    classes.push_back(cssClassSize);
+    contents.push_back("SizeContent");
+
+    std::string tagImage = "TagImage";
+    std::string idImage = "IdImage";
+    std::string cssClassImage = "itemClassImage";
+    templateParameter = TemplateParameter(tagImage, idImage, cssClassImage);
+    site.setTemplateParameter(siteSearch::image, templateParameter);
+    tags.push_back(tagImage);
+    ids.push_back(idImage);
+    classes.push_back(cssClassImage);
+    contents.push_back("ImageContent");
+
+    std::string htmlFile;
+    for (int i = 0; i < parametersAmount; ++i) {
+        htmlFile += "<" + tags[i] + "id = \"" + ids[i] + "\" class = \"" + classes[i] + "\">" + contents[i] + "</" +
+                    tags[i] + ">\n";
+    }
+
+    // url, cost, title, person, size, image, itemTemplate
+    EXPECT_EQ(contents[0], site.singleCrawl(siteSearch::url, htmlFile));
+    EXPECT_EQ(contents[1], site.singleCrawl(siteSearch::cost, htmlFile));
+    EXPECT_EQ(contents[2], site.singleCrawl(siteSearch::title, htmlFile));
+    EXPECT_EQ(contents[3], site.singleCrawl(siteSearch::person, htmlFile));
+    EXPECT_EQ(contents[4], site.singleCrawl(siteSearch::size, htmlFile));
+    EXPECT_EQ(contents[5], site.singleCrawl(siteSearch::image, htmlFile));
 }
 
 // TODO

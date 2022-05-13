@@ -796,8 +796,122 @@ TEST_F(TestSite, singleCrawl) {
     EXPECT_EQ(contents[5], site.singleCrawl(siteSearch::image, htmlFile));
 }
 
-// TODO
-TEST_F(TestSite, crawlChapter) {
+TEST_F(TestSite, crawlHtml) {
+    site = siteEmpty;
+    const int parametersAmount = 6;
+    TemplateParameter templateParameter;
+    std::vector<std::string> tags;
+    std::vector<std::string> ids;
+    std::vector<std::string> classes;
+    std::vector<std::string> contents;
+
+    std::string itemTag = "itemTag";
+    std::string itemId = "itemId";
+    std::string itemClass = "itemClass";
+    TemplateParameter itemTemplate(itemTag, itemId, itemClass);
+    site.setTemplateParameter(siteSearch::itemTemplate, itemTemplate);
+
+    std::string tagUrl = "TagUrl";
+    std::string idUrl = "IdUrl";
+    std::string cssClassUrl = "ClassUrl";
+    templateParameter = TemplateParameter(tagUrl, idUrl, cssClassUrl);
+    site.setTemplateParameter(siteSearch::url, templateParameter);
+    tags.push_back(tagUrl);
+    ids.push_back(idUrl);
+    classes.push_back(cssClassUrl);
+    contents.push_back("UrlContent");
+
+    std::string tagCost = "TagCost";
+    std::string idCost = "IdCost";
+    std::string cssClassCost = "itemClass";
+    templateParameter = TemplateParameter(tagCost, idCost, cssClassCost);
+    site.setTemplateParameter(siteSearch::cost, templateParameter);
+    tags.push_back(tagCost);
+    ids.push_back(idCost);
+    classes.push_back(cssClassCost);
+    contents.push_back("CostContent");
+
+    std::string tagTitle = "TagTitle";
+    std::string idTitle = "IdTitle";
+    std::string cssClassTitle = "itemClassTitle";
+    templateParameter = TemplateParameter(tagTitle, idTitle, cssClassTitle);
+    site.setTemplateParameter(siteSearch::title, templateParameter);
+    tags.push_back(tagTitle);
+    ids.push_back(idTitle);
+    classes.push_back(cssClassTitle);
+    contents.push_back("TitleContent");
+
+    std::string tagPerson = "TagPerson";
+    std::string idPerson = "IdPerson";
+    std::string cssClassPerson = "itemClassPerson";
+    templateParameter = TemplateParameter(tagPerson, idPerson, cssClassPerson);
+    site.setTemplateParameter(siteSearch::person, templateParameter);
+    tags.push_back(tagPerson);
+    ids.push_back(idPerson);
+    classes.push_back(cssClassPerson);
+    contents.push_back("PersonContent");
+
+    std::string tagSize = "TagSize";
+    std::string idSize = "IdSize";
+    std::string cssClassSize = "itemClassSize";
+    templateParameter = TemplateParameter(tagSize, idSize, cssClassSize);
+    site.setTemplateParameter(siteSearch::size, templateParameter);
+    tags.push_back(tagSize);
+    ids.push_back(idSize);
+    classes.push_back(cssClassSize);
+    contents.push_back("SizeContent");
+
+    std::string tagImage = "TagImage";
+    std::string idImage = "IdImage";
+    std::string cssClassImage = "itemClassImage";
+    templateParameter = TemplateParameter(tagImage, idImage, cssClassImage);
+    site.setTemplateParameter(siteSearch::image, templateParameter);
+    tags.push_back(tagImage);
+    ids.push_back(idImage);
+    classes.push_back(cssClassImage);
+    contents.push_back("ImageContent");
+
+    std::string htmlFile;
+    std::vector<std::string> contentsAnother;
+
+    htmlFile += "<" + itemTag + " id = \"" + itemId + "\" class = \"" + itemClass + "\">\n";
+    for (int i = 0; i < parametersAmount; ++i) {
+        htmlFile += "<" + tags[i] + "id = \"" + ids[i] + "\" class = \"" + classes[i] + "\">" + contents[i] + "</" +
+                    tags[i] + ">\n";
+        contentsAnother.push_back(contents[i]);
+    }
+    htmlFile += "</" + itemTag + ">\n";
+
+    htmlFile += "<" + itemTag + " id = \"" + itemId + "\" class = \"" + itemClass + "\">\n";
+    for (int i = 0; i < parametersAmount; ++i) {
+        htmlFile +=
+                "<" + tags[i] + "id = \"" + ids[i] + "\" class = \"" + classes[i] + "\">" + contentsAnother[i] + "</" +
+                tags[i] + ">\n";
+        contentsAnother.push_back(contents[i]);
+    }
+    htmlFile += "</" + itemTag + ">\n";
+
+    json resultJson = {
+            {
+                    {std::to_string(siteSearch::url), contents[0]},
+                    {std::to_string(siteSearch::cost), contents[1]},
+                    {std::to_string(siteSearch::title), contents[2]},
+                    {std::to_string(siteSearch::person), contents[3]},
+                    {std::to_string(siteSearch::size), contents[4]},
+                    {std::to_string(siteSearch::image), contents[5]}
+            },
+            {
+                    {std::to_string(siteSearch::url), contentsAnother[0]},
+                    {std::to_string(siteSearch::cost), contentsAnother[1]},
+                    {std::to_string(siteSearch::title), contentsAnother[2]},
+                    {std::to_string(siteSearch::person), contentsAnother[3]},
+                    {std::to_string(siteSearch::size), contentsAnother[4]},
+                    {std::to_string(siteSearch::image), contentsAnother[5]}}};
+
+    std::set<siteSearch::Parameters> parametersSet = {siteSearch::url, siteSearch::cost, siteSearch::title,
+                                                      siteSearch::person, siteSearch::size, siteSearch::image};
+
+    EXPECT_EQ(resultJson, site.crawlHtml(parametersSet, htmlFile));
 }
 
 // TODO

@@ -162,9 +162,8 @@ namespace siteSearch {
         std::string
         singleCrawl(const Parameters &parameter, const std::string &htmlItem) const;
 
-        // ищет значения всех параметров в разделе и возвращает json с параметрами предмета из htmlItem
-        json crawlChapter(const std::set<Parameters> &parameters_, const std::string &chapter,
-                          const std::string &htmlItem) const;
+        // ищет значения всех параметров в html и возвращает json с параметрами предмета из htmlItem
+        json crawlHtml(const std::set<Parameters> &parameters_,const std::string &htmlFile) const;
 
         // ищет на сайте параметры parameters в разделах chapters
         // возвращает json с найденными объектами

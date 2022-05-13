@@ -358,7 +358,6 @@ std::vector<std::string> siteSearch::Site::getItemsFromHtml(const std::string &h
     return resultVector;
 }
 
-//TODO
 std::string siteSearch::Site::singleCrawl(const Parameters &parameter, const std::string &htmlItem) const {
     // просто из html с объектом забирает строковое представление нужного параметра и возвращает его
     if (!parameterMap.count(parameter))
@@ -369,11 +368,19 @@ std::string siteSearch::Site::singleCrawl(const Parameters &parameter, const std
 }
 
 
-//TODO
-json siteSearch::Site::crawlChapter(const std::set<Parameters> &parameters_, const std::string &chapter,
-                                    const std::string &htmlItem) const {
+json siteSearch::Site::crawlHtml(const std::set<Parameters> &parameters_, const std::string &htmlFile) const {
     // Вызывает singleCrawl для каждого параметра и затем соединяет это в один json файл для своего объекта
-    return nlohmann::json();
+    std::vector<std::string> items = getItemsFromHtml(htmlFile);
+    json resultJson = json::array();
+
+    for (const auto &item: items) {
+        json itemJson;
+        for (const auto &parameter: parameters_) {
+            itemJson[std::to_string(parameter)] = singleCrawl(parameter, item);
+        }
+        resultJson[resultJson.size()] = itemJson;
+    }
+    return resultJson;
 }
 
 // TODO

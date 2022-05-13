@@ -1104,10 +1104,6 @@ TEST_F(TestCrawler, resetSettigs) {
     EXPECT_EQ(emptySettings, crawler.getSettings());
 }
 
-// TODO
-TEST_F(TestCrawler, crawl) {
-}
-
 int main() {
     testing::InitGoogleTest();
     return RUN_ALL_TESTS();

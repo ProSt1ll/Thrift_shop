@@ -140,7 +140,6 @@ using namespace bd;
                 }
 
                 temp_query += ");";
-                std::cout << temp_query;
 
                 Query_BD instance;
                 if(instance.insert_into(temp_query.c_str()))
@@ -159,7 +158,6 @@ using namespace bd;
         // добавляем ссылку на товар и цену в таблицу catagory_url связанную с таблицой category:один(товар) ко многим(ссылкам+ценам), нет проверки параметров
         void BI::set_url_product_price(Categories category, int id_prod, std::size_t price, std::string url_product){
             std::string query_url = "INSERT INTO " + CategoriesToString(category) + "_urls" + " (product_id,price,url_product) VALUES ('" + std::to_string(id_prod) + "','" + std::to_string(price) + "','" + url_product + "');";
-            std::cout << query_url;
 
             Query_BD instance;
                 if(instance.insert_into(query_url.c_str()))
@@ -167,11 +165,10 @@ using namespace bd;
         }
 
         // Возвращает все записи из данной категории 
-        std::vector<Product> BI::get_products(Categories category, std::string conditions = " "){
+        std::vector<Product> BI::get_products(Categories category, std::string conditions){
             Query_BD instance;
             std::string name_table = CategoriesToString(category);
             std::string query = "SELECT " + name_table + ".name, " + name_table + ".url_image, " + name_table + ".size, " + name_table + ".color, " + name_table + ".brand, " + name_table + "_urls.price, " + name_table + "_urls.url_product" + " FROM " + name_table +" INNER JOIN " + name_table + "_urls ON " + name_table + ".id = " + name_table + "_urls.product_id" + conditions + ";";
-            std::cout << query;
             std::vector<std::string> category_products = instance.select_from(query.c_str());
             std::vector<Product> res_products; 
             res_products.resize(category_products.size()/7);
@@ -216,7 +213,7 @@ using namespace bd;
                 BI interface;
                 std::string conditions = " ";
                 if(param.size != 0){
-                        std::string conditions = " WHERE " + CategoriesToString(category) + ".size = '" + std::to_string(param.size) + "'";
+                        conditions = " WHERE " + CategoriesToString(category) + ".size = '" + std::to_string(param.size) + "'";
                         if(param.color != None)
                                 conditions += " AND " + CategoriesToString(category) + ".color = '" + ColorsToString(param.color) + "'";
                         if(param.brand != "NULL")
@@ -227,9 +224,6 @@ using namespace bd;
                                 conditions += " AND " + CategoriesToString(category) + ".brand = '" + param.brand + "'"; 
                 } else if(param.brand != "NULL")
                         conditions = " WHERE " + CategoriesToString(category) + ".brand = '" + param.brand + "'"; 
-
-                std::cout << "\n" << conditions;
-
                 std::vector<Product> answer = interface.get_products(category,conditions);
                 return answer;
         }
@@ -237,13 +231,10 @@ using namespace bd;
         // В таблице пользователей создаёт запись об избранном товаре(отношение многие ко многим)
         void BI::set_user_chosen(std::string user_id, Categories category, std::size_t product_id){
                 Query_BD instance;
-                std::string query_user = "INSERT INTO Users (tg_id) VALUES ('" + std::to_string(product_id) + "');";
+                std::string query_user = "INSERT INTO Users (tg_id) VALUES ('" + user_id + "');";
                 instance.insert_into(query_user.c_str());
 
-                std::string temp_query = "SELECT id FROM Users WHERE tg_id = '" + std::to_string(product_id) + "';";
-                std::vector<std::string> id_string = instance.select_from(temp_query.c_str());
-
-                query_user = "INSERT INTO Users_chosen(user_id, id_product, category) VALUES ('" + id_string[0] + "','" + std::to_string(product_id) + "','" + CategoriesToString(category) + "');";
+                query_user = "INSERT INTO Users_chosen(user_id, id_product, category) VALUES ('" + user_id + "','" + std::to_string(product_id) + "','" + CategoriesToString(category) + "');";
                 instance.insert_into(query_user.c_str());
         }
 
@@ -259,7 +250,7 @@ using namespace bd;
                 Query_BD instance;
                 std::string temp_query = "SELECT Users_chosen.id_product,Users_chosen.category FROM Users INNER JOIN Users_chosen ON Users.id = Users_chosen.user_id WHERE Users.id ='" + user_id + "';";
                 std::vector<std::string> products_id = instance.select_from(temp_query.c_str());
-                std::cout << products_id[0] << products_id[1];           
+          
                 std::string conditions_sneakers = " WHERE ";
                 std::string conditions_shirts = " WHERE ";
                 std::string conditions_tshirts = " WHERE ";
@@ -271,8 +262,6 @@ using namespace bd;
                         if(products_id[i+1] == CategoriesToString(Tshirts))
                                 help_func_get_us(conditions_tshirts, products_id, i);
                 }
-
-                std::cout << "\n" << conditions_sneakers;
 
                 BI interface;
                 std::vector<Product> result;

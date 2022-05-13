@@ -50,7 +50,7 @@ namespace bd {
         void set_url_product_price(Categories category, int id_prod, std::size_t price, std::string url_product);
 
         // Возвращает все записи из данной категории 
-        std::vector<Product> get_products(Categories category, std::string conditions);
+        std::vector<Product> get_products(Categories category, std::string conditions = " ");
 
         // Возвращает все записи из данной категории с ценой меньше или равной указанной
         std::vector<Product> search_down_price(Categories category, std::size_t price);

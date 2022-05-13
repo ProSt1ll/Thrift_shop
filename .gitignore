@@ -33,5 +33,3 @@
 *.idea
 cmake-build-debug
 interface_bd
-server/src/Handler.cpp
-server/include/Handler.h

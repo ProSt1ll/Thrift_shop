@@ -27,7 +27,8 @@ void Connection::do_read() {
 }
 
 // Обработка завершения операции асинхронного чтения.
-void Connection::handle_read(beast::error_code error, std::size_t bytes_transferred) {
+void Connection::handle_read(beast::error_code error,
+                             std::size_t bytes_transferred) {
     // Закрываем сессию
     if(error == http::error::end_of_stream)
         return do_close();
@@ -46,11 +47,12 @@ void Connection::handle_read(beast::error_code error, std::size_t bytes_transfer
             if (target == "/add_user" &&
                 request_.method() == http::verb::post) {
                 res = handlers_.add_user(request_);
-            } else if (target == "/get_item" &&
-                       request_.method() == http::verb::post) {
-                res = handlers_.get_item(request_);
+//            } else if (target == "/get_item" &&
+//                       request_.method() == http::verb::post) {
+//                res = handlers_.get_item(request_);
             // Пока это вся логика (нужно бы навесить еще)
-            } else {
+//        }
+            }else {
                 res.set(http::field::content_type, "application/json");
                 res.result(http::status::not_found);
                 res.body() = "Not found";

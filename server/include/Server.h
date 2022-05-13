@@ -5,7 +5,6 @@
 
 #include "Handler.h"
 #include "Connection.h"
-#include "Router.h"
 
 class Server : public std::enable_shared_from_this<Server> {
 public:
@@ -32,6 +31,8 @@ private:
     tcp::acceptor acceptor_;
     // Количество потоков, которые будут вызывать io_context::run().
     std::size_t thread_pool_size_;
+
+    Handlers handlers;
 
 };
 

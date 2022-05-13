@@ -18,7 +18,6 @@
 #include <thread>
 #include <vector>
 
-#include "Router.h"
 #include "Handler.h"
 
 namespace beast = boost::beast;         // from <boost/beast.hpp>

@@ -9,7 +9,7 @@
 #include <boost/config.hpp>
 #include <nlohmann/json.hpp>
 
-#include "Crawler.h"
+//#include "Crawler.h"
 #include "../../interface_bd/headers/interface_BD.h"
 
 //#include "структура из клиента"
@@ -27,25 +27,23 @@ public:
     http::response <http::string_body>
     add_user(http::request <http::string_body> request);
 
-    http::response <http::string_body>
-    get_item(http::request <http::string_body> request);
+//    http::response <http::string_body>
+//    get_item(http::request <http::string_body> request);
 
 
 private:
-    std::map<std::string, std::string>
-    parse_params(const std::string &url);
-
-    std::string get_user_body(User user);
-
-    std::string get_product_body(bd::Product product);
-
-    std::string check_update();
-
-    std::map<Categories, Parametrs> pars_param(json json_);
-
-    json need_item(Product item);
-
-
+//    std::map<std::string, std::string>
+//    parse_params(const std::string &url);
+//
+//    std::string get_user_body(User user);
+//
+//    std::string get_product_body(bd::Product product);
+//
+//    std::string check_update();
+//
+//    std::map<Categories, Parametrs> pars_param(json json_);
+//
+//    json need_item(Product item);
 
 };
 

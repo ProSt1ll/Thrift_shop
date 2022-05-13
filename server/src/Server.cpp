@@ -9,8 +9,9 @@
 
 // Инициализируем на каком хосте и порту будем работать
 Server::Server(const std::string &address, const std::string &port,
-               std::size_t thread_pool_size): acceptor_(net::make_strand(io_context_)),
-                                              thread_pool_size_(thread_pool_size) {
+               std::size_t thread_pool_size):
+               acceptor_(net::make_strand(io_context_)),
+               thread_pool_size_(thread_pool_size) {
 
     // Открытие приемщика с возможностью повторного использования адреса (например, SO_REUSEADDR).
     boost::asio::ip::tcp::resolver resolver(io_context_);
@@ -55,7 +56,7 @@ void Server::handle_accept(beast::error_code error, tcp::socket socket) {
     if (!error) {
         std::cout << "accept!";
         // Запускаем процесс для соединения (клиента)
-        auto c = std::make_shared<Connection>(std::move(socket));
+        auto c = std::make_shared<Connection>(std::move(socket), handlers);
         c->start();
     }
     // и уходим обратно

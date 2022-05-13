@@ -677,12 +677,38 @@ TEST_F(TestSite, getBlockContent) {
     EXPECT_EQ(content, siteSearch::getBlockContent(fullData, tag, "", id));
 }
 
-// TODO
-TEST_F(TestSite, crawl) {
-}
-
-// TODO
 TEST_F(TestSite, getItemsFromHtml) {
+    // в этом тесте сначала создаем сайт с нужным шаблоном под предметы, затем создаем массив предметов и по нему
+    // генерируем html, который потом и проверяем
+    std::string itemTag = "itemTag";
+    std::string itemId = "itemId";
+    std::string itemClass = "itemClass";
+    TemplateParameter itemTemplate(itemTag, itemId, itemClass);
+    site = siteEmpty;
+    site.setTemplateParameter(siteSearch::itemTemplate, itemTemplate);
+
+    std::vector<std::string> resultItems;
+    std::string htmlFile;
+    const int itemSize = 5;
+    for (int i = 0; i < itemSize; ++i) {
+        std::string item = "ItemContent" + std::to_string(i);
+        resultItems.push_back(item);
+        htmlFile +=
+                "<" + itemTag + "id =\" " + itemId + "\" class = \"" + itemClass + "\">" + item + "</" + itemTag + ">";
+    }
+
+    EXPECT_EQ(resultItems, site.getItemsFromHtml(htmlFile));
+
+    // а теперь каждый item будет состоять тоже из разных тегов
+    resultItems.clear();
+    htmlFile.clear();
+    for (int i = 0; i < itemSize; ++i) {
+        std::string item = "<" + itemTag + ">ItemContent" + std::to_string(i) + "</" + itemTag + ">";;
+        resultItems.push_back(item);
+        htmlFile +=
+                "<" + itemTag + "id =\" " + itemId + "\" class = \"" + itemClass + "\">" + item + "</" + itemTag + ">";
+    }
+    EXPECT_EQ(resultItems, site.getItemsFromHtml(htmlFile));
 }
 
 // TODO
@@ -691,6 +717,10 @@ TEST_F(TestSite, singleCrawl) {
 
 // TODO
 TEST_F(TestSite, crawlChapter) {
+}
+
+// TODO
+TEST_F(TestSite, crawl) {
 }
 
 // TestCrawler

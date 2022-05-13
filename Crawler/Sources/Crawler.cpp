@@ -87,10 +87,15 @@ void Crawler::deleteParameter(const Parameters &parameter) {
 
 // основной функционал
 
-// TODO
 json Crawler::crawl(const std::set<Site> &sites_, const std::set<Parameters> &parameters_,
                     const std::set<Chapters> &chapters_) const {
-    return nlohmann::json();
+    json resultJson = json::array();
+    for (const auto &site: sites_) {
+        json items = site.crawlChapters(parameters_, chapters_);
+        for (const auto &item: items)
+            resultJson[resultJson.size()] = item;
+    }
+    return resultJson;
 }
 
 void Crawler::resetSettings(const json &settings) {

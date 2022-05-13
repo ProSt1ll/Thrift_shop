@@ -158,9 +158,9 @@ namespace siteSearch {
         // из html страницы с предметами достает каждый предмет и возвращает vector с ними
         std::vector<std::string> getItemsFromHtml(const std::string &htmlFile) const;
 
-        // ищет значение параметра в разделе и возвращает строковое значение параметра для предмета в htmlItem
+        // ищет значение параметра в html предмета и возвращает строковое значение параметра
         std::string
-        singleCrawl(const Parameters &parameter, const std::string &chapter, const std::string &htmlItem) const;
+        singleCrawl(const Parameters &parameter, const std::string &htmlItem) const;
 
         // ищет значения всех параметров в разделе и возвращает json с параметрами предмета из htmlItem
         json crawlChapter(const std::set<Parameters> &parameters_, const std::string &chapter,

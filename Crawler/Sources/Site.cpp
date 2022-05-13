@@ -336,8 +336,7 @@ void siteSearch::Site::resetSettings(const json &settings) {
     parameterMap = getParameterMapFromJson(settings);
 }
 
-//TODO
-std::vector<std::string> siteSearch::Site::getItemsFromHtml(const std::string& htmlFile) const {
+std::vector<std::string> siteSearch::Site::getItemsFromHtml(const std::string &htmlFile) const {
     // По параметру itemTemplate достает все предметы из html с их набором и возвращает vector этих предметов
     size_t startIndex = 0;
     std::vector<std::string> resultVector;
@@ -348,7 +347,7 @@ std::vector<std::string> siteSearch::Site::getItemsFromHtml(const std::string& h
     TemplateParameter itemParameter = parameterMap.at(itemTemplate);
     while (true) {
         std::string htmlItem = getBlockContent(htmlFile, itemParameter.getTag(), itemParameter.getCssClass(),
-                                               itemParameter.getTag(), startIndex);
+                                               itemParameter.getId(), startIndex);
         if (htmlItem.empty())
             break;
 
@@ -360,10 +359,13 @@ std::vector<std::string> siteSearch::Site::getItemsFromHtml(const std::string& h
 }
 
 //TODO
-std::string siteSearch::Site::singleCrawl(const Parameters &parameter, const std::string &chapter,
-                                          const std::string &htmlItem) const {
+std::string siteSearch::Site::singleCrawl(const Parameters &parameter, const std::string &htmlItem) const {
     // просто из html с объектом забирает строковое представление нужного параметра и возвращает его
-    return std::string();
+    if (!parameterMap.count(parameter))
+        return "";
+    auto templateParameter = parameterMap.at(parameter);
+    return getBlockContent(htmlItem, templateParameter.getTag(), templateParameter.getCssClass(),
+                           templateParameter.getId());
 }
 
 

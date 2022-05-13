@@ -383,7 +383,6 @@ json siteSearch::Site::crawlHtml(const std::set<Parameters> &parameters_, const 
     return resultJson;
 }
 
-// TODO
 json
 siteSearch::Site::crawlHtmlVector(const std::set<Parameters> &parameters_,
                                   const std::vector<std::string> &htmlVector) const {
@@ -412,4 +411,14 @@ json siteSearch::Site::getSettings() const {
 
     resultJson["parameterMap"] = parameterMapArray;
     return resultJson;
+}
+
+json
+siteSearch::Site::crawlChapters(const std::set<Parameters> &parameters_, const std::set<Chapters> &chapters_) const {
+    std::vector<std::string> htmlVector;
+    for (const auto &chapter: chapters_) {
+        auto response = getWebPage(chapterMap.at(chapter));
+        htmlVector.push_back(getStringFromResponse(response));
+    }
+    return crawlHtmlVector(parameters_, htmlVector);
 }

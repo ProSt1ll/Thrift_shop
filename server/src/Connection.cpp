@@ -55,7 +55,13 @@ void Connection::handle_read(beast::error_code error, std::size_t bytes_transfer
                 res.result(http::status::not_found);
                 res.body() = "Not found";
             }
-        };
+        }
+        catch (std::exception &ex) {
+            res.set(http::field::server, BOOST_BEAST_VERSION_STRING);
+            res.set(http::field::content_type, "application/json");
+            res.body() = ex.what();
+        }
+
         std::cout << "Response status: " << std::endl << res.reason()<< std::endl;
         std::cout << "Response body: " << std::endl << res.body() << std::endl;
         std::cout << "======================================================="<< std::endl;

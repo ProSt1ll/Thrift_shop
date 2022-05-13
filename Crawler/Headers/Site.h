@@ -156,7 +156,7 @@ namespace siteSearch {
         void resetSettings(const nlohmann::json &settings);
 
         // из html страницы с предметами достает каждый предмет и возвращает vector с ними
-        std::vector<std::string> getItemsFromHtml(const Chapters &chapter) const;
+        std::vector<std::string> getItemsFromHtml(const std::string &htmlFile) const;
 
         // ищет значение параметра в разделе и возвращает строковое значение параметра для предмета в htmlItem
         std::string

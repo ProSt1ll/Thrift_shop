@@ -312,6 +312,7 @@ bool siteSearch::operator<(const siteSearch::Site &lhs, const siteSearch::Site &
     return lhs.chapterMap.at(compareParameter) < rhs.chapterMap.at(compareParameter);
 }
 
+//TODO
 std::string siteSearch::getNumber(const std::string &str) {
     return std::string();
 }
@@ -336,9 +337,26 @@ void siteSearch::Site::resetSettings(const json &settings) {
 }
 
 //TODO
-std::vector<std::string> siteSearch::Site::getItemsFromHtml(const Chapters &chapter) const {
+std::vector<std::string> siteSearch::Site::getItemsFromHtml(const std::string& htmlFile) const {
     // По параметру itemTemplate достает все предметы из html с их набором и возвращает vector этих предметов
-    return std::vector<std::string>();
+    size_t startIndex = 0;
+    std::vector<std::string> resultVector;
+
+    if (htmlFile.empty() || !parameterMap.count(itemTemplate))
+        return {};
+
+    TemplateParameter itemParameter = parameterMap.at(itemTemplate);
+    while (true) {
+        std::string htmlItem = getBlockContent(htmlFile, itemParameter.getTag(), itemParameter.getCssClass(),
+                                               itemParameter.getTag(), startIndex);
+        if (htmlItem.empty())
+            break;
+
+        resultVector.push_back(htmlItem);
+        startIndex = htmlFile.find(htmlItem, startIndex) + htmlItem.size();
+    }
+
+    return resultVector;
 }
 
 //TODO

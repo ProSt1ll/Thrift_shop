@@ -1,56 +1,23 @@
 #include <iostream>
+#include <nlohmann/json.hpp>
 #include "Headers/Site.h"
-# include <nlohmann/json.hpp>
+#include "Headers/Crawler.h"
 
-using nlohmann::json;
+#include <boost/beast/core.hpp>
+#include <boost/beast/http.hpp>
+#include <boost/beast/version.hpp>
+#include <boost/asio/connect.hpp>
+#include <boost/asio/ip/tcp.hpp>
+#include <string>
+
+using tcp = boost::asio::ip::tcp;
+namespace http = boost::beast::http;
+
 
 int main() {
-
-    json settings = {
-            {"chapterMap",   {
-                                     {siteSearch::index, "indexUrl"},
-                                     {siteSearch::man,  "manUrl"},
-                                     {siteSearch::woman, "womanUrl"},
-                                     {siteSearch::boy,    "boyUrl"},
-                                     {siteSearch::girl, "girlUrl"}
-                             }},
-            {"parameterMap", {
-                                     {siteSearch::url,   {
-                                                                 {"tag", "tagUrl"},
-                                                                 {"id", "idUrl"},
-                                                                 {"cssClass", "cssClassUrl"}
-                                                         }},
-                                     {siteSearch::cost, {
-                                                                {"tag", "tagCost"},
-                                                                {"id", "idcCst"},
-                                                                {"cssClass", "cssClassCost"}
-                                                        }},
-                                     {siteSearch::title, {
-                                                                 {"tag", "tagTitle"},
-                                                                 {"id", "idTitle"},
-                                                                 {"cssClass", "cssClassTitle"}
-                                                         }},
-                                     {siteSearch::person, {
-                                                                  {"tag", "tagPerson"},
-                                                                  {"id", "idPerson"},
-                                                                  {"cssClass", "cssClassPerson"}
-                                                          }},
-                                     {siteSearch::size, {
-                                                                {"tag", "tagSize"},
-                                                                {"id", "idSize"},
-                                                                {"cssClass", "cssClassSize"}
-                                                        }},
-                                     {siteSearch::image, {
-                                                                 {"tag", "tagImage"},
-                                                                 {"id", "idImage"},
-                                                                 {"cssClass", "cssClassImage"}
-                                                         }}
-                             }}
-    };
-
-    //json newSettings;
-    //newSettings["chapterMap"][std::to_string(siteSearch::index)] = "indexUrl";
-    //siteSearch::Site site(settings);
-    //std::cout << settings << std::endl << site.getSettings() << std::endl << newSettings << std::endl;
+    auto tmp = siteSearch::getWebPage("www.example.com");
+    auto result = siteSearch::getStringFromResponse(tmp);
+    std::cout << result << std::endl;
+    std::cout << std::stoi(" 19 ") << std::endl;
     return 0;
 }

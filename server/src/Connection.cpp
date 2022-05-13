@@ -55,32 +55,7 @@ void Connection::handle_read(beast::error_code error, std::size_t bytes_transfer
                 res.result(http::status::not_found);
                 res.body() = "Not found";
             }
-        }
-        // НЕПОНЯТНО, что это
-        catch (pqxx::unique_violation &ex) {
-            res.set(http::field::server, BOOST_BEAST_VERSION_STRING);
-            res.set(http::field::content_type, "application/json");
-            res.result(http::status::method_not_allowed);
-            res.body() = ex.what();
-        }
-        catch (pqxx::plpgsql_no_data_found &ex) {
-            res.set(http::field::server, BOOST_BEAST_VERSION_STRING);
-            res.set(http::field::content_type, "application/json");
-            res.result(http::status::not_found);
-            res.body() = ex.what();
-        }
-        catch (pqxx::failure &ex) {
-            res.set(http::field::server, BOOST_BEAST_VERSION_STRING);
-            res.set(http::field::content_type, "application/json");
-            res.result(http::status::service_unavailable);
-            res.body() = ex.what();
-        }
-        catch (std::exception &ex) {
-            res.set(http::field::server, BOOST_BEAST_VERSION_STRING);
-            res.set(http::field::content_type, "application/json");
-            res.body() = ex.what();
-        }
-
+        };
         std::cout << "Response status: " << std::endl << res.reason()<< std::endl;
         std::cout << "Response body: " << std::endl << res.body() << std::endl;
         std::cout << "======================================================="<< std::endl;

@@ -11,7 +11,7 @@ jobs:
     - run: sudo apt-get install -y libgmock-dev
     - run: cmake interface_bd/
     - run: make
-    - run: mysql -u root -p
+    - run: sudo mysql 
     - run: CREATE DATABASE products
     - run: CREATE USER 'admin'@'%' IDENTIFIED BY 'Technosquad'
     - run: GRANT ALL PRIVILEGES ON *.* TO 'admin'@'%'

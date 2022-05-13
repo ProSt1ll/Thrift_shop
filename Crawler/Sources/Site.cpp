@@ -384,12 +384,16 @@ json siteSearch::Site::crawlHtml(const std::set<Parameters> &parameters_, const 
 }
 
 // TODO
-json siteSearch::Site::crawl(const std::set<Parameters> &parameters_, const std::set<Chapters> &chapters_) const {
-    // В разделах из chapters сначала берется элемент из большого списка по параметру itemTemplate, затем уже внутри
-    // него идет поиск параметров из parameters и формируется json, содержащий массив items, в каждом из которых
-    // лежит словарь с parameters и значениями этих параметров. По сути, запускает crawlChapter для каждой главы из
-    // chapters и соединяет это все в один json. При этом делает это для каждого предмета из большого списка.
-    return nlohmann::json();
+json
+siteSearch::Site::crawlHtmlVector(const std::set<Parameters> &parameters_,
+                                  const std::vector<std::string> &htmlVector) const {
+    json resultJson = json::array();
+    for (const auto &html: htmlVector) {
+        json items = crawlHtml(parameters_, html);
+        for (const auto &item: items)
+            resultJson[resultJson.size()] = item;
+    }
+    return resultJson;
 }
 
 json siteSearch::Site::getSettings() const {

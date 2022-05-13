@@ -140,6 +140,7 @@ TEST(get_products, right) {
     EXPECT_EQ(Sneakers, ot[0].category);
     EXPECT_EQ("Nike Air Force 1 Crater Next Nature", ot[0].name);
     EXPECT_EQ("http", ot[0].url_image);
+    EXPECT_EQ(1, ot[0].param.id);
     EXPECT_EQ(0, ot[0].param.size);
     EXPECT_EQ(None, ot[0].param.color);
     EXPECT_EQ("Nike", ot[0].param.brand);

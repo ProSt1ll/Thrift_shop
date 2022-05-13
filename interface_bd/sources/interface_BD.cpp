@@ -168,12 +168,12 @@ using namespace bd;
         std::vector<Product> BI::get_products(Categories category, std::string conditions){
             Query_BD instance;
             std::string name_table = CategoriesToString(category);
-            std::string query = "SELECT " + name_table + ".name, " + name_table + ".url_image, " + name_table + ".size, " + name_table + ".color, " + name_table + ".brand, " + name_table + "_urls.price, " + name_table + "_urls.url_product" + " FROM " + name_table +" INNER JOIN " + name_table + "_urls ON " + name_table + ".id = " + name_table + "_urls.product_id" + conditions + ";";
+            std::string query = "SELECT " + name_table + ".name, " + name_table + ".url_image, " + name_table + ".size, " + name_table + ".color, " + name_table + ".brand, " + name_table + "_urls.price, " + name_table + "_urls.url_product" + name_table + ".id" + " FROM " + name_table +" INNER JOIN " + name_table + "_urls ON " + name_table + ".id = " + name_table + "_urls.product_id" + conditions + ";";
             std::vector<std::string> category_products = instance.select_from(query.c_str());
             std::vector<Product> res_products; 
-            res_products.resize(category_products.size()/7);
+            res_products.resize(category_products.size()/8);
             int j = 0;
-            for(int i = 0; i < category_products.size()/7; i++ ){
+            for(int i = 0; i < category_products.size()/8; i++ ){
                     res_products[i].category = category;
                     res_products[i].name = category_products[j];
                     j++;
@@ -194,6 +194,8 @@ using namespace bd;
                     res_products[i].price = std::stoi(category_products[j]);
                     j++;
                     res_products[i].url_product = category_products[j];
+                    j++;
+                    res_products[i].param.id = std::stoi(category_products[j]);
                     j++;
             }
 

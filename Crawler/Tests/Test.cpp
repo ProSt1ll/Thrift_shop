@@ -914,7 +914,6 @@ TEST_F(TestSite, crawlHtml) {
     EXPECT_EQ(resultJson, site.crawlHtml(parametersSet, htmlFile));
 }
 
-// TODO
 TEST_F(TestSite, crawlHtmlVector) {
     site = siteEmpty;
     const int parametersAmount = 6;

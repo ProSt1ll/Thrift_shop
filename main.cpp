@@ -1,6 +1,7 @@
 #include <iostream>
-
+#include "include/MenuController.h"
 int main() {
-    std::cout << "Hello, World!" << std::endl;
+    MenuController tgbot;
+    tgbot.run();
     return 0;
 }

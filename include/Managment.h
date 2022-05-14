@@ -1,9 +1,12 @@
-#include "Server.h"
-#include <vector>
-#include <string.h>
+//#include "Client.h"
 
 #ifndef TGBOT_MANAGMENT_H
 #define TGBOT_MANAGMENT_H
+#include <vector>
+#include <string.h>
+#include "json.hpp"
+#include <boost/beast/http.hpp>
+#include <tgbot/tgbot.h>
 
 class Package {
 public:
@@ -24,14 +27,14 @@ public:
 
 class Managment {
 public:
-    int *search_parametrs;
+    std::vector<int> *search_parametrs;
 
-    Managment();
+    Managment( TgBot::Bot *bot);
 
     ~Managment();
 
 
-    nlohmann::json get_product(int *search_parametr);
+    void get_product(int search_parametr);
 // запрос на сервер о требуемом продукте
 
     void add_favorite(int product_id);
@@ -39,14 +42,15 @@ public:
 
     void delete_favorite(int product_id);
 // удаление из отслеживания
+    void get_res(nlohmann::json request);
 private:
-    Server server;
+    TgBot::Bot *bot_mnm;
+    nlohmann::json create_req(std::string some);
+// создание request на сервер по параметру
 
-    nlohmann::json create_html(std::string some);
-// создание html запроса на сервер по параметру
-
-    std::string parse_html(nlohmann::json html);
+    void parse_res(nlohmann::json html,int type);
 // получение информации из hml запроса
+    void display(std::string url,int id);
 };
 
-#endif TGBOT_MANAGMENT_H
+#endif //TGBOT_MANAGMENT_H

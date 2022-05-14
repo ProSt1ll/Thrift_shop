@@ -40,19 +40,15 @@ void Connection::handle_read(beast::error_code error,
         http::response<http::string_body> res{http::status::bad_request,
                                               request_.version()};
         try {
-            std::string req_tar = static_cast<std::string>(request_.target());
-            auto delimiterPos = req_tar.find('?');
-            auto target = req_tar.substr(0, delimiterPos);
+            std::string request_target = static_cast<std::string>(request_.target());
 
-            if (target == "/add_user" &&
-                request_.method() == http::verb::post) {
+            if (request_target == "/posts") {
                 res = handlers_.add_user(request_);
-//            } else if (target == "/get_item" &&
-//                       request_.method() == http::verb::post) {
-//                res = handlers_.get_item(request_);
-            // Пока это вся логика (нужно бы навесить еще)
-//        }
-            }else {
+            } else if (request_target == "/get_item") {
+                res = handlers_.get_item(request_);
+            } else if (request_target == "/to_favorite") {
+                res = handlers_.to_favorite(request_);
+            } else {
                 res.set(http::field::content_type, "application/json");
                 res.result(http::status::not_found);
                 res.body() = "Not found";

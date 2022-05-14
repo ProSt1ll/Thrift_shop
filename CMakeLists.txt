@@ -22,7 +22,10 @@ add_library(server_lib ${INCLUDE} ${SOURCE} )
 
 add_executable(main.out server/main.cpp)
 target_link_libraries(main.out server_lib Threads::Threads nlohmann_json::nlohmann_json ${Boost_LIBRARIES})
-#target_link_libraries(main.out server_lib ${Boost_LIBRARIES})
+
+# Async HTTP Client
+#add_executable(client client.cpp)
+#target_link_libraries(client Threads::Threads nlohmann_json::nlohmann_json ${Boost_LIBRARIES})
 
 enable_testing()
 find_package(GTest REQUIRED)

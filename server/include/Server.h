@@ -36,5 +36,4 @@ private:
 
 };
 
-
 #endif //THRIFT_SHOP_SERVER_H

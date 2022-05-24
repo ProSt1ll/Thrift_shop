@@ -13,7 +13,8 @@ jobs:
     - run: cmake interface_bd/
     - run: make
     - run: sudo service mysql start
-    - run: sudo mysql 
+    - run: mysql -u root -p
+    - run:  
     - run: CREATE DATABASE products
     - run: CREATE USER 'admin'@'%' IDENTIFIED BY 'Technosquad'
     - run: GRANT ALL PRIVILEGES ON *.* TO 'admin'@'%'

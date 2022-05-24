@@ -168,7 +168,8 @@ using namespace bd;
         std::vector<Product> BI::get_products(Categories category, std::string conditions){
             Query_BD instance;
             std::string name_table = CategoriesToString(category);
-            std::string query = "SELECT " + name_table + ".name, " + name_table + ".url_image, " + name_table + ".size, " + name_table + ".color, " + name_table + ".brand, " + name_table + "_urls.price, " + name_table + "_urls.url_product" + name_table + ".id" + " FROM " + name_table +" INNER JOIN " + name_table + "_urls ON " + name_table + ".id = " + name_table + "_urls.product_id" + conditions + ";";
+            std::string query = "SELECT " + name_table + ".name, " + name_table + ".url_image, " + name_table + ".size, " + name_table + ".color, " + name_table + ".brand, " + name_table + "_urls.price, " + name_table + "_urls.url_product, " + name_table + ".id" + " FROM " + name_table +" INNER JOIN " + name_table + "_urls ON " + name_table + ".id = " + name_table + "_urls.product_id" + conditions + ";";
+
             std::vector<std::string> category_products = instance.select_from(query.c_str());
             std::vector<Product> res_products; 
             res_products.resize(category_products.size()/8);
@@ -275,13 +276,13 @@ using namespace bd;
                         result.insert(result.end(),std::make_move_iterator(result1.begin()),std::make_move_iterator(result1.end()));
                 }
                 if(conditions_shirts != " WHERE "){
-                        result2 = interface.get_products(Sneakers, conditions_shirts);
+                        result2 = interface.get_products(Shirts, conditions_shirts);
                         result.insert(result.end(),std::make_move_iterator(result2.begin()),std::make_move_iterator(result2.end()));
                 }
                 if(conditions_tshirts != " WHERE "){
-                        result3 = interface.get_products(Sneakers, conditions_tshirts);
+                        result3 = interface.get_products(Tshirts, conditions_tshirts);
                         result.insert(result.end(),std::make_move_iterator(result3.begin()),std::make_move_iterator(result3.end()));
                 }
-                
+
                 return result;
         }

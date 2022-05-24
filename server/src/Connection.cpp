@@ -42,9 +42,7 @@ void Connection::handle_read(beast::error_code error,
         try {
             std::string request_target = static_cast<std::string>(request_.target());
 
-            if (request_target == "/posts") {
-                res = handlers_.add_user(request_);
-            } else if (request_target == "/get_item") {
+            if (request_target == "/get_item") {
                 res = handlers_.get_item(request_);
             } else if (request_target == "/to_favorite") {
                 res = handlers_.to_favorite(request_);

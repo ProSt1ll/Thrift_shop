@@ -12,8 +12,7 @@ jobs:
     - run: sudo apt-get install -y mysql-server
     - run: cmake interface_bd/
     - run: make
-    - run: sudo service mysql start
-    - run: mysql -u root -p
+    - run: mysqld_safe --skip-grant-tables &
     - run: CREATE DATABASE products
     - run: CREATE USER 'admin'@'%' IDENTIFIED BY 'Technosquad'
     - run: GRANT ALL PRIVILEGES ON *.* TO 'admin'@'%'

@@ -9,11 +9,12 @@ HunterGate(
 project(ThriftShop_server)
 
 set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-fprofile-arcs -ftest-coverage -fPIC -O0")
+set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-fprofile-arcs -ftest-coverage -fPIC -O0 -pthread")
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -coverage -l sqlite3 -lgcov")
+set(THREADS_PREFER_PTHREAD_FLAG TRUE)
 
 #add_compile_options(-g -O0 -Wextra -Wall -Wextra -Wpedantic -lgcov --coverage)
-add_link_options( -O0 -lgcov --coverage)
+#add_link_options( -O0 -lgcov --coverage)
 
 ##bd
 file(GLOB SOURCES_BD "interface_bd/sources/*.cpp")
@@ -58,8 +59,8 @@ add_library(lib_cr ${INCLUDE_Cr} ${SOURCES_Cr})
 target_link_libraries(lib_cr nlohmann_json::nlohmann_json gumbo::gumbo Beast::Beast asio::asio_headeronly)
 ##end_crawler
 
-find_package (Threads REQUIRED)
 add_compile_options(-pthread)
+find_package (Threads REQUIRED)
 find_package(Boost REQUIRED)
 find_package(nlohmann_json CONFIG REQUIRED)
 

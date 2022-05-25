@@ -1,0 +1,1 @@
+/usr/bin/c++     CMakeFiles/main.dir/main.cpp.o  -o main  liblib.a /home/mike/.hunter/_Base/35fa55b/f845a29/b78b2c5/Install/lib/libgumbod.a /home/mike/.hunter/_Base/35fa55b/f845a29/b78b2c5/Install/lib/libboost_system-mt-d-x64.a -lpthread 

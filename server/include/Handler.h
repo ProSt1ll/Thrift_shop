@@ -8,6 +8,8 @@
 #include <boost/asio/strand.hpp>
 #include <boost/config.hpp>
 #include <nlohmann/json.hpp>
+#include <string>
+#include <iostream>
 
 #include <ctime>
 
@@ -27,7 +29,7 @@ public:
 
     // поиск по критериям
     http::response <http::string_body>
-    get_item(http::request <http::string_body> request);
+    get_item(const http::request <http::string_body>& request);
 
     // добавление в избранное
     http::response <http::string_body>

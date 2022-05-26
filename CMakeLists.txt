@@ -10,8 +10,14 @@ project(ThriftShop_server)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-fprofile-arcs -ftest-coverage -fPIC -O0 -pthread")
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -coverage -l sqlite3 -lgcov")
+#set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -coverage -l sqlite3 -lgcov")
+
+set(CMAKE_THREAD_LIBS_INIT "-lpthread")
+set(CMAKE_HAVE_THREADS_LIBRARY 1)
+set(CMAKE_USE_WIN32_THREADS_INIT 0)
+set(CMAKE_USE_PTHREADS_INIT 1)
 set(THREADS_PREFER_PTHREAD_FLAG TRUE)
+
 
 #add_compile_options(-g -O0 -Wextra -Wall -Wextra -Wpedantic -lgcov --coverage)
 #add_link_options( -O0 -lgcov --coverage)
@@ -26,8 +32,6 @@ message("INCLUDE_BD = ${INCLUDE_BD}")
 add_library(lib_bd ${INCLUDE_BD} ${SOURCES_BD})
 #SET_TARGET_PROPERTIES(lib_bd PROPERTIES LINKER_LANGUAGE CXX))
 
-file(GLOB SOURCE "server/src/*.cpp")
-file(GLOB INCLUDE "server/include/*.h")
 
 ##end_bd
 
@@ -61,14 +65,17 @@ target_link_libraries(lib_cr nlohmann_json::nlohmann_json gumbo::gumbo Beast::Be
 
 add_compile_options(-pthread)
 find_package (Threads REQUIRED)
-find_package(Boost REQUIRED)
-find_package(nlohmann_json CONFIG REQUIRED)
+#find_package(Boost REQUIRED)
+
+
+file(GLOB SOURCE "server/src/*.cpp")
+file(GLOB INCLUDE "server/include/*.h")
 
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 add_library(server_lib ${INCLUDE} ${SOURCE} )
 
 add_executable(main.out server/main.cpp)
-target_link_libraries(main.out server_lib Threads::Threads nlohmann_json::nlohmann_json ${Boost_LIBRARIES} )
+target_link_libraries(main.out server_lib Threads::Threads nlohmann_json::nlohmann_json)
 target_link_libraries(main.out lib_bd)
 target_link_libraries(main.out -I/usr/include/mysql -L/usr/lib/x86_64-linux-gnu -lgtest -lmysqlclient -lpthread)
 target_link_libraries(main.out lib_cr)
@@ -77,7 +84,3 @@ target_link_libraries(main.out lib_cr)
 # Async HTTP Client
 #add_executable(client client.cpp)
 #target_link_libraries(client Threads::Threads nlohmann_json::nlohmann_json ${Boost_LIBRARIES})
-
-
-
-

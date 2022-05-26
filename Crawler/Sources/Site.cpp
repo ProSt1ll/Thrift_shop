@@ -419,6 +419,7 @@ siteSearch::Site::crawlChapters(const std::set<Parameters> &parameters_, const s
     for (const auto &chapter: chapters_) {
         auto response = getWebPage(chapterMap.at(chapter));
         htmlVector.push_back(getStringFromResponse(response));
+        std::cout << getStringFromResponse(response) << std::endl;
     }
     return crawlHtmlVector(parameters_, htmlVector);
 }

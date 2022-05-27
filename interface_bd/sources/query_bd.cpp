@@ -31,7 +31,7 @@ Query_BD::Query_BD(){
 
       /* Connect to database */
       if (!mysql_real_connect(this->conn, server,
-            user, password, database, 0, NULL, 0)) {
+            user, password, database, port, NULL, 0)) {
           fprintf(stderr, "%s\n", mysql_error(this->conn));
           exit(1);
       }

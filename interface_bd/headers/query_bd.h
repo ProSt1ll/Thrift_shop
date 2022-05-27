@@ -9,7 +9,7 @@
 #include <vector>
 #include <mysql/mysql.h>
 
-#define server "localhost"
+#define server "tcp://127.0.0.1:3306"
 #define user "admin"
 #define password "Technosquad"
 #define database "products"

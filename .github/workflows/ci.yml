@@ -8,7 +8,6 @@ jobs:
     - run: sudo apt-get update -y
     - run: sudo apt-get install -y libgtest-dev
     - run: sudo apt-get install -y mysql-server
-    - run: sudo service mysql start
     - run: sudo mysqld --skip-grant-tables --user=root
     - run: sudo mysql
     - run: CREATE DATABASE products;

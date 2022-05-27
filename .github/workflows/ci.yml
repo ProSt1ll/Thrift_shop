@@ -18,6 +18,13 @@ jobs:
     - run: sudo apt-get install -y google-mock
     - run: sudo apt-get install -y libgtest-dev
     - run: sudo apt-get install -y libgmock-dev
+    - run: sudo apt install -y lcov
     - run: cmake interface_bd/
     - run: make
     - run: ./tests
+    - run: lcov -t "coverageTests" -o coverage.info -c -d .
+    - run: genhtml -o report coverage.info
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        path: ./report/

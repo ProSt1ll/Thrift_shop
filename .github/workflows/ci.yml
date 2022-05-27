@@ -13,7 +13,6 @@ jobs:
           # Opens tcp port 6379 on the host and service container
           - 3306:3306
     steps:
-    - run: docker exec it mysql1 bash
     - uses: actions/checkout@v2
     - run: cmake interface_bd/
     - run: make

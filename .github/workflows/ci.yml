@@ -20,5 +20,4 @@ jobs:
     - run: sudo apt-get install -y libgmock-dev
     - run: cmake interface_bd/
     - run: make
-    - run: docker-compose up -d db
     - run: ./tests

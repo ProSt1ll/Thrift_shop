@@ -2,29 +2,6 @@
 
 using namespace bd;
 
-#ifndef CATEGORIESToString
-#define CATEGORIESToString
-std::string CategoriesToString( Categories catagory ) {
-    switch( catagory ){
-    case Sneakers:
-         {
-             return "Sneakers";
-             break;
-         }
-    case Shirts:
-         {
-             return "Shirts";
-             break;
-         }
-    case Tshirts:
-         {
-             return "Tshirts";
-             break;
-         }
-    }
-}
-#endif
-
 //устанавливает соединение с БД 
 Query_BD::Query_BD(){
     this->conn = mysql_init(NULL);

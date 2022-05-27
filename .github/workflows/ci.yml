@@ -14,11 +14,8 @@ jobs:
           - 3306:3306
     steps:
     - uses: actions/checkout@v2
+    - run: sudo apt-get install -y libgtest-dev
     - run: cmake interface_bd/
     - run: make
     - run: docker-compose up -d db
-    - name: Sleep for 120 seconds
-      uses: jakejarvis/wait-action@master
-      with:
-        time: '120s'
     - run: ./tests

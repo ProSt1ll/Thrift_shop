@@ -10,11 +10,12 @@ jobs:
     - run: sudo apt-get install -y libgtest-dev
     - run: sudo apt-get install -y libgmock-dev
     - run: sudo apt-get install -y mysql-server
+    - run: sudo apt-get install libmysqlclient-dev -y
     - run: cmake interface_bd/
     - run: make
     - run: sudo mysql
-    - run: CREATE DATABASE products
-    - run: CREATE USER 'admin'@'%' IDENTIFIED BY 'Technosquad'
-    - run: GRANT ALL PRIVILEGES ON *.* TO 'admin'@'%'
+    - run: CREATE DATABASE products;
+    - run: CREATE USER 'admin'@'%' IDENTIFIED BY 'Technosquad';
+    - run: GRANT ALL PRIVILEGES ON *.* TO 'admin'@'%';
     - run: \q
     - run: ./tests

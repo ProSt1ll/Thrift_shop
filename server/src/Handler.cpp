@@ -29,96 +29,54 @@ std::string Handlers::get_product_body(const bd::Product product) {
 }
 
 // Создаем настройки сайтов (то, где будем бегать)
-json Handlers::json_set(const json& jv) {
+json Handlers::json_set() {
 
     json site_1 = {
             {"chapterMap",   {
-                                     {siteSearch::index, "www.ostin.com"},
-                                     {siteSearch::man,  "www.ostin.com/catalog/muzhchiny"},
-                                     {siteSearch::woman, "www.ostin.com/catalog/zhenschiny"},
-                                     {siteSearch::boy,  "www.ostin.com/catalog/malchiki"},
-                                     {siteSearch::girl, "www.ostin.com/catalog/devochki"}
+                             {siteSearch::index, "www.ostin.com"},
+                             {siteSearch::man,  "www.ostin.com/catalog/muzhchiny"},
+                             {siteSearch::woman, "www.ostin.com/catalog/zhenschiny"},
+                             {siteSearch::boy,  "www.ostin.com/catalog/malchiki"},
+                             {siteSearch::girl, "www.ostin.com/catalog/devochki"}
                              }},
             {"parameterMap", {
                              {siteSearch::url,   {
-                                                         {"tag", "a"},
-                                                         {"id", "idTitle_1"},
-                                                         {"cssClass", "rr-item__info"}
+                                                 {"tag", "a"},
+                                                 {"id", "idTitle_1"},
+                                                 {"cssClass", "rr-item__info"}
                                                  }},
                              {siteSearch::cost, {
-                                                        {"tag", "div"},
-                                                        {"id", "idTitle_1"},
-                                                        {"cssClass", "rr-item__price-value"}
+                                                {"tag", "div"},
+                                                {"id", "idTitle_1"},
+                                                {"cssClass", "rr-item__price-value"}
                                                 }},
                              {siteSearch::title, {
-                                                         {"tag", "div"},
-                                                         {"id", "idTitle_1"},
-                                                         {"cssClass", "rr-itemname-block  rr-itemtitle"}
+                                                 {"tag", "div"},
+                                                 {"id", "idTitle_1"},
+                                                 {"cssClass", "rr-itemname-block  rr-itemtitle"}
                                                  }},
                              {siteSearch::person, {
-                                                          {"tag", "tagPerson_1"},
-                                                          {"id", "idTitle_1"},
-                                                          {"cssClass", "cssClassPerson_1"}
+                                                  {"tag", "tagPerson_1"},
+                                                  {"id", "idTitle_1"},
+                                                  {"cssClass", "cssClassPerson_1"}
                                                 }},
                              {siteSearch::image, {
-                                                         {"tag", "img"},
-                                                         {"id", "idTitle_1"},
-                                                         {"cssClass", "rr-def__img rr-product-img swiper-lazy swiper-lazy-loaded"}
+                                                 {"tag", "img"},
+                                                 {"id", "idTitle_1"},
+                                                 {"cssClass", "rr-def__img rr-product-img swiper-lazy swiper-lazy-loaded"}
                                                  }},
                              {siteSearch::size, {
-                                                        {"tag", "tagSize_1"},
-                                                        {"id", "idTitle_1"},
-                                                        {"cssClass", "cssClassSize_1"}
+                                                {"tag", "tagSize_1"},
+                                                {"id", "idTitle_1"},
+                                                {"cssClass", "cssClassSize_1"}
                                                 }},
-                             {siteSearch::itemTemplate, {
+                             {siteSearch::itemTemplate,  {
                                                          {"tag", "div"},
                                                          {"id", "idTitle_1"},
                                                          {"cssClass", "rr-item"}
-                                                 }}
+                                                         }}
                              }}
     };
-//    json site_1 = {
-//            {"chapterMap",   {
-//                                     {siteSearch::index, "indexUrl_1"},
-//                                     {siteSearch::man,  "manUrl_1"},
-//                                     {siteSearch::woman, "womanUrl_1"},
-//                                     {siteSearch::boy,    "boyUrl_1"},
-//                                     {siteSearch::girl, "girlUrl_1"}
-//                             }},
-//            {"parameterMap", {
-//                                     {siteSearch::url,   {
-//                                                                 {"tag", "tagUrl_1"},
-//                                                                 {"id", "idUrl_1"},
-//                                                                 {"cssClass", "cssClassUrl_1"}
-//                                                         }},
-//                                     {siteSearch::cost, {
-//                                                                {"tag", "tagCost_1"},
-//                                                                {"id", "idcCst_1"},
-//                                                                {"cssClass", "cssClassCost_1"}
-//                                                        }},
-//                                     {siteSearch::title, {
-//                                                                 {"tag", "tagTitle_1"},
-//                                                                 {"id", "idTitle_1"},
-//                                                                 {"cssClass", "cssClassTitle_1"}
-//                                                         }},
-//                                     {siteSearch::person, {
-//                                                                  {"tag", "tagPerson_1"},
-//                                                                  {"id", "idPerson_1"},
-//                                                                  {"cssClass", "cssClassPerson_1"}
-//                                                          }},
-//                                     {siteSearch::size, {
-//                                                                {"tag", "tagSize_1"},
-//                                                                {"id", "idSize_1"},
-//                                                                {"cssClass", "cssClassSize_1"}
-//                                                        }},
-//                                     {siteSearch::image, {
-//                                                                 {"tag", "tagImage_1"},
-//                                                                 {"id", "idImage_1"},
-//                                                                 {"cssClass", "cssClassImage_1"}
-//                                                         }}
-//                             }}
-//    };
-
 
     json settings = {
             {"chapters",
@@ -132,9 +90,9 @@ json Handlers::json_set(const json& jv) {
 }
 
 // Формируем запрос к БД из json от crawler
-bd::Product Handlers::site_json_pars(const json& jv) {
+void Handlers::site_json_pars(bd::Product& prod, const json& jv) {
 
-    bd::Product prod;
+//    bd::Product prod;
 
     jv.at("UrlContent").get_to(prod.url_product);
     jv.at("CostContent").get_to(prod.price);
@@ -143,7 +101,7 @@ bd::Product Handlers::site_json_pars(const json& jv) {
     jv.at("SizeContent").get_to(prod.param.size);
     jv.at("ImageContent").get_to(prod.url_image);
 
-    return prod;
+//    return prod;
 }
 
 // Добавляем в избранное
@@ -186,13 +144,13 @@ http::response<http::string_body>
     data_base.set_user_chosen(user_id, category, product_id);
 
     http::response<http::string_body> response;
+    response.body() = R"("Favorite item add.")";
+
     response.set(http::field::server, BOOST_BEAST_VERSION_STRING);
     response.set(http::field::content_length,
-                 std::to_string(request.body().size()));
+                 std::to_string(response.body().size()));
     response.set(http::field::content_type, "application/json");
     response.result(http::status::ok);
-
-    response.body() = R"("Favorite item add.")";
 
     return response;
 
@@ -226,8 +184,8 @@ http::response<http::string_body>
 
     // проверка обновлений
     time_t result_hours = time(nullptr) / 3600;
-//    if (result_hours % 3 == 0)
-//    check_update(jv);
+    if (result_hours % 3 == 0)
+        update_bd();
     // id пользователя
     std::string user_id;
     jv.at("user_id").get_to(user_id);
@@ -305,11 +263,10 @@ http::response<http::string_body>
 }
 
 // Проверяем обновления
-void Handlers::check_update(const json& jv) {
+void Handlers::update_bd() {
 
-    // формируем настройки сайтов (по чему нужнобегать)
-
-    json json_setting = json_set(jv);
+    // формируем настройки сайтов (по чему нужно бегать)
+    json json_setting = json_set();
 
     Crawler crawler = Crawler(json_setting);
 //    for (auto i: crawler.getParameters())
@@ -325,7 +282,7 @@ void Handlers::check_update(const json& jv) {
     bd::Product prod;
     // Формирование запроса к БД из обновления
     for (json result_json: result_jsons) {
-        prod = site_json_pars(result_jsons);
+        site_json_pars(prod,result_jsons);
         // обновляем БД
         data_base.set_product(prod);
         std::cout << "After BD" << std::endl;

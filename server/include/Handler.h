@@ -35,6 +35,9 @@ public:
     http::response <http::string_body>
     to_favorite(http::request <http::string_body> request);
 
+    // Обновление Базы
+    void update_bd();
+
 private:
 
     // Формирование общую часть json
@@ -42,12 +45,10 @@ private:
                               int option, std::size_t favorit_product_id);
     // Формирование json для каждого товара
     std::string get_product_body(bd::Product product);
-    // Проверка обновлений
-    void check_update(const json& jv);
     // Настройки сайтов
-    json json_set(const json& jv);
+    json json_set();
     // Формирование запроса к БД из обновления
-    bd::Product site_json_pars(const json& jv);
+    void site_json_pars(bd::Product& prod, const json& jv);
 
 };
 

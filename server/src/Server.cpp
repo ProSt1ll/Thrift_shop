@@ -25,6 +25,9 @@ Server::Server(const std::string &address, const std::string &port,
 // Запускаем цикл io_context сервера (создаем обработчики событий).
 void Server::run() {
     start_accept();
+    // тут формируем базу (раскомментить, когда будет работать кравлер)
+//    Handlers handler_;
+//    handler_.update_bd();
 
     // Создаем пул потоков для запуска всех io_contexts.
     std::vector<boost::shared_ptr<std::thread> > threads;

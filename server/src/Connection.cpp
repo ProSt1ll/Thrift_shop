@@ -71,6 +71,9 @@ void Connection::handle_read(beast::error_code error,
                                   &Connection::handle_write,
                                   shared_from_this(),
                                   sp->need_eof()));
+    } else {
+        std::cout << "Error: " << error << "\n";
+        return do_close();
     }
 
 }

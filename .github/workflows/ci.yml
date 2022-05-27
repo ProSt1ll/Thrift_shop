@@ -5,6 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     container: mike5535/db
     steps:
+    - run: docker exec it mysql1 bash
     - uses: actions/checkout@v2
     - run: cmake interface_bd/
     - run: make

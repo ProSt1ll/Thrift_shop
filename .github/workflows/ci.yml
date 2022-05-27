@@ -10,7 +10,8 @@ jobs:
     - run: sudo apt-get install -y libgtest-dev
     - run: sudo apt-get install -y libgmock-dev
     - run: sudo apt-get install -y mysql-server
-    - run: mysql -h 127.0.0.1 -P 3306 -u root -p <database>
+    - run: service mysql restart
+    - run: sudo mysql
     - run: CREATE DATABASE products;
     - run: CREATE USER 'admin'@'%' IDENTIFIED BY 'Technosquad';
     - run: GRANT ALL PRIVILEGES ON *.* TO 'admin'@'%';

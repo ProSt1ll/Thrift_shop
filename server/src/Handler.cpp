@@ -225,6 +225,7 @@ http::response<http::string_body>
         jv.at("/product/parameters/color"_json_pointer).get_to(params.color);
         jv.at("/product/parameters/brand"_json_pointer).get_to(params.brand);
 
+        // временно
         product.category = category;
         jv.at("/product/price"_json_pointer).get_to(product.price);
         jv.at("/product/url_image"_json_pointer).get_to(product.url_image);

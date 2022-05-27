@@ -9,10 +9,11 @@
 #include <vector>
 #include <mysql/mysql.h>
 
-#define server "tcp://127.0.0.1:3306"
+#define server "127.0.0.1"
 #define user "admin"
 #define password "Technosquad"
 #define database "products"
+#define port 3306
 
 #ifndef CATEGORIES
 #define CATEGORIES

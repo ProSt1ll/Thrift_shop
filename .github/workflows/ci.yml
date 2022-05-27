@@ -3,7 +3,15 @@ on: push
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: mike5535/db
+    services:
+      # Label used to access the service container
+      db:
+        # Docker Hub image
+        image: mike5535/db
+        #
+        ports:
+          # Opens tcp port 6379 on the host and service container
+          - 3306:3306
     steps:
     - run: docker exec it mysql1 bash
     - uses: actions/checkout@v2

@@ -3,17 +3,9 @@ on: push
 jobs:
   build:
     runs-on: ubuntu-latest
+    container: mike5535/db
     steps:
     - uses: actions/checkout@v2
-    - run: sudo apt-get update -y
-    - run: sudo apt-get install -y libgtest-dev
-    - run: sudo apt-get install -y mysql-server
-    - run: sudo service mysql start
-    - run: sudo mysql
-    - run: CREATE DATABASE products;
-    - run: CREATE USER 'admin'@'%' IDENTIFIED BY 'Technosquad';
-    - run: GRANT ALL PRIVILEGES ON *.* TO 'admin'@'%';
-    - run: \q
     - run: cmake interface_bd/
     - run: make
     - run: sudo mysql

@@ -6,9 +6,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - run: sudo apt-get update -y
-    - run: sudo apt-get install -y google-mock
     - run: sudo apt-get install -y libgtest-dev
-    - run: sudo apt-get install -y libgmock-dev
     - run: sudo apt-get install -y mysql-server
     - run: sudo service mysql start
     - run: sudo mysql

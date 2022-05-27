@@ -17,5 +17,9 @@ jobs:
     - uses: actions/checkout@v2
     - run: cmake interface_bd/
     - run: make
-    - run: sudo mysql
+    - run: docker-compose up -d db
+    - name: Sleep for 120 seconds
+      uses: jakejarvis/wait-action@master
+      with:
+        time: '120s'
     - run: ./tests

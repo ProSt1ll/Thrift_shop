@@ -17,7 +17,7 @@ std::string Handlers::get_product_body(const bd::Product product) {
             {"price", product.price},
             {"url_image", product.url_image},
             {"url_product", product.url_product},
-            {"product_param",   {
+            {"parameters",   {
                 {"id", product.param.id},
                 {"size", product.param.size},
                 {"color", product.param.color},
@@ -191,7 +191,8 @@ http::response<http::string_body>
                  std::to_string(request.body().size()));
     response.set(http::field::content_type, "application/json");
     response.result(http::status::ok);
-    response.body() = R"("Favorite item add.")";;
+
+    response.body() = R"("Favorite item add.")";
 
     return response;
 
@@ -200,6 +201,7 @@ http::response<http::string_body>
 // Получаем товар по критериям
 http::response<http::string_body>
         Handlers::get_item(const http::request<http::string_body>& request) {
+
 //    json jv = json::parse(request.body());
 // пока так
     json jv = {
@@ -225,7 +227,7 @@ http::response<http::string_body>
     // проверка обновлений
     time_t result_hours = time(nullptr) / 3600;
 //    if (result_hours % 3 == 0)
-    check_update(jv);
+//    check_update(jv);
     // id пользователя
     std::string user_id;
     jv.at("user_id").get_to(user_id);
@@ -265,13 +267,14 @@ http::response<http::string_body>
         jv.at("/product/parameters/color"_json_pointer).get_to(params.color);
         jv.at("/product/parameters/brand"_json_pointer).get_to(params.brand);
 
-//        product.category = category;
-//        jv.at("/product/price"_json_pointer).get_to(product.price);
-//        jv.at("/product/url_image"_json_pointer).get_to(product.url_image);
-//        jv.at("/product/url_product"_json_pointer).get_to(product.url_product);
-//        product.param = params;
+        product.category = category;
+        jv.at("/product/price"_json_pointer).get_to(product.price);
+        jv.at("/product/url_image"_json_pointer).get_to(product.url_image);
+        jv.at("/product/url_product"_json_pointer).get_to(product.url_product);
+        product.param = params;
 
-        need_items = data_base.search_parametrs(category, params);
+//        need_items = data_base.search_parametrs(category, params);
+
     }
     // простой поиск по категории
     else
@@ -280,23 +283,25 @@ http::response<http::string_body>
     // формирование ответа
     std::string response_user_body = get_user_body(user_id,
                                                    option, product_id);
-    std::string response_product_body = "{\"Products\": [";
+    response_user_body.pop_back();
+    std::string response_product_body = ",\"product\":";
     // временно
-    for (const bd::Product& item: need_items) {
-        response_product_body += get_product_body(item) + ",";
-    }
+//    for (const bd::Product& item: need_items) {
+//        response_product_body += get_product_body(item) + ",";
+//    }
     response_product_body += get_product_body(product);
     response_product_body.pop_back();
-    response_product_body += "]}";
+    response_product_body += "}}";
     http::response<http::string_body> response;
+    response.body() = response_user_body + response_product_body;
+
     response.set(http::field::server, BOOST_BEAST_VERSION_STRING);
     response.set(http::field::content_length,
-                 std::to_string(response_product_body.size()));
+                 std::to_string(response.body().size()));
     response.set(http::field::content_type, "application/json");
     response.result(http::status::ok);
-    response.body() = response_user_body + response_product_body;
-    return response;
 
+    return response;
 }
 
 // Проверяем обновления
@@ -305,9 +310,8 @@ void Handlers::check_update(const json& jv) {
     // формируем настройки сайтов (по чему нужнобегать)
 
     json json_setting = json_set(jv);
-    std::cout << "Before" << std::endl;
+
     Crawler crawler = Crawler(json_setting);
-    std::cout << "After" << std::endl;
 //    for (auto i: crawler.getParameters())
 //        std::cout << i << std::endl;
 //    for (auto i: crawler.getChapters())

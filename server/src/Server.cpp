@@ -54,7 +54,7 @@ void Server::start_accept() {
 // Обработка завершения асинхронной операции принятия.
 void Server::handle_accept(beast::error_code error, tcp::socket socket) {
     if (!error) {
-        std::cout << "accept!";
+        std::cout << "accept!" << std::endl;
         // Запускаем процесс для соединения (клиента)
         auto c = std::make_shared<Connection>(std::move(socket), handlers);
         c->start();

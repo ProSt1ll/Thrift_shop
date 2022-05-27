@@ -1,7 +1,7 @@
 #include <iostream>
-#include "include/MenuController.h"
+#include "include/Managment.h"
 int main() {
-    MenuController tgbot;
+    Managment tgbot;
     tgbot.run();
     return 0;
 }

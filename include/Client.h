@@ -11,7 +11,6 @@
 #include <boost/beast/http.hpp>
 #include <boost/beast/version.hpp>
 #include <boost/asio/strand.hpp>
-#include "Managment.h"
 
 
 using tcp = boost::asio::ip::tcp;
@@ -23,18 +22,20 @@ namespace net = boost::asio;            // from <boost/asio.hpp>
 class Client : public std::enable_shared_from_this<Client>
 {
 public:
-    Client(boost::asio::io_context &io_context,Managment *main_mgm,std::string server, std::string port);
+    Client(boost::asio::io_context& io_context);
 
-    void run();
+    void run(std::string& server, const std::string& port);
     void post(nlohmann::json package);
 
-    Managment* sec_mgm;
 private:
     void handle_resolve(beast::error_code err,
                         tcp::resolver::results_type results);
+    void handle_resolver2(beast::error_code err,
+                        tcp::resolver::results_type results);
 
     void handle_connect(beast::error_code err, tcp::resolver::results_type::endpoint_type);
-
+    void handle_connect2(beast::error_code err, tcp::resolver::results_type::endpoint_type);
+    void send_msg(std::string some);
     void handle_write_request(beast::error_code err,
                               std::size_t bytes_transferred);
 

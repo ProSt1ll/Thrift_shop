@@ -1,28 +1,16 @@
 #include "../include/MenuController.h"
 
-
-    void MenuController::run(){
-        TgBot::Bot bot("5341881620:AAFENTOHJUFUwmpvyLun51Yu5FLmesHvZYU");
-        Managment main_mgm(&bot);
-        net::io_context io_context;
-        Client client(io_context, &main_mgm, "127.0.0.1", "5000");
-        try{
-
-            io_context.run();
-        }
-
-        catch (std::exception &e) {
-            std::cout << "Exception: " << e.what() << "\n";
-        }
-
+    void MenuController::run(std::function<void (std::string message)> get_mes){
 
         std::vector<std::string>bot_commands ={"start"};
 
-        bot.getEvents().onCommand("start", [&bot, &client](TgBot::Message::Ptr message) {
+        bot.getEvents().onCommand("start", [this, &get_mes](TgBot::Message::Ptr message) {
             bot.getApi().sendMessage(message->chat->id, "Hello, sweetie");
-            MainMenu(&bot,message->chat->id,&client);
+            MainMenu Main(&bot,message->chat->id,[&](std::string message){get_mes(message); });
+            SearchMenu search()
+            Main.run();
         });
-        bot.getEvents().onAnyMessage([&bot, &bot_commands](TgBot::Message::Ptr message) {
+        bot.getEvents().onAnyMessage([this, &bot_commands](TgBot::Message::Ptr message) {
             printf("User wrote %s\n", message->text.c_str());
             for (const auto& command : bot_commands){
                 if ("/"+command == message->text){
@@ -30,7 +18,6 @@
                 }
                 bot.getApi().sendMessage(message->chat->id, "не понял...");
             }
-
         });
 
 
@@ -47,4 +34,5 @@
 
     }
 
-void MenuController::stop(){};
+void MenuController::stop(){}
+

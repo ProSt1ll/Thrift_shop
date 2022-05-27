@@ -5,8 +5,13 @@
 class MainMenu{
 public:
     Menu menu;
-    MainMenu(TgBot::Bot *bot,int id,Client* client);
-    ~MainMenu();
+    MainMenu(TgBot::Bot *bot,int id,std::function<void(std::string message)> get_mes,std::function<void(void)> back);
+    void run();
+    void rerun();
 
+    ~MainMenu();
+    TgBot::Bot *t_bot;
+    std::function<void(std::string message)> func;
+    int t_id;
 };
 #endif //TGBOT_MAINMENU_H

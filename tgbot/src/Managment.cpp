@@ -30,14 +30,17 @@ void Managment::get_mes(std::string message) {
     ClientCntrl client(message,[&](std::string message){get_mes_from_serv(message); });
 };
 void Managment::get_mes_from_serv(std::string message) {
-//    nlohmann::json res = nlohmann::json::parse(message);
-//
-//    tgbot.to_tg(res["url_image"],res["user_id"]);
-//    tgbot.to_tg(res["url_product"],res["user_id"]);
-//    tgbot.to_tg(res["price"],res["user_id"]);
-    tgbot.to_tg(message,517318106);
+    if(message[0]=='{') {
 
+        if (message[10] == '3') {
+            nlohmann::json res = nlohmann::json::parse(message);
+            tgbot.to_tg(res["product"]["url_image"], 517318106);
+            tgbot.to_tg(res["product"]["url_product"], 517318106);
+            tgbot.to_tg("цена: " +res["product"]["price"].dump(), 517318106);
 
+        }
+    }
+   // tgbot.to_tg(message, 517318106);
 };
 void Managment::get_product(int search_parametr) {
 
@@ -67,4 +70,3 @@ void Managment::run() {
 tgbot.run([&](std::string message){get_mes(message); },[&](){run_serv(); });
 
 }
-

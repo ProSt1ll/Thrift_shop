@@ -48,7 +48,7 @@ private:
     // Настройки сайтов
     json json_set();
     // Формирование запроса к БД из обновления
-    void site_json_pars(bd::Product& prod, const json& jv);
+    bd::Product site_json_pars(const json& jv);
 
 };
 

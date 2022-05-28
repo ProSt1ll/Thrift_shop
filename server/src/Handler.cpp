@@ -33,48 +33,33 @@ json Handlers::json_set() {
 
     json site_1 = {
             {"chapterMap",   {
-                             {siteSearch::index, "www.ostin.com"},
-                             {siteSearch::man,  "www.ostin.com/catalog/muzhchiny"},
-                             {siteSearch::woman, "www.ostin.com/catalog/zhenschiny"},
-                             {siteSearch::boy,  "www.ostin.com/catalog/malchiki"},
-                             {siteSearch::girl, "www.ostin.com/catalog/devochki"}
+                                     {siteSearch::index, "moda.oc-mod.ru"},
+                                     {siteSearch::man,  "/wooman/wooman_odegda/wooman_dresses/"},
+                                     {siteSearch::woman, "/"},
+                                     {siteSearch::boy,          "/"},
+                                     {siteSearch::girl, "/"}
                              }},
             {"parameterMap", {
-                             {siteSearch::url,   {
-                                                 {"tag", "a"},
-                                                 {"id", "idTitle_1"},
-                                                 {"cssClass", "rr-item__info"}
-                                                 }},
-                             {siteSearch::cost, {
-                                                {"tag", "div"},
-                                                {"id", "idTitle_1"},
-                                                {"cssClass", "rr-item__price-value"}
-                                                }},
-                             {siteSearch::title, {
-                                                 {"tag", "div"},
-                                                 {"id", "idTitle_1"},
-                                                 {"cssClass", "rr-itemname-block  rr-itemtitle"}
-                                                 }},
-                             {siteSearch::person, {
-                                                  {"tag", "tagPerson_1"},
-                                                  {"id", "idTitle_1"},
-                                                  {"cssClass", "cssClassPerson_1"}
-                                                }},
-                             {siteSearch::image, {
-                                                 {"tag", "img"},
-                                                 {"id", "idTitle_1"},
-                                                 {"cssClass", "rr-def__img rr-product-img swiper-lazy swiper-lazy-loaded"}
-                                                 }},
-                             {siteSearch::size, {
-                                                {"tag", "tagSize_1"},
-                                                {"id", "idTitle_1"},
-                                                {"cssClass", "cssClassSize_1"}
-                                                }},
-                             {siteSearch::itemTemplate,  {
-                                                         {"tag", "div"},
-                                                         {"id", "idTitle_1"},
-                                                         {"cssClass", "rr-item"}
-                                                         }}
+                                     {siteSearch::title, {
+                                                                 {"tag", "span"},
+                                                                 {"id", "itemprop=\"name\""},
+                                                                 {"cssClass", ""}
+                                                         }},
+                                     {siteSearch::cost, {
+                                                                {"tag", "span"},
+                                                                {"id", " "},
+                                                                {"cssClass", "class=\"price_no_format"}
+                                                        }},
+                                     {siteSearch::image, {
+                                                                 {"tag", "img"},
+                                                                 {"id", "idTitle_1"},
+                                                                 {"cssClass", "rr-def__img rr-product-img swiper-lazy swiper-lazy-loaded"}
+                                                         }},
+                                     {siteSearch::itemTemplate, {
+                                                                        {"tag", "div"},
+                                                                        {"id", ""},
+                                                                        {"cssClass", "class=\"caption product-info clearfix\""}
+                                                                }}
                              }}
     };
 
@@ -90,43 +75,54 @@ json Handlers::json_set() {
 }
 
 // Формируем запрос к БД из json от crawler
-void Handlers::site_json_pars(bd::Product& prod, const json& jv) {
+bd::Product Handlers::site_json_pars(const json& jv) {
 
-//    bd::Product prod;
+    bd::Product prod;
 
-    jv.at("UrlContent").get_to(prod.url_product);
-    jv.at("CostContent").get_to(prod.price);
-    jv.at("TitleContent").get_to(prod.name);
+    prod.url_image = "3112";
+    prod.url_product = "123r";
+    prod.param.id = 1;
+    prod.param.color = bd::Colors::Black;
+    // None == NULL
+    std::string brand;
+//    jv.at("0").get_to(prod.url_product);
+    std::string str_price;
+    jv.at("1").get_to(str_price);
+    prod.price = std::stoi(str_price);
+    jv.at("2").get_to(prod.name);
     //jv.at("PersonContent").get_to(prod.param.person);
-    jv.at("SizeContent").get_to(prod.param.size);
-    jv.at("ImageContent").get_to(prod.url_image);
+//    std::string str_size;
+//    jv.at("4").get_to(str_size);
+    prod.param.size = 1;
+    prod.category = bd::Categories::Tshirts;
+//    jv.at("5").get_to(prod.url_image);
 
-//    return prod;
+    return prod;
 }
 
 // Добавляем в избранное
 http::response<http::string_body>
         Handlers::to_favorite(http::request<http::string_body> request) {
-//    json jv = json::parse(request.body());
-    json jv = {
-            {"user_id", "123qwery"},
-            {"option", 3},
-            {"product_id", 0},
-            {"product", {
-                                {"category", 1},
-                                {"price", 100},
-                                {"url_image", "url_imag"},
-                                {"url_product", "url_prod"},
-                                {"parameters", {
-                                                       {"id", 15},
-                                                       {"size", 2},
-                                                       {"color", 1},
-                                                       {"brand", "gucci"}
-                                               }
-                                }
-                        }
-            }
-    };
+    json jv = json::parse(request.body());
+//    json jv = {
+//            {"user_id", "123qwery"},
+//            {"option", 3},
+//            {"product_id", 0},
+//            {"product", {
+//                                {"category", 1},
+//                                {"price", 100},
+//                                {"url_image", "url_imag"},
+//                                {"url_product", "url_prod"},
+//                                {"parameters", {
+//                                                       {"id", 15},
+//                                                       {"size", 2},
+//                                                       {"color", 1},
+//                                                       {"brand", "gucci"}
+//                                               }
+//                                }
+//                        }
+//            }
+//    };
     // id пользователя
     std::string user_id;
     jv.at("user_id").get_to(user_id);
@@ -183,9 +179,9 @@ http::response<http::string_body>
     };
 
     // проверка обновлений
-    time_t result_hours = time(nullptr) / 3600;
-    if (result_hours % 3 == 0)
-        update_bd();
+//    time_t result_hours = time(nullptr) / 3600;
+//    if (result_hours % 3 == 0)
+    update_bd();
     // id пользователя
     std::string user_id;
     jv.at("user_id").get_to(user_id);
@@ -270,23 +266,19 @@ void Handlers::update_bd() {
     json json_setting = json_set();
 
     Crawler crawler = Crawler(json_setting);
-//    for (auto i: crawler.getParameters())
-//        std::cout << i << std::endl;
-//    for (auto i: crawler.getChapters())
-//        std::cout << i << std::endl;
+
     // пробегаемся по сайтам и возвращаем найденные объекты
     json result_jsons = json::array();
     result_jsons = crawler.crawl(crawler.getSites(), crawler.getParameters(),
                         crawler.getChapters());
-    std::cout << "After crawler" << std::endl;
+    std::cout << result_jsons << std::endl;
     bd::BI data_base;
     bd::Product prod;
     // Формирование запроса к БД из обновления
-    for (json result_json: result_jsons) {
-        site_json_pars(prod,result_jsons);
+    for (const auto &res_json: result_jsons) {
+        prod = site_json_pars(res_json);
         // обновляем БД
         data_base.set_product(prod);
-        std::cout << "After BD" << std::endl;
     }
 
 }

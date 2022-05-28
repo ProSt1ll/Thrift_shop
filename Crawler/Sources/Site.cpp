@@ -99,20 +99,22 @@ siteSearch::getBlockContent(const std::string &htmlFile, const std::string &html
     isFound = false;
     size_t endPos = pos;
     size_t searchStartPos = startPos;
+
+    size_t nextTagPos = startPos;
     while (true) {
         endPos = htmlFile.find("/" + htmlTag, searchStartPos);
         // ищем конец открывающего блока
-        size_t blockOpenEndPos = htmlFile.find('>', searchStartPos);
+        size_t blockOpenEndPos = htmlFile.find('>', nextTagPos);
         // следующий тег с тем же названием, который может быть вложенный, из-за чего нужно искать закрытие тега дальше
-        size_t nextTagPos = htmlFile.find(htmlTag, blockOpenEndPos);
-        if (endPos == -1)
-            break;
-        if (nextTagPos > endPos || nextTagPos == std::string::npos || nextTagPos == -1) {
+        nextTagPos = htmlFile.find("<" + htmlTag, blockOpenEndPos);
+        if (nextTagPos > endPos || nextTagPos == std::string::npos || nextTagPos == -1 || endPos == -1) {
             isFound = true;
             break;
         }
-        // на следующей итерации поиск производится после вложенного закрывающего тега
-        ++endPos;
+        // на следующей итерации поиск производится после вложенного закрывающего тега,
+        // а поиск открытых - после нового открытого
+        endPos += htmlTag.length();
+        nextTagPos += htmlTag.length();
         searchStartPos = endPos;
     }
 
@@ -363,8 +365,9 @@ std::string siteSearch::Site::singleCrawl(const Parameters &parameter, const std
     if (!parameterMap.count(parameter))
         return "";
     auto templateParameter = parameterMap.at(parameter);
-    return getBlockContent(htmlItem, templateParameter.getTag(), templateParameter.getCssClass(),
-                           templateParameter.getId());
+    auto result = getBlockContent(htmlItem, templateParameter.getTag(), templateParameter.getCssClass(),
+                                  templateParameter.getId());
+    return result;
 }
 
 
@@ -389,8 +392,9 @@ siteSearch::Site::crawlHtmlVector(const std::set<Parameters> &parameters_,
     json resultJson = json::array();
     for (const auto &html: htmlVector) {
         json items = crawlHtml(parameters_, html);
-        for (const auto &item: items)
+        for (const auto &item: items) {
             resultJson[resultJson.size()] = item;
+        }
     }
     return resultJson;
 }
@@ -416,10 +420,10 @@ json siteSearch::Site::getSettings() const {
 json
 siteSearch::Site::crawlChapters(const std::set<Parameters> &parameters_, const std::set<Chapters> &chapters_) const {
     std::vector<std::string> htmlVector;
+    std::string host = chapterMap.at(siteSearch::index);
     for (const auto &chapter: chapters_) {
-        auto response = getWebPage(chapterMap.at(chapter));
+        auto response = getWebPage(host, chapterMap.at(chapter));
         htmlVector.push_back(getStringFromResponse(response));
-        std::cout << getStringFromResponse(response) << std::endl;
     }
     return crawlHtmlVector(parameters_, htmlVector);
 }

@@ -27,7 +27,7 @@ namespace bd {
    #ifndef CATEGORIES
     #define CATEGORIES
     enum Categories {
-        Empty , Sneakers, Shirts, Tshirts
+        Empty, Sneakers, Shirts, Tshirts
     };
     #endif // CATEGORIES
 

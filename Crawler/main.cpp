@@ -76,10 +76,9 @@ int main() {
     json site_1 = {
             {"chapterMap",   {
                                      {siteSearch::index, "moda.oc-mod.ru"},
-                                     {siteSearch::man,  "/wooman/wooman_odegda/wooman_dresses/"},
-                                     {siteSearch::woman, "/"},
-                                     {siteSearch::boy,          "/"},
-                                     {siteSearch::girl, "/"}
+                                     {siteSearch::womanOuter, "/wooman/wooman_odegda/wooman_dresses/"},
+                                     {siteSearch::womanDown, "/wooman/wooman_odegda/wooman_skirts/"},
+                                     {siteSearch::womanShoes,   "/wooman/wooman_shoes/wooman_tufli/"}
                              }},
             {"parameterMap", {
                                      {siteSearch::title, {
@@ -87,32 +86,37 @@ int main() {
                                                                  {"id", "itemprop=\"name\""},
                                                                  {"cssClass", ""}
                                                          }},
-                                     {siteSearch::cost, {
-                                                                {"tag", "span"},
-                                                                {"id", " "},
-                                                                {"cssClass", "class=\"price_no_format"}
-                                                        }},
-                                     {siteSearch::image, {
-                                                                 {"tag", "img"},
-                                                                 {"id", "idTitle_1"},
-                                                                 {"cssClass", "rr-def__img rr-product-img swiper-lazy swiper-lazy-loaded"}
-                                                         }},
+                                     {siteSearch::cost,       {
+                                                                      {"tag", "span"},
+                                                                      {"id", " "},
+                                                                      {"cssClass", "class=\"price_no_format"}
+                                                              }},
+                                     {siteSearch::url,       {
+                                                                      {"tag", "link"},
+                                                                      {"id", " "},
+                                                                      {"cssClass", "itemprop=\"url\""}
+                                                              }},
+                                     {siteSearch::image,     {
+                                                                     {"tag", "img"},
+                                                                     {"id", " "},
+                                                                     {"cssClass", "img-responsive"}
+                                                             }},
                                      {siteSearch::itemTemplate, {
                                                                         {"tag", "div"},
                                                                         {"id", ""},
-                                                                        {"cssClass", "class=\"caption product-info clearfix\""}
+                                                                        {"cssClass", "class=\"product-layout product-list"}
                                                                 }}
                              }}
     };
     json settings = {
             {"chapters",
-                      {siteSearch::index, siteSearch::man,  siteSearch::woman, siteSearch::boy,    siteSearch::girl}},
+                      {siteSearch::index, siteSearch::womanOuter, siteSearch::womanDown, siteSearch::womanShoes}},
             {"parameters",
-                      {siteSearch::url,   siteSearch::cost, siteSearch::title, siteSearch::person, siteSearch::size, siteSearch::image}},
+                      {siteSearch::url,   siteSearch::cost,    siteSearch::title,     siteSearch::person, siteSearch::size, siteSearch::image}},
             {"sites", {site_1}}
     };
     Crawler crawler(settings);
-    std::cout << crawler.crawl(crawler.getSites(), crawler.getParameters(), crawler.getChapters());
+    std::cout << crawler.crawl(crawler.getSites(), crawler.getParameters(), crawler.getChapters()) << std::endl;
 
     return 0;
 }

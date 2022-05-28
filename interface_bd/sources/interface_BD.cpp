@@ -5,6 +5,7 @@ using namespace bd;
 
         Parametrs::Parametrs(){
                 id = 0;
+                gender = "NULL";
                 size = 0;
                 color = None;
                 brand = "NULL";
@@ -110,6 +111,26 @@ using namespace bd;
                 return "Tshirts";
                 break;
                 }
+        case Dress:
+                {
+                return "Dress";
+                break;
+                }
+        case Shorts:
+                {
+                return "Shorts";
+                break;
+                }
+        case Skirts:
+                {
+                return "Skirts";
+                break;
+                }
+        case Vintage_shoes:
+                {
+                return "Vintage_shoes";
+                break;
+                }
         }
         }
 
@@ -118,6 +139,8 @@ using namespace bd;
                 std::string temp_parametrs;
                 if(prod.param.size != 0)
                         temp_parametrs += ",size";
+                if(prod.param.gender != "NULL")
+                        temp_parametrs += ",gender";
                 if(prod.param.color != None)
                         temp_parametrs += ",color";
 
@@ -129,6 +152,10 @@ using namespace bd;
 
                 if(prod.param.size != 0){
                         temp_query += ",'" + std::to_string(prod.param.size) + "'";
+                }
+
+                if(prod.param.gender != "NULL"){
+                        temp_query += ",'" + prod.param.gender + "'";
                 }
 
                 if(prod.param.color != None){
@@ -145,7 +172,26 @@ using namespace bd;
                 if(instance.insert_into(temp_query.c_str()))
                         printf("\nerror\n"); 
 
-                temp_query = "SELECT id FROM " + CategoriesToString(prod.category) + " WHERE name = '" + prod.name + "';";
+                temp_query = "SELECT id FROM " + CategoriesToString(prod.category) + " WHERE name = '" + prod.name + "'";
+
+                if(prod.param.size != 0){
+                        temp_query += " AND size ='" + std::to_string(prod.param.size) + "'";
+                }
+
+                if(prod.param.gender != "NULL"){
+                        temp_query += " AND gender = '" + prod.param.gender + "'";
+                }
+
+                if(prod.param.color != None){
+                        temp_query += " AND color = '" + ColorsToString(prod.param.color) + "'";
+                }
+
+                if(prod.param.brand != "NULL"){
+                        temp_query += " AND brand = '" + prod.param.brand + "'";
+                }
+
+                temp_query += ";";
+
                 std::vector<std::string> id_string = instance.select_from(temp_query.c_str());
                 int id = std::stoi(id_string[0]);
 
@@ -168,13 +214,13 @@ using namespace bd;
         std::vector<Product> BI::get_products(Categories category, std::string conditions){
             Query_BD instance;
             std::string name_table = CategoriesToString(category);
-            std::string query = "SELECT " + name_table + ".name, " + name_table + ".url_image, " + name_table + ".size, " + name_table + ".color, " + name_table + ".brand, " + name_table + "_urls.price, " + name_table + "_urls.url_product, " + name_table + ".id" + " FROM " + name_table +" INNER JOIN " + name_table + "_urls ON " + name_table + ".id = " + name_table + "_urls.product_id" + conditions + ";";
+            std::string query = "SELECT " + name_table + ".name, " + name_table + ".url_image, " + name_table + ".size, " + name_table + ".gender, " + name_table + ".color, " + name_table + ".brand, " + name_table + "_urls.price, " + name_table + "_urls.url_product, " + name_table + ".id" + " FROM " + name_table +" INNER JOIN " + name_table + "_urls ON " + name_table + ".id = " + name_table + "_urls.product_id" + conditions + ";";
 
             std::vector<std::string> category_products = instance.select_from(query.c_str());
             std::vector<Product> res_products; 
-            res_products.resize(category_products.size()/8);
+            res_products.resize(category_products.size()/9);
             int j = 0;
-            for(int i = 0; i < category_products.size()/8; i++ ){
+            for(int i = 0; i < category_products.size()/9; i++ ){
                     res_products[i].category = category;
                     res_products[i].name = category_products[j];
                     j++;
@@ -183,6 +229,10 @@ using namespace bd;
                     if(category_products[j] != "NULL")
                         res_products[i].param.size = std::stoi(category_products[j]);
                     else res_products[i].param.size = 0;
+                    j++;
+                    if(category_products[j] != "NULL")
+                        res_products[i].param.gender = category_products[j];
+                    else res_products[i].param.gender = "NULL";
                     j++;
                     if(category_products[j] != "NULL")
                         res_products[i].param.color = StringToColors(category_products[j]);
@@ -217,10 +267,18 @@ using namespace bd;
                 std::string conditions = " ";
                 if(param.size != 0){
                         conditions = " WHERE " + CategoriesToString(category) + ".size = '" + std::to_string(param.size) + "'";
+                        if(param.gender != "NULL")
+                                conditions += " AND " + CategoriesToString(category) + ".gender = '" + param.gender + "'";
                         if(param.color != None)
                                 conditions += " AND " + CategoriesToString(category) + ".color = '" + ColorsToString(param.color) + "'";
                         if(param.brand != "NULL")
                                 conditions += " AND " + CategoriesToString(category) + ".brand = '" + param.brand + "'";
+                } else if(param.gender != "NULL"){
+                        conditions += " AND " + CategoriesToString(category) + ".gender = '" + param.gender + "'";
+                        if(param.color != None)
+                                conditions += " AND " + CategoriesToString(category) + ".color = '" + ColorsToString(param.color) + "'";
+                        if(param.brand != "NULL")
+                                conditions += " AND " + CategoriesToString(category) + ".brand = '" + param.brand + "'"; 
                 } else if(param.color != None){
                         conditions = " WHERE " + CategoriesToString(category) + ".color = '" + ColorsToString(param.color) + "'";
                         if(param.brand != "NULL")

@@ -42,15 +42,16 @@ void Connection::handle_read(beast::error_code error,
         try {
             std::string request_target = static_cast<std::string>(request_.target());
 
-            if (request_target == "/get_item") {
-                res = handlers_.get_item(request_);
-            } else if (request_target == "/to_favorite") {
-                res = handlers_.to_favorite(request_);
-            } else {
-                res.set(http::field::content_type, "application/json");
-                res.result(http::status::not_found);
-                res.body() = "Not found";
-            }
+//            if (request_target == "/getitem") {
+//                res = handlers.getitem(request);
+//            } else if (request_target == "/tofavorite") {
+//                res = handlers.tofavorite(request);
+//            } else {
+//                res.set(http::field::content_type, "application/json");
+//                res.result(http::status::notfound);
+//                res.body() = "Not found";
+//            }
+            res = handlers_.get_item(request_);
         }
         catch (std::exception &ex) {
             res.set(http::field::server, BOOST_BEAST_VERSION_STRING);

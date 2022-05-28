@@ -2,36 +2,13 @@
 
 using namespace bd;
 
-#ifndef CATEGORIESToString
-#define CATEGORIESToString
-std::string CategoriesToString( Categories catagory ) {
-    switch( catagory ){
-    case Sneakers:
-         {
-             return "Sneakers";
-             break;
-         }
-    case Shirts:
-         {
-             return "Shirts";
-             break;
-         }
-    case Tshirts:
-         {
-             return "Tshirts";
-             break;
-         }
-    }
-}
-#endif
-
 //устанавливает соединение с БД 
 Query_BD::Query_BD(){
     this->conn = mysql_init(NULL);
 
       /* Connect to database */
       if (!mysql_real_connect(this->conn, server,
-            user, password, database, 0, NULL, 0)) {
+            user, password, database, port, NULL, 0)) {
           fprintf(stderr, "%s\n", mysql_error(this->conn));
           exit(1);
       }
@@ -43,12 +20,20 @@ Query_BD::~Query_BD(){
 }
 
 void Query_BD::create_all_tables(){
-    mysql_query(this->conn, "CREATE TABLE Sneakers (id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(255) UNIQUE NOT NULL, url_image VARCHAR(255), size INT, color VARCHAR(30), brand VARCHAR(30));");
-    mysql_query(this->conn, "CREATE TABLE Sneakers_urls (id INT PRIMARY KEY AUTO_INCREMENT, product_id int NOT NULL, price FLOAT, url_product VARCHAR(255) UNIQUE, FOREIGN KEY (product_id) REFERENCES Sneakers (id) ON DELETE CASCADE );");
-    mysql_query(this->conn, "CREATE TABLE Shirts (id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(255) UNIQUE NOT NULL, url_image VARCHAR(255), size INT, color VARCHAR(30), brand VARCHAR(30));");
-    mysql_query(this->conn, "CREATE TABLE Shirts_urls (id INT PRIMARY KEY AUTO_INCREMENT, product_id int NOT NULL, price FLOAT, url_product VARCHAR(255) UNIQUE, FOREIGN KEY (product_id) REFERENCES Sneakers (id) ON DELETE CASCADE );");
-    mysql_query(this->conn, "CREATE TABLE Tshirts (id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(255) UNIQUE NOT NULL, url_image VARCHAR(255), size INT, color VARCHAR(30), brand VARCHAR(30));");
-    mysql_query(this->conn, "CREATE TABLE Tshirts_urls (id INT PRIMARY KEY AUTO_INCREMENT, product_id int NOT NULL, price FLOAT, url_product VARCHAR(255) UNIQUE, FOREIGN KEY (product_id) REFERENCES Sneakers (id) ON DELETE CASCADE );");
+    mysql_query(this->conn, "CREATE TABLE Sneakers (id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(500) UNIQUE NOT NULL, url_image VARCHAR(500), size INT, gender VARCHAR(30), color VARCHAR(30), brand VARCHAR(30));");
+    mysql_query(this->conn, "CREATE TABLE Sneakers_urls (id INT PRIMARY KEY AUTO_INCREMENT, product_id int NOT NULL, price INT, url_product VARCHAR(500) UNIQUE, FOREIGN KEY (product_id) REFERENCES Sneakers (id) ON DELETE CASCADE );");
+    mysql_query(this->conn, "CREATE TABLE Shirts (id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(500) UNIQUE NOT NULL, url_image VARCHAR(500), size INT, gender VARCHAR(30), color VARCHAR(30), brand VARCHAR(30));");
+    mysql_query(this->conn, "CREATE TABLE Shirts_urls (id INT PRIMARY KEY AUTO_INCREMENT, product_id int NOT NULL, price INT, url_product VARCHAR(500) UNIQUE, FOREIGN KEY (product_id) REFERENCES Shirts (id) ON DELETE CASCADE );");
+    mysql_query(this->conn, "CREATE TABLE Tshirts (id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(500) UNIQUE NOT NULL, url_image VARCHAR(500), size INT, gender VARCHAR(30), color VARCHAR(30), brand VARCHAR(30));");
+    mysql_query(this->conn, "CREATE TABLE Tshirts_urls (id INT PRIMARY KEY AUTO_INCREMENT, product_id int NOT NULL, price INT, url_product VARCHAR(500) UNIQUE, FOREIGN KEY (product_id) REFERENCES Tshirts (id) ON DELETE CASCADE );");
+    mysql_query(this->conn, "CREATE TABLE Dress (id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(500) UNIQUE NOT NULL, url_image VARCHAR(500), size INT, gender VARCHAR(30), color VARCHAR(30), brand VARCHAR(30));");
+    mysql_query(this->conn, "CREATE TABLE Dress_urls (id INT PRIMARY KEY AUTO_INCREMENT, product_id int NOT NULL, price INT, url_product VARCHAR(500) UNIQUE, FOREIGN KEY (product_id) REFERENCES Dress (id) ON DELETE CASCADE );");
+    mysql_query(this->conn, "CREATE TABLE Shorts (id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(500) UNIQUE NOT NULL, url_image VARCHAR(500), size INT, gender VARCHAR(30), color VARCHAR(30), brand VARCHAR(30));");
+    mysql_query(this->conn, "CREATE TABLE Shorts_urls (id INT PRIMARY KEY AUTO_INCREMENT, product_id int NOT NULL, price INT, url_product VARCHAR(500) UNIQUE, FOREIGN KEY (product_id) REFERENCES Shorts (id) ON DELETE CASCADE );");
+    mysql_query(this->conn, "CREATE TABLE Skirts (id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(500) UNIQUE NOT NULL, url_image VARCHAR(500), size INT, gender VARCHAR(30), color VARCHAR(30), brand VARCHAR(30));");
+    mysql_query(this->conn, "CREATE TABLE Skirts_urls (id INT PRIMARY KEY AUTO_INCREMENT, product_id int NOT NULL, price INT, url_product VARCHAR(500) UNIQUE, FOREIGN KEY (product_id) REFERENCES Skirts (id) ON DELETE CASCADE );");
+    mysql_query(this->conn, "CREATE TABLE Vintage_shoes (id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(500) UNIQUE NOT NULL, url_image VARCHAR(500), size INT, gender VARCHAR(30), color VARCHAR(30), brand VARCHAR(30));");
+    mysql_query(this->conn, "CREATE TABLE Vintage_shoes_urls (id INT PRIMARY KEY AUTO_INCREMENT, product_id int NOT NULL, price INT, url_product VARCHAR(500) UNIQUE, FOREIGN KEY (product_id) REFERENCES Vintage_shoes (id) ON DELETE CASCADE );");
     mysql_query(this->conn, "CREATE TABLE Users (id INT PRIMARY KEY AUTO_INCREMENT, tg_id VARCHAR(255) UNIQUE NOT NULL);");
     mysql_query(this->conn, "CREATE TABLE Users_chosen (id INT PRIMARY KEY AUTO_INCREMENT, user_id int NOT NULL, id_product INT NOT NULL, category VARCHAR(255) NOT NULL, FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE, CONSTRAINT chosen_unique UNIQUE (user_id, id_product, category));");
 }
@@ -57,10 +42,18 @@ void Query_BD::delete_all_tables(){
     mysql_query(this->conn, "DROP TABLE Sneakers_urls");
     mysql_query(this->conn, "DROP TABLE Shirts_urls");
     mysql_query(this->conn, "DROP TABLE Tshirts_urls");
-    mysql_query(this->conn, "DROP TABLE Users_chosen");
-    mysql_query(this->conn, "DROP TABLE Shirts");
+    mysql_query(this->conn, "DROP TABLE Dress_urls");
+    mysql_query(this->conn, "DROP TABLE Shorts_urls");
+    mysql_query(this->conn, "DROP TABLE Skirts_urls");
+    mysql_query(this->conn, "DROP TABLE Vintage_shoes_urls");
     mysql_query(this->conn, "DROP TABLE Sneakers");
+    mysql_query(this->conn, "DROP TABLE Shirts");
     mysql_query(this->conn, "DROP TABLE Tshirts");
+    mysql_query(this->conn, "DROP TABLE Dress");
+    mysql_query(this->conn, "DROP TABLE Shorts");
+    mysql_query(this->conn, "DROP TABLE Skirts");
+    mysql_query(this->conn, "DROP TABLE Vintage_shoes");
+    mysql_query(this->conn, "DROP TABLE Users_chosen");
     mysql_query(this->conn, "DROP TABLE Users");
 }
 

@@ -8,7 +8,7 @@ HunterGate(
 
 project(ThriftShop_server)
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-fprofile-arcs -ftest-coverage -fPIC -O0 -pthread")
 #set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -coverage -l sqlite3 -lgcov")
 
@@ -45,11 +45,11 @@ file(GLOB INCLUDE_Cr "Crawler/Headers/*.h")
 
 
 hunter_add_package(asio)
-hunter_add_package(Beast)
-hunter_add_package(Boost)
+
 hunter_add_package(gumbo)
+
 hunter_add_package(nlohmann_json)
-hunter_add_package(GTest)
+
 
 find_package(asio CONFIG REQUIRED)
 find_package(Beast CONFIG REQUIRED)

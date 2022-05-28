@@ -49,6 +49,9 @@ private:
     json json_set();
     // Формирование запроса к БД из обновления
     bd::Product site_json_pars(const json& jv);
+    bd::Colors StringToColors( const std::string& color_string );
+    bd::Categories StringToCategory( const std::string& category_string );
+
 
 };
 

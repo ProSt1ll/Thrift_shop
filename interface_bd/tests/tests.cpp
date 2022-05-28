@@ -12,28 +12,37 @@ TEST(create_all_tables, work) {
     Query_BD instance;
     instance.create_all_tables();
     std::vector<std::string> ot = instance.select_from("SHOW TABLES");
-    EXPECT_EQ("Shirts", ot[0]);
-    EXPECT_EQ("Shirts_urls", ot[1]);
-    EXPECT_EQ("Sneakers", ot[2]);
-    EXPECT_EQ("Sneakers_urls", ot[3]);
-    EXPECT_EQ("Tshirts", ot[4]);
-    EXPECT_EQ("Tshirts_urls", ot[5]);
-    EXPECT_EQ("Users", ot[6]);
-    EXPECT_EQ("Users_chosen", ot[7]);
+    EXPECT_EQ("Dress", ot[0]);
+    EXPECT_EQ("Dress_urls", ot[1]);
+    EXPECT_EQ("Shirts", ot[2]);
+    EXPECT_EQ("Shirts_urls", ot[3]);
+    EXPECT_EQ("Shorts", ot[4]);
+    EXPECT_EQ("Shorts_urls", ot[5]);
+    EXPECT_EQ("Skirts", ot[6]);
+    EXPECT_EQ("Skirts_urls", ot[7]);
+    EXPECT_EQ("Sneakers", ot[8]);
+    EXPECT_EQ("Sneakers_urls", ot[9]);
+    EXPECT_EQ("Tshirts", ot[10]);
+    EXPECT_EQ("Tshirts_urls", ot[11]);
+    EXPECT_EQ("Users", ot[12]);
+    EXPECT_EQ("Users_chosen", ot[13]);
+    EXPECT_EQ("Vintage_shoes", ot[14]);
+    EXPECT_EQ("Vintage_shoes_urls", ot[15]);
 }
 
 TEST(insert_into__select_from, right) {
     Query_BD instance;
     instance.delete_all_tables();
     instance.create_all_tables();
-    instance.insert_into("INSERT INTO Sneakers (name, url_image, brand) VALUES ('Nike Air Force 1 Crater Next Nature','https://','Nike');");
+    instance.insert_into("INSERT INTO Sneakers (name, url_image, brand, gender) VALUES ('Nike Air Force 1 Crater Next Nature','https://','Nike','m');");
     std::vector<std::string> ot = instance.select_from("SELECT * FROM Sneakers");
-    EXPECT_EQ("1", ot[0]);
-    EXPECT_EQ("Nike Air Force 1 Crater Next Nature", ot[1]);
-    EXPECT_EQ("https://", ot[2]);
-    EXPECT_EQ("NULL", ot[3]);
-    EXPECT_EQ("NULL", ot[4]);
-    EXPECT_EQ("Nike", ot[5]);
+    EXPECT_EQ("1", ot[0]);//id
+    EXPECT_EQ("Nike Air Force 1 Crater Next Nature", ot[1]);//name
+    EXPECT_EQ("https://", ot[2]);//url_image
+    EXPECT_EQ("NULL", ot[3]);//size
+    EXPECT_EQ("m", ot[4]);//gender
+    EXPECT_EQ("NULL", ot[5]);//color
+    EXPECT_EQ("Nike", ot[6]);//brand
 }
 
 TEST(insert_into__select_from, wrong) {
@@ -87,7 +96,7 @@ TEST(set_product, no_double) {
     interface.set_product(prod);
 
     std::vector<std::string> ot = instance.select_from("SELECT Sneakers.name, Sneakers.url_image, Sneakers.size, Sneakers.color, Sneakers.brand, Sneakers_urls.price, Sneakers_urls.url_product FROM Sneakers INNER JOIN Sneakers_urls ON Sneakers.id = Sneakers_urls.product_id;");
-    EXPECT_EQ(7, ot.size());
+    EXPECT_EQ(7, ot.size());//!
     EXPECT_EQ("Nike Air Force 1 Crater Next Nature", ot[0]);
     EXPECT_EQ("http", ot[1]);
     EXPECT_EQ("NULL", ot[2]);

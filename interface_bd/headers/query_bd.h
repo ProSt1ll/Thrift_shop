@@ -9,17 +9,11 @@
 #include <vector>
 #include <mysql/mysql.h>
 
-#define server "localhost"
+#define server "127.0.0.1"
 #define user "admin"
 #define password "Technosquad"
 #define database "products"
-
-#ifndef CATEGORIES
-#define CATEGORIES
-    enum Categories {
-        Empty , Sneakers, Shirts, Tshirts
-    };
-#endif // CATEGORIES
+#define port 3306
 
 namespace bd{
 

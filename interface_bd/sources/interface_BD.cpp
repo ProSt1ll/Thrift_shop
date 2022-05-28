@@ -315,13 +315,25 @@ using namespace bd;
                 std::string conditions_sneakers = " WHERE ";
                 std::string conditions_shirts = " WHERE ";
                 std::string conditions_tshirts = " WHERE ";
+                std::string conditions_dress = " WHERE ";
+                std::string conditions_shorts = " WHERE ";
+                std::string conditions_skirts = " WHERE ";
+                std::string conditions_vintage_shoes = " WHERE ";
                 for(int i = 0; i < products_id.size(); i+=2){
-                        if(products_id[i+1] == CategoriesToString(Sneakers))
+                        if(products_id[i+1] == CategoriesToString(Sneakers)){
                                 help_func_get_us(conditions_sneakers, products_id, i);
-                        if(products_id[i+1] == CategoriesToString(Shirts))
+                        } else if(products_id[i+1] == CategoriesToString(Shirts)){
                                 help_func_get_us(conditions_shirts, products_id, i);
-                        if(products_id[i+1] == CategoriesToString(Tshirts))
+                        } else if(products_id[i+1] == CategoriesToString(Tshirts)){
                                 help_func_get_us(conditions_tshirts, products_id, i);
+                        } else if(products_id[i+1] == CategoriesToString(Dress)){
+                                help_func_get_us(conditions_dress, products_id, i);
+                        } else if(products_id[i+1] == CategoriesToString(Shorts)){
+                                help_func_get_us(conditions_shorts, products_id, i);
+                        } else if(products_id[i+1] == CategoriesToString(Skirts)){
+                                help_func_get_us(conditions_skirts, products_id, i);
+                        } else if(products_id[i+1] == CategoriesToString(Vintage_shoes))
+                                help_func_get_us(conditions_vintage_shoes, products_id, i);
                 }
 
                 BI interface;
@@ -329,6 +341,10 @@ using namespace bd;
                 std::vector<Product> result1;
                 std::vector<Product> result2; 
                 std::vector<Product> result3; 
+                std::vector<Product> result4;
+                std::vector<Product> result5; 
+                std::vector<Product> result6; 
+                std::vector<Product> result7; 
                 if(conditions_sneakers != " WHERE "){
                         result1 = interface.get_products(Sneakers, conditions_sneakers);
                         result.insert(result.end(),std::make_move_iterator(result1.begin()),std::make_move_iterator(result1.end()));
@@ -340,6 +356,22 @@ using namespace bd;
                 if(conditions_tshirts != " WHERE "){
                         result3 = interface.get_products(Tshirts, conditions_tshirts);
                         result.insert(result.end(),std::make_move_iterator(result3.begin()),std::make_move_iterator(result3.end()));
+                }
+                if(conditions_dress != " WHERE "){
+                        result4 = interface.get_products(Dress, conditions_dress);
+                        result.insert(result.end(),std::make_move_iterator(result4.begin()),std::make_move_iterator(result4.end()));
+                }
+                if(conditions_shorts != " WHERE "){
+                        result5 = interface.get_products(Shorts, conditions_shorts);
+                        result.insert(result.end(),std::make_move_iterator(result5.begin()),std::make_move_iterator(result5.end()));
+                }
+                if(conditions_skirts != " WHERE "){
+                        result6 = interface.get_products(Skirts, conditions_skirts);
+                        result.insert(result.end(),std::make_move_iterator(result6.begin()),std::make_move_iterator(result6.end()));
+                }
+                if(conditions_vintage_shoes != " WHERE "){
+                        result7 = interface.get_products(Vintage_shoes, conditions_vintage_shoes);
+                        result.insert(result.end(),std::make_move_iterator(result7.begin()),std::make_move_iterator(result7.end()));
                 }
 
                 return result;

@@ -23,9 +23,9 @@ void Query_BD::create_all_tables(){
     mysql_query(this->conn, "CREATE TABLE Sneakers (id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(255) UNIQUE NOT NULL, url_image VARCHAR(255), size INT, color VARCHAR(30), brand VARCHAR(30));");
     mysql_query(this->conn, "CREATE TABLE Sneakers_urls (id INT PRIMARY KEY AUTO_INCREMENT, product_id int NOT NULL, price FLOAT, url_product VARCHAR(255) UNIQUE, FOREIGN KEY (product_id) REFERENCES Sneakers (id) ON DELETE CASCADE );");
     mysql_query(this->conn, "CREATE TABLE Shirts (id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(255) UNIQUE NOT NULL, url_image VARCHAR(255), size INT, color VARCHAR(30), brand VARCHAR(30));");
-    mysql_query(this->conn, "CREATE TABLE Shirts_urls (id INT PRIMARY KEY AUTO_INCREMENT, product_id int NOT NULL, price FLOAT, url_product VARCHAR(255) UNIQUE, FOREIGN KEY (product_id) REFERENCES Sneakers (id) ON DELETE CASCADE );");
+    mysql_query(this->conn, "CREATE TABLE Shirts_urls (id INT PRIMARY KEY AUTO_INCREMENT, product_id int NOT NULL, price FLOAT, url_product VARCHAR(255) UNIQUE, FOREIGN KEY (product_id) REFERENCES Shirts (id) ON DELETE CASCADE );");
     mysql_query(this->conn, "CREATE TABLE Tshirts (id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(255) UNIQUE NOT NULL, url_image VARCHAR(255), size INT, color VARCHAR(30), brand VARCHAR(30));");
-    mysql_query(this->conn, "CREATE TABLE Tshirts_urls (id INT PRIMARY KEY AUTO_INCREMENT, product_id int NOT NULL, price FLOAT, url_product VARCHAR(255) UNIQUE, FOREIGN KEY (product_id) REFERENCES Sneakers (id) ON DELETE CASCADE );");
+    mysql_query(this->conn, "CREATE TABLE Tshirts_urls (id INT PRIMARY KEY AUTO_INCREMENT, product_id int NOT NULL, price FLOAT, url_product VARCHAR(255) UNIQUE, FOREIGN KEY (product_id) REFERENCES TShirts (id) ON DELETE CASCADE );");
     mysql_query(this->conn, "CREATE TABLE Users (id INT PRIMARY KEY AUTO_INCREMENT, tg_id VARCHAR(255) UNIQUE NOT NULL);");
     mysql_query(this->conn, "CREATE TABLE Users_chosen (id INT PRIMARY KEY AUTO_INCREMENT, user_id int NOT NULL, id_product INT NOT NULL, category VARCHAR(255) NOT NULL, FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE, CONSTRAINT chosen_unique UNIQUE (user_id, id_product, category));");
 }

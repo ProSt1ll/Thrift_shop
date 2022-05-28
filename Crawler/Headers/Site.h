@@ -31,16 +31,44 @@ namespace siteSearch {
 // Проверяет, что в открывающем блоке есть аттрибут Attr. start - позиция "<", end - позиция ">"
     bool checkAttr(size_t start, size_t end, const std::string &attr, const std::string &htmlFile);
 
-// Возвращает строковое содержание тега tag, начиная с позиции start, в файле file
+// Возвращает строковое содержание тега tag, начиная с позиции start, в файле htmlFile
     std::string
     getBlockContent(const std::string &htmlFile, const std::string &htmlTag, const std::string &htmlClass = "",
                     const std::string &htmlId = "", size_t pos = 0);
+
+// Возвращает значение аттрибута attr в теге tag, который начинается с позиции start в файле htmlFile
+    std::string getTagAttr(const std::string &htmlFile, const std::string &htmlTag, const std::string &htmlAttr = "",
+                           const std::string &htmlClass = "", const std::string &htmlId = "", size_t pos = 0);
 
 // Находит в строке первое число и возвращает его в виде строки
     std::string getNumber(const std::string &str);
 
     enum Chapters {
-        index, man, woman, boy, girl
+        index,
+        man,
+        manOuter,
+        manInner,
+        manUp,
+        manDown,
+        manShoes,
+        woman,
+        womanOuter,
+        womanInner,
+        womanUp,
+        womanDown,
+        womanShoes,
+        boy,
+        boyOuter,
+        boyInner,
+        boyUp,
+        boyDown,
+        boyShoes,
+        girl,
+        girlOuter,
+        girlInner,
+        girlUp,
+        girlDown,
+        girlShoes
     };
 
     enum Parameters {

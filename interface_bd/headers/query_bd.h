@@ -15,13 +15,6 @@
 #define database "products"
 #define port 3306
 
-#ifndef CATEGORIES
-#define CATEGORIES
-    enum Categories {
-        Empty , Sneakers, Shirts, Tshirts
-    };
-#endif // CATEGORIES
-
 namespace bd{
 
     class Query_BD{

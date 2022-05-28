@@ -1,13 +1,11 @@
 #include "../include/MenuController.h"
 
-    void MenuController::run(std::function<void (std::string message)> get_mes){
-
+    void MenuController::run(std::function<void (std::string message)> get_mes,std::function<void(void)> start){
         std::vector<std::string>bot_commands ={"start"};
-
+       // io_context.run();
         bot.getEvents().onCommand("start", [this, &get_mes](TgBot::Message::Ptr message) {
             bot.getApi().sendMessage(message->chat->id, "Hello, sweetie");
             MainMenu Main(&bot,message->chat->id,[&](std::string message){get_mes(message); });
-            SearchMenu search()
             Main.run();
         });
         bot.getEvents().onAnyMessage([this, &bot_commands](TgBot::Message::Ptr message) {
@@ -25,6 +23,7 @@
             printf("Bot username: %s\n", bot.getApi().getMe()->username.c_str());
             TgBot::TgLongPoll longPoll(bot);
             while (true) {
+                //start();
                 printf("Long poll started\n");
                 longPoll.start();
             }
@@ -33,6 +32,8 @@
         }
 
     }
-
+    void MenuController::to_tg(std::string some,int id){
+        bot.getApi().sendMessage(id, some);
+}
 void MenuController::stop(){}
 

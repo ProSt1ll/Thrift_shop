@@ -22,11 +22,11 @@ namespace net = boost::asio;            // from <boost/asio.hpp>
 class Client : public std::enable_shared_from_this<Client>
 {
 public:
-    Client(boost::asio::io_context& io_context);
-
-    void run(std::string& server, const std::string& port);
+    Client(boost::asio::io_context& io_context,std::string message,std::function<void(std::string message)> get_mes);
+    void try_read();
+    void run();
     void post(nlohmann::json package);
-
+    void send_msg(std::string some);
 private:
     void handle_resolve(beast::error_code err,
                         tcp::resolver::results_type results);
@@ -35,13 +35,13 @@ private:
 
     void handle_connect(beast::error_code err, tcp::resolver::results_type::endpoint_type);
     void handle_connect2(beast::error_code err, tcp::resolver::results_type::endpoint_type);
-    void send_msg(std::string some);
     void handle_write_request(beast::error_code err,
                               std::size_t bytes_transferred);
 
     void handle_read(beast::error_code err,
                      std::size_t bytes_transferred);
-
+    void stop();
+    void set(std::function<void(std::string message)> get_mes);
 private:
     tcp::resolver resolver_;
     beast::tcp_stream stream_;
@@ -50,6 +50,10 @@ private:
     std::basic_string<char> port_server;
     http::request<http::empty_body> request_;
     http::response<http::string_body> response_;
+    std::string to_serv;
+    std::function<void(std::string message)> manage;
+    tcp::resolver::results_type result;
+
 };
 
 

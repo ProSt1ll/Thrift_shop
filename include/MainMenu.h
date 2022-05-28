@@ -5,7 +5,7 @@
 class MainMenu{
 public:
     Menu menu;
-    MainMenu(TgBot::Bot *bot,int id,std::function<void(std::string message)> get_mes,std::function<void(void)> back);
+    MainMenu(TgBot::Bot *bot,int id,std::function<void(std::string message)> get_mes);
     void run();
     void rerun();
 

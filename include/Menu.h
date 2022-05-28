@@ -3,6 +3,7 @@
 #define TGBOT_MENU_H
 #include <tgbot/tgbot.h>
 #include <stdio.h>
+#include "json.hpp"
 
 class Menu{
 public:

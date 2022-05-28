@@ -1,22 +1,133 @@
 #include "../include/SearchMenu.h"
 
-SearchMenu::SearchMenu(TgBot::Bot *bot,int id,std::function<void(std::string message)> get_mes,std::function<void(void)> back) {
-    t_id = id;
+std::vector<std::string> Category = {"Empty", "Sneakers", "Shirts", "Tshirts"};
+std::vector<std::string> Color = {"None",
+                                  "White",
+                                  "Blue",
+                                  "Red",
+                                  "Orange",
+                                  "Yellow",
+                                  "Green",
+                                  "Black"};
+std::vector<std::string> Size = {"XS",
+                                 "S",
+                                 "M",
+                                 "L"
+};
+nlohmann::json package;
+TgBot::InlineKeyboardMarkup::Ptr size_key(new TgBot::InlineKeyboardMarkup);
+TgBot::InlineKeyboardMarkup::Ptr color_key(new TgBot::InlineKeyboardMarkup);
+
+SearchMenu::SearchMenu(TgBot::Bot *bot, int id, std::function<void(std::string message)> get_mes):t_id(id),t_bot(bot) {
+    package["user_id"]=id;
+
+
+    TgBot::InlineKeyboardButton::Ptr color1_btn(new TgBot::InlineKeyboardButton);
+    TgBot::InlineKeyboardButton::Ptr color2_btn(new TgBot::InlineKeyboardButton);
+    TgBot::InlineKeyboardButton::Ptr color3_btn(new TgBot::InlineKeyboardButton);
+    TgBot::InlineKeyboardButton::Ptr color4_btn(new TgBot::InlineKeyboardButton);
+    TgBot::InlineKeyboardButton::Ptr color5_btn(new TgBot::InlineKeyboardButton);
+    TgBot::InlineKeyboardButton::Ptr color6_btn(new TgBot::InlineKeyboardButton);
+    TgBot::InlineKeyboardButton::Ptr color7_btn(new TgBot::InlineKeyboardButton);
+    TgBot::InlineKeyboardButton::Ptr color8_btn(new TgBot::InlineKeyboardButton);
+
+    TgBot::InlineKeyboardButton::Ptr size1_btn(new TgBot::InlineKeyboardButton);
+    TgBot::InlineKeyboardButton::Ptr size2_btn(new TgBot::InlineKeyboardButton);
+    TgBot::InlineKeyboardButton::Ptr size3_btn(new TgBot::InlineKeyboardButton);
+    TgBot::InlineKeyboardButton::Ptr size4_btn(new TgBot::InlineKeyboardButton);
+    int i = 0;
+    color1_btn->text = Color[i];
+    color1_btn->callbackData = Color[i];
+    i++;
+    color2_btn->text = Color[i];
+    color2_btn->callbackData = Color[i];
+    i++;
+    color3_btn->text = Color[i];
+    color3_btn->callbackData = Color[i];
+    i++;
+    color4_btn->text = Color[i];
+    color4_btn->callbackData = Color[i];
+    i++;
+    color5_btn->text = Color[i];
+    color5_btn->callbackData = Color[i];
+    i++;
+    color6_btn->text = Color[i];
+    color6_btn->callbackData = Color[i];
+    i++;
+    color7_btn->text = Color[i];
+    color7_btn->callbackData = Color[i];
+    i++;
+    color8_btn->text = Color[i];
+    color8_btn->callbackData = Color[i];
+    color_but.push_back(color1_btn);
+    color_but.push_back(color2_btn);
+    color_but.push_back(color3_btn);
+    color_but.push_back(color4_btn);
+    color_but.push_back(color5_btn);
+    color_but.push_back(color6_btn);
+    color_but.push_back(color7_btn);
+    color_but.push_back(color8_btn);
+    color_key->inlineKeyboard.push_back(color_but);
+
+    i = 0;
+    size1_btn->text = Size[i];
+    size1_btn->callbackData = Size[i];
+
+    i++;
+    size2_btn->text = Size[i];
+    size2_btn->callbackData = Size[i];
+    i++;
+    size3_btn->text = Size[i];
+    size3_btn->callbackData = Size[i];
+    i++;
+    size4_btn->text = Size[i];
+    size4_btn->callbackData = Size[i];
+    i++;
+
+    size_but.push_back(size1_btn);
+    size_but.push_back(size2_btn);
+    size_but.push_back(size3_btn);
+    size_but.push_back(size4_btn);
+
+    size_key->inlineKeyboard.push_back(size_but);
+
+    //t_id = id;
     t_bot = bot;
 
-    TgBot::InlineKeyboardMarkup::Ptr tmp_keyboard = menu.keyboard;
-    bot->getEvents().onCallbackQuery([&bot , back](TgBot::CallbackQuery::Ptr query){
-        if(query->data == "back"){
-           back();
+
+    bot->getEvents().onCallbackQuery([bot, id, this,get_mes](TgBot::CallbackQuery::Ptr query) {
+            for (const auto bot_color: Color) {
+                if (query->data == bot_color) {
+                    package["product"]["parametrs"]["color"]=query->data;
+                    bot->getApi().sendMessage(id,"Choose size",false,0,size_key);
+                }
+            }
+        for (const auto bot_size: Size) {
+            if (query->data == bot_size) {
+                package["product"]["parametrs"]["size"]=query->data;
+                package["option"]="3";
+                std::string tmp = package.dump();
+                get_mes(tmp);
+            }
         }
+        for (const auto bot_category: Category) {
+            if (query->data == bot_category) {
+                package["product"]["category"]=query->data;
+                bot->getApi().sendMessage(id,"Choose color",false,0,color_key);
+            }
+        }
+
     });
+
 }
-void SearchMenu::run(){
+
+void SearchMenu::run() {
     TgBot::InlineKeyboardButton::Ptr category1_btn(new TgBot::InlineKeyboardButton);
     TgBot::InlineKeyboardButton::Ptr category2_btn(new TgBot::InlineKeyboardButton);
     TgBot::InlineKeyboardButton::Ptr category3_btn(new TgBot::InlineKeyboardButton);
     TgBot::InlineKeyboardButton::Ptr category4_btn(new TgBot::InlineKeyboardButton);
     TgBot::InlineKeyboardButton::Ptr back_btn(new TgBot::InlineKeyboardButton);
+
 
     category1_btn->text = "Empty";
     category1_btn->callbackData = "Empty";
@@ -30,7 +141,7 @@ void SearchMenu::run(){
     category4_btn->text = "Tshirts";
     category4_btn->callbackData = "Tshirts";
 
-    back_btn->text="Back to main menu";
+    back_btn->text = "Back to main menu";
     back_btn->callbackData = "back";
 
     menu.buttons.push_back(category1_btn);
@@ -42,8 +153,9 @@ void SearchMenu::run(){
     menu.keyboard->inlineKeyboard.push_back(menu.buttons);
 
     std::string label = "Choose category";
-    menu.display(t_id,label,t_bot);
+    menu.display(t_id, label, t_bot);
 }
+
 SearchMenu::~SearchMenu() {
 
 }

@@ -23,6 +23,7 @@ public:
     void(*get_msg)(std::string);
     int t_id;
     void to_tg(std::string some,int id);
+    void key_favor(int id, int id_product);
     TgBot::Bot bot;
 };
 #endif //TGBOT_MENUCONTROLLER_H

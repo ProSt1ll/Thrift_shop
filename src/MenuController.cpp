@@ -35,5 +35,15 @@
     void MenuController::to_tg(std::string some,int id){
         bot.getApi().sendMessage(id, some);
 }
+void MenuController::key_favor(int id, int id_product){
+    TgBot::InlineKeyboardMarkup::Ptr favor_key(new TgBot::InlineKeyboardMarkup);
+    TgBot::InlineKeyboardButton::Ptr favor_btn(new TgBot::InlineKeyboardButton);
+    std::vector<TgBot::InlineKeyboardButton::Ptr> favor_but;
+    favor_btn->text = "add to favorite";
+    favor_btn->callbackData = std::to_string(id_product);
+    favor_but.push_back(favor_btn);
+    favor_key->inlineKeyboard.push_back(favor_but);
+    bot.getApi().sendMessage(id,"",false,0,favor_key);
+}
 void MenuController::stop(){}
 

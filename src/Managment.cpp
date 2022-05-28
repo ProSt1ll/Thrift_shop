@@ -27,11 +27,17 @@ Managment::~Managment() {
 
 }
 void Managment::get_mes(std::string message) {
-    ClientCntrl client("/posts",[&](std::string message){get_mes_from_serv(message); });
+    ClientCntrl client(message,[&](std::string message){get_mes_from_serv(message); });
 };
 void Managment::get_mes_from_serv(std::string message) {
-    //nlohmann::json res = nlohmann::json::parse(message);
+//    nlohmann::json res = nlohmann::json::parse(message);
+//
+//    tgbot.to_tg(res["url_image"],res["user_id"]);
+//    tgbot.to_tg(res["url_product"],res["user_id"]);
+//    tgbot.to_tg(res["price"],res["user_id"]);
     tgbot.to_tg(message,517318106);
+
+
 };
 void Managment::get_product(int search_parametr) {
 

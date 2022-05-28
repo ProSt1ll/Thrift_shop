@@ -9,10 +9,10 @@ std::vector<std::string> Color = {"None",
                                   "Yellow",
                                   "Green",
                                   "Black"};
-std::vector<std::string> Size = {"XS",
-                                 "S",
-                                 "M",
-                                 "L"
+std::vector<int> Size = {         50,
+                                 52,
+                                 54,
+                                 56
 };
 nlohmann::json package;
 TgBot::InlineKeyboardMarkup::Ptr size_key(new TgBot::InlineKeyboardMarkup);
@@ -70,18 +70,18 @@ SearchMenu::SearchMenu(TgBot::Bot *bot, int id, std::function<void(std::string m
     color_key->inlineKeyboard.push_back(color_but);
 
     i = 0;
-    size1_btn->text = Size[i];
-    size1_btn->callbackData = Size[i];
+    size1_btn->text = std::to_string(Size[i]);
+    size1_btn->callbackData = std::to_string(Size[i]);
 
     i++;
-    size2_btn->text = Size[i];
-    size2_btn->callbackData = Size[i];
+    size2_btn->text = std::to_string(Size[i]);
+    size2_btn->callbackData = std::to_string(Size[i]);
     i++;
-    size3_btn->text = Size[i];
-    size3_btn->callbackData = Size[i];
+    size3_btn->text = std::to_string(Size[i]);
+    size3_btn->callbackData = std::to_string(Size[i]);
     i++;
-    size4_btn->text = Size[i];
-    size4_btn->callbackData = Size[i];
+    size4_btn->text = std::to_string(Size[i]);
+    size4_btn->callbackData = std::to_string(Size[i]);
     i++;
 
     size_but.push_back(size1_btn);
@@ -98,15 +98,16 @@ SearchMenu::SearchMenu(TgBot::Bot *bot, int id, std::function<void(std::string m
     bot->getEvents().onCallbackQuery([bot, id, this,get_mes](TgBot::CallbackQuery::Ptr query) {
             for (const auto bot_color: Color) {
                 if (query->data == bot_color) {
-                    package["product"]["parametrs"]["color"]=query->data;
+                    package["product"]["parameters"]["color"]=query->data;
                     bot->getApi().sendMessage(id,"Choose size",false,0,size_key);
                 }
             }
         for (const auto bot_size: Size) {
-            if (query->data == bot_size) {
-                package["product"]["parametrs"]["size"]=query->data;
-                package["option"]="3";
-                std::string tmp = package.dump();
+            std::string tmp = std::to_string(bot_size);
+            if (query->data == tmp) {
+                package["product"]["parameters"]["size"]=bot_size;
+                package["option"]=3;
+                tmp = package.dump();
                 get_mes(tmp);
             }
         }

@@ -15,6 +15,8 @@ namespace bd {
     typedef struct Parametrs{
         std::size_t id;
         // 0 == NULL
+        std::string gender;
+        // "NULL"== NULL, m - мужская, w-женская, u-неважно
         std::size_t size;
         // 0 == NULL
         Colors color;
@@ -27,7 +29,7 @@ namespace bd {
    #ifndef CATEGORIES
     #define CATEGORIES
     enum Categories {
-        Empty , Sneakers, Shirts, Tshirts
+        Empty , Sneakers, Shirts, Tshirts , Dress, Shorts, Skirts, Vintage_shoes
     };
     #endif // CATEGORIES
 

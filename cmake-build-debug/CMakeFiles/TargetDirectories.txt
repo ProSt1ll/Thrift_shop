@@ -1,6 +1,0 @@
-/home/ivan/Рабочий стол/Project/Thrift_shop/cmake-build-debug/CMakeFiles/lib_bd.dir
-/home/ivan/Рабочий стол/Project/Thrift_shop/cmake-build-debug/CMakeFiles/lib_cr.dir
-/home/ivan/Рабочий стол/Project/Thrift_shop/cmake-build-debug/CMakeFiles/server_lib.dir
-/home/ivan/Рабочий стол/Project/Thrift_shop/cmake-build-debug/CMakeFiles/main.out.dir
-/home/ivan/Рабочий стол/Project/Thrift_shop/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/ivan/Рабочий стол/Project/Thrift_shop/cmake-build-debug/CMakeFiles/rebuild_cache.dir

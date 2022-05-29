@@ -78,7 +78,7 @@ int main() {
                                      {siteSearch::index, "moda.oc-mod.ru"},
                                      {siteSearch::womanOuter, "/wooman/wooman_odegda/wooman_dresses/"},
                                      {siteSearch::womanDown, "/wooman/wooman_odegda/wooman_skirts/"},
-                                     {siteSearch::womanShoes,   "/wooman/wooman_shoes/wooman_tufli/"}
+                                     {siteSearch::womanShoes, "/wooman/wooman_shoes/wooman_tufli/"}
                              }},
             {"parameterMap", {
                                      {siteSearch::title, {
@@ -92,15 +92,15 @@ int main() {
                                                                       {"cssClass", "class=\"price_no_format"}
                                                               }},
                                      {siteSearch::url,       {
-                                                                      {"tag", "link"},
-                                                                      {"id", " "},
-                                                                      {"cssClass", "itemprop=\"url\""}
-                                                              }},
-                                     {siteSearch::image,     {
-                                                                     {"tag", "img"},
+                                                                     {"tag", "link"},
                                                                      {"id", " "},
-                                                                     {"cssClass", "img-responsive"}
+                                                                     {"cssClass", "itemprop=\"url\""}
                                                              }},
+                                     {siteSearch::image,      {
+                                                                      {"tag", "img"},
+                                                                      {"id", " "},
+                                                                      {"cssClass", "img-responsive"}
+                                                              }},
                                      {siteSearch::itemTemplate, {
                                                                         {"tag", "div"},
                                                                         {"id", ""},
@@ -112,11 +112,13 @@ int main() {
             {"chapters",
                       {siteSearch::index, siteSearch::womanOuter, siteSearch::womanDown, siteSearch::womanShoes}},
             {"parameters",
-                      {siteSearch::url,   siteSearch::cost,    siteSearch::title,     siteSearch::person, siteSearch::size, siteSearch::image}},
+                      {siteSearch::url,   siteSearch::cost,       siteSearch::title,     siteSearch::person, siteSearch::size, siteSearch::image}},
             {"sites", {site_1}}
     };
     Crawler crawler(settings);
-    std::cout << crawler.crawl(crawler.getSites(), crawler.getParameters(), crawler.getChapters()) << std::endl;
+    auto result = crawler.crawl(crawler.getSites(), crawler.getParameters(), crawler.getChapters());
+    for (const auto &element: result)
+        std::cout << element << std::endl;
 
     return 0;
 }

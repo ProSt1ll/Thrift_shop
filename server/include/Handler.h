@@ -49,45 +49,34 @@ private:
     json json_set();
     // Формирование запроса к БД из обновления
     bd::Product site_json_pars(const json& jv);
-    bd::Colors StringToColors( const std::string& color_string );
-    bd::Categories StringToCategory( const std::string& category_string );
 
+    static bd::Colors str_to_color(const std::string& color_string );
+
+    static bd::Categories str_to_category(const std::string& category_string );
 
 };
 
 /*
  ПРИМЕРНЫЙ JSON
-{
-	"user_id": 12345,
-	"option": 1 || 0 - just category; 1 - favorite; 2 - price; 3 - parametrs
-	"product_id": 63452 (or 0),
-	"product": {
-		"category": [
-			 Empty,
-			 Sneakers,
-			 Shirts,
-			 Tshirts
-			 ],
-		"price": 1000,
-		"url_image": 12ew2313r,
-		"url_product": g3423rf,
-		"parametrs": {
-			 "id": 1245,
-			 "size": 45,
-			 "color": [
-				 None,
-				 White,
-				 Blue,
-				 Red,
-				 Orange,
-				 Yellow,
-				 Green,
-				 Black
-				 ],
-		 	 "brand": gucci
-		 	 }
- 	}
-}
+//    json jv = {
+//            {"user_id", "123qwery"},
+//            {"option", 3},
+//            {"product_id", 0},
+//            {"product", {
+//                                {"category", 1},
+//                                {"price", 100},
+//                                {"url_image", "url_imag"},
+//                                {"url_product", "url_prod"},
+//                                {"parameters", {
+//                                                       {"id", 15},
+//                                                       {"size", 2},
+//                                                       {"color", 1},
+//                                                       {"brand", "gucci"}
+//                                               }
+//                                }
+//                        }
+//            }
+//    };
  */
 
 

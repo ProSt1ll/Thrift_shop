@@ -1,0 +1,23 @@
+# ninja log v5
+1	739	1653810035580445890	CMakeFiles/lib_bd.dir/interface_bd/sources/query_bd.cpp.o	c83a383e1ce0d9eb
+0	1208	1653810036052446641	CMakeFiles/lib_bd.dir/interface_bd/sources/interface_BD.cpp.o	96a70f6bf56162e9
+1208	1267	1653810036112446735	liblib_bd.a	4ca64522faa4ef55
+1	3118	1653810037960449641	CMakeFiles/lib_cr.dir/Crawler/Sources/Clothe.cpp.o	7c63ad063ad628c4
+741	9078	1653810043912458729	CMakeFiles/lib_cr.dir/Crawler/Sources/Crawler.cpp.o	2f21064a02b05916
+3119	17967	1653810052784471639	CMakeFiles/server_lib.dir/server/src/Connection.cpp.o	8a41fcb83d5e2b8
+1268	18820	1653810053644472856	CMakeFiles/lib_cr.dir/Crawler/Sources/Site.cpp.o	11ccf9317142156a
+18821	19863	1653810054180473612	liblib_crd.a	f9460c8a7c107e4a
+9082	20951	1653810055784475862	CMakeFiles/server_lib.dir/server/src/Handler.cpp.o	a64c5ec5d66b0bbc
+17967	27283	1653810062120484583	CMakeFiles/server_lib.dir/server/src/Server.cpp.o	2e7b9feeb870a1f8
+19863	27423	1653810062264484779	CMakeFiles/main.out.dir/server/main.cpp.o	8a3ab402ad4c7ef9
+27284	28249	1653810062812485521	libserver_libd.a	36ee4009dae2ba4e
+28249	29605	1653810064444532467	main.out	c27940083945ac0a
+6	7902	1653810475558496938	CMakeFiles/server_lib.dir/server/src/Handler.cpp.o	a64c5ec5d66b0bbc
+7903	8743	1653810476174505369	libserver_libd.a	36ee4009dae2ba4e
+8743	9804	1653810477478523147	main.out	c27940083945ac0a
+65	26547	1653810864518549888	CMakeFiles/server_lib.dir/server/src/Server.cpp.o	2e7b9feeb870a1f8
+64	27026	1653810864574551015	CMakeFiles/server_lib.dir/server/src/Handler.cpp.o	a64c5ec5d66b0bbc
+63	27340	1653810865298565567	CMakeFiles/server_lib.dir/server/src/Connection.cpp.o	8a41fcb83d5e2b8
+27340	30358	1653810867866617001	libserver_libd.a	36ee4009dae2ba4e
+26805	51171	1653810889147032460	CMakeFiles/main.out.dir/server/main.cpp.o	8a3ab402ad4c7ef9
+51171	54027	1653810891999086739	main.out	c27940083945ac0a

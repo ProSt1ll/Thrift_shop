@@ -104,25 +104,7 @@ bd::Product Handlers::site_json_pars(const json& jv) {
 http::response<http::string_body>
 Handlers::to_favorite(http::request<http::string_body> request) {
     json jv = json::parse(request.body());
-//    json jv = {
-//            {"user_id", "123qwery"},
-//            {"option", 3},
-//            {"product_id", 0},
-//            {"product", {
-//                                {"category", 1},
-//                                {"price", 100},
-//                                {"url_image", "url_imag"},
-//                                {"url_product", "url_prod"},
-//                                {"parameters", {
-//                                                       {"id", 15},
-//                                                       {"size", 2},
-//                                                       {"color", 1},
-//                                                       {"brand", "gucci"}
-//                                               }
-//                                }
-//                        }
-//            }
-//    };
+
     // id пользователя
     std::string user_id;
     jv.at("user_id").get_to(user_id);
@@ -163,22 +145,24 @@ Handlers::get_item(const http::request<http::string_body>& request) {
 //    if (result_hours % 3 == 0)
 //    update_bd();
     // id пользователя
-    int user_id;
+    std::string user_id;
     jv.at("user_id").get_to(user_id);
     // опция поиска
     int option;
     jv.at("option").get_to(option);
 
-    // выбранная категория
-    bd::Categories category;
-   // jv.at("/product/category"_json_pointer).get_to(category);
-    category = bd::Categories::Tshirts;
+    // выбранная категория;
+    std::string str_category;
+    jv.at("/product/category"_json_pointer).get_to(str_category);
+    bd::Categories category = str_to_category(str_category);
+//    bd::Categories category = bd::Categories::Sneakers;
+
     bd::BI data_base;
     std::vector<bd::Product> need_items;
 
     // избранный товар
     if (option == 1)  {
-       // need_items = data_base.get_user_chosen(user_id);
+        need_items = data_base.get_user_chosen(user_id);
     }
         // с ценой меньше или равной указанной
     else if (option == 2) {
@@ -190,41 +174,50 @@ Handlers::get_item(const http::request<http::string_body>& request) {
         // по параметрам
     else if (option == 3) {
         bd::Parametrs params;
-//        jv.at("/product/parameters/id"_json_pointer).get_to(params.id);
         jv.at("/product/parameters/size"_json_pointer).get_to(params.size);
-       // jv.at("/product/parameters/color"_json_pointer).get_to(params.color);
-
-       params.color = bd::Colors::Black;
+        std::string param_color;
+        jv.at("/product/parameters/color"_json_pointer).get_to(param_color);
+        params.color = str_to_color(param_color);
+//        params.color = bd::Colors::White;
 //        jv.at("/product/parameters/brand"_json_pointer).get_to(params.brand);
 
-        std::cout <<"loh"<<std::endl;
         need_items = data_base.search_parametrs(category, params);
-        std::cout <<"ne loh"<<std::endl;
 
     }
         // простой поиск по категории
     else
         need_items = data_base.get_products(category);
-    if (need_items.empty()){
-        option = 2;
-    }
+
     // формирование ответа
     json response_value = {
             {"user_id", user_id},
-            {"option", option}
+            {"option", 2}
     };
     std::string response_user_body = response_value.dump();
 
     response_user_body.pop_back();
     std::string response_product_body = ",\"product\":";
-    // временно
+
     for (const bd::Product& item: need_items) {
         response_product_body += get_product_body(item) + ",";
     }
-    response_product_body.pop_back();
-    response_product_body += "}";
-    http::response<http::string_body> response;
+    json resp_value = {
+            {"category", bd::Categories::Sneakers},
+            {"price", 100},
+            {"url_image", "123rerge"},
+            {"url_product", "543trr234"},
+            {"parameters",   {
+                                 {"id", 123},
+                                 {"size", 2},
+                                 {"color", bd::Colors::White},
+                                 {"brand", "gucci"}
+                         }}
+    };
 
+    response_product_body += resp_value.dump(); + ",";
+    response_product_body.pop_back();
+    response_product_body += "}}";
+    http::response<http::string_body> response;
     response.body() = response_user_body + response_product_body;
 
     response.set(http::field::server, BOOST_BEAST_VERSION_STRING);
@@ -258,4 +251,35 @@ void Handlers::update_bd() {
         data_base.set_product(prod);
     }
 
+}
+
+
+bd::Colors Handlers::str_to_color(const std::string& color_string ) {
+    if(color_string =="White")
+        return bd::Colors::White;
+    if(color_string =="Blue")
+        return bd::Colors::Blue;
+    if(color_string == "Red")
+        return bd::Colors::Red;
+    if(color_string == "Orange")
+        return bd::Colors::Orange;
+    if(color_string == "Yellow")
+        return bd::Colors::Yellow;
+    if(color_string == "Green")
+        return bd::Colors::Green;
+    if(color_string == "Black")
+        return bd::Colors::Black;
+
+    return bd::Colors::None;
+}
+
+bd::Categories Handlers::str_to_category(const std::string& category_string ) {
+    if(category_string =="Sneakers")
+        return bd::Categories::Sneakers;
+    if(category_string =="Shirts")
+        return bd::Categories::Shirts;
+    if(category_string == "Tshirts")
+        return bd::Categories::Tshirts;
+
+    return bd::Categories::Empty;
 }

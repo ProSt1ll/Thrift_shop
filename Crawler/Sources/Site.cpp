@@ -23,7 +23,7 @@ siteSearch::getWebPage(const std::string &host, const std::string &target, const
 // Создание сообщения http запроса
     http::request<http::string_body> req{http::verb::get, target, version};
     req.set(http::field::host, host);
-    req.set(http::field::user_agent, BOOST_BEAST_VERSION_STRING);
+    req.set(http::field::user_agent, "Mozilla/5.0 (compatible; YandexBot/3.0; +http://yandex.com/bots)");
 
 // Отправка http запроса
     http::write(socket, req);
@@ -126,6 +126,72 @@ siteSearch::getBlockContent(const std::string &htmlFile, const std::string &html
         return "";
     // учитываем "<"
     return htmlFile.substr(startPos, endPos - startPos - 1);
+}
+
+std::string
+siteSearch::getTagAttr(const std::string &htmlFile, const std::string &htmlTag, const std::string &htmlAttr,
+                       const std::string &htmlClass, const std::string &htmlId, size_t pos) {
+    // Нужно найти в документе блок с тегом htmlTag. И, при наличии, с классом htmlClass и id htmlId.
+    bool isFound = false;
+    size_t startPos = pos;
+    while (!isFound) {
+        // ищем начало блока по тегу
+        startPos = htmlFile.find(htmlTag, pos);
+        pos = startPos + 1;
+        if (startPos != -1) {
+            isFound = true;
+        } else {
+            // если в документе, начиная с pos уже нет нужного тега.
+            break;
+        }
+        // ищем конец открывающего блока
+        size_t endPos = htmlFile.find('>', pos);
+
+        // проверка, что в блоке есть нужный класс
+        if (!checkAttr(startPos, endPos, htmlClass, htmlFile)) {
+            isFound = false;
+            continue;
+        }
+
+        // проверка, что в блоке есть нужный id
+        if (!checkAttr(startPos, endPos, htmlId, htmlFile)) {
+            isFound = false;
+            continue;
+        }
+
+        // проверка, что в блоке вообще присутствует нужный аттрибут
+        if (!checkAttr(startPos, endPos, htmlAttr, htmlFile)) {
+            isFound = false;
+            continue;
+        }
+    }
+    // если не нашли даже начала нужного блока
+    if (!isFound)
+        return "";
+
+    // ищем начало аттрибута
+    std::size_t attrStart = htmlFile.find(htmlAttr, pos);
+    // открывающая кавычка
+    attrStart = htmlFile.find('\"', attrStart);
+    ++attrStart;
+    // закрывающая кавычка
+    std::size_t attrEnd = htmlFile.find('\"', attrStart);
+
+    return htmlFile.substr(attrStart, attrEnd - attrStart);
+}
+
+std::string getPrice(const std::string &strPrice) {
+    std::string result;
+    for (const auto &element: strPrice) {
+        if (element >= '0' && element <= '9') {
+            result += element;
+            continue;
+        }
+        if (element == ' ')
+            continue;
+        break;
+    }
+    return result;
 }
 
 // TemplateParameter
@@ -314,13 +380,6 @@ bool siteSearch::operator<(const siteSearch::Site &lhs, const siteSearch::Site &
     return lhs.chapterMap.at(compareParameter) < rhs.chapterMap.at(compareParameter);
 }
 
-//TODO
-std::string siteSearch::getNumber(const std::string &str) {
-    return std::string();
-}
-
-// delete методы
-
 void siteSearch::Site::deleteChapter(const Chapters &chapter) {
     if (chapterMap.count(chapter))
         chapterMap.erase(chapter);
@@ -367,6 +426,20 @@ std::string siteSearch::Site::singleCrawl(const Parameters &parameter, const std
     auto templateParameter = parameterMap.at(parameter);
     auto result = getBlockContent(htmlItem, templateParameter.getTag(), templateParameter.getCssClass(),
                                   templateParameter.getId());
+    // ссылки лежат в описании тега, так что достаем их иначе
+    if (parameter == siteSearch::url) {
+        return getTagAttr(htmlItem, templateParameter.getTag(), "href", templateParameter.getCssClass(),
+                          templateParameter.getId());
+    }
+    // картинки тоже достаются немного по-другому
+    if (parameter == siteSearch::image) {
+        return getTagAttr(htmlItem, templateParameter.getTag(), "src", templateParameter.getCssClass(),
+                          templateParameter.getId());
+    }
+
+    // из цены нужно убрать лишние символы
+    if (parameter == siteSearch::cost)
+        result = getPrice(result);
     return result;
 }
 
@@ -393,7 +466,8 @@ siteSearch::Site::crawlHtmlVector(const std::set<Parameters> &parameters_,
     for (const auto &html: htmlVector) {
         json items = crawlHtml(parameters_, html);
         for (const auto &item: items) {
-            resultJson[resultJson.size()] = item;
+            if (!item[std::to_string(siteSearch::title)].empty())
+                resultJson[resultJson.size()] = item;
         }
     }
     return resultJson;

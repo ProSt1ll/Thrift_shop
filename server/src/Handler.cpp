@@ -34,10 +34,9 @@ json Handlers::json_set() {
     json site_1 = {
             {"chapterMap",   {
                                      {siteSearch::index, "moda.oc-mod.ru"},
-                                     {siteSearch::man,  "/wooman/wooman_odegda/wooman_dresses/"},
-                                     {siteSearch::woman, "/"},
-                                     {siteSearch::boy,          "/"},
-                                     {siteSearch::girl, "/"}
+                                     {siteSearch::womanOuter, "/wooman/wooman_odegda/wooman_dresses/"},
+                                     {siteSearch::womanDown, "/wooman/wooman_odegda/wooman_skirts/"},
+                                     {siteSearch::womanShoes,   "/wooman/wooman_shoes/wooman_tufli/"}
                              }},
             {"parameterMap", {
                                      {siteSearch::title, {
@@ -45,29 +44,33 @@ json Handlers::json_set() {
                                                                  {"id", "itemprop=\"name\""},
                                                                  {"cssClass", ""}
                                                          }},
-                                     {siteSearch::cost, {
-                                                                {"tag", "span"},
-                                                                {"id", " "},
-                                                                {"cssClass", "class=\"price_no_format"}
-                                                        }},
-                                     {siteSearch::image, {
-                                                                 {"tag", "img"},
-                                                                 {"id", "idTitle_1"},
-                                                                 {"cssClass", "rr-def__img rr-product-img swiper-lazy swiper-lazy-loaded"}
-                                                         }},
+                                     {siteSearch::cost,       {
+                                                                      {"tag", "span"},
+                                                                      {"id", " "},
+                                                                      {"cssClass", "class=\"price_no_format"}
+                                                              }},
+                                     {siteSearch::url,       {
+                                                                     {"tag", "link"},
+                                                                     {"id", " "},
+                                                                     {"cssClass", "itemprop=\"url\""}
+                                                             }},
+                                     {siteSearch::image,     {
+                                                                        {"tag", "img"},
+                                                                        {"id", " "},
+                                                                        {"cssClass", "img-responsive"}
+                                                                }},
                                      {siteSearch::itemTemplate, {
                                                                         {"tag", "div"},
                                                                         {"id", ""},
-                                                                        {"cssClass", "class=\"caption product-info clearfix\""}
+                                                                        {"cssClass", "class=\"product-layout product-list"}
                                                                 }}
                              }}
     };
-
     json settings = {
             {"chapters",
-                      {siteSearch::index, siteSearch::man,  siteSearch::woman, siteSearch::boy,    siteSearch::girl}},
+                      {siteSearch::index, siteSearch::womanOuter, siteSearch::womanDown, siteSearch::womanShoes}},
             {"parameters",
-                      {siteSearch::url,   siteSearch::cost, siteSearch::title, siteSearch::person, siteSearch::size, siteSearch::image}},
+                      {siteSearch::url,   siteSearch::cost,    siteSearch::title,     siteSearch::person, siteSearch::size, siteSearch::image}},
             {"sites", {site_1}}
     };
 
@@ -79,23 +82,15 @@ bd::Product Handlers::site_json_pars(const json& jv) {
 
     bd::Product prod;
 
-    prod.url_image = "3112";
-    prod.url_product = "123r";
-    prod.param.id = 1;
-    prod.param.color = bd::Colors::Black;
-    // None == NULL
-    std::string brand;
-//    jv.at("0").get_to(prod.url_product);
+    jv.at("0").get_to(prod.url_product);
     std::string str_price;
     jv.at("1").get_to(str_price);
     prod.price = std::stoi(str_price);
     jv.at("2").get_to(prod.name);
-    //jv.at("PersonContent").get_to(prod.param.person);
 //    std::string str_size;
 //    jv.at("4").get_to(str_size);
     prod.param.size = 1;
-    prod.category = bd::Categories::Tshirts;
-//    jv.at("5").get_to(prod.url_image);
+    jv.at("5").get_to(prod.url_image);
 
     return prod;
 }
@@ -111,11 +106,12 @@ Handlers::to_favorite(http::request<http::string_body> request) {
 
     // избранный товар
     std::size_t product_id;
-    jv.at("product_id").get_to(product_id);
+    jv.at("/product/parameters/id"_json_pointer).get_to(product_id);
 
-    // выбранная категория
-    bd::Categories category;
-    jv.at("/product/category"_json_pointer).get_to(category);
+    // выбранная категория;
+    std::string str_category;
+    jv.at("/product/category"_json_pointer).get_to(str_category);
+    bd::Categories category = str_to_category(str_category);
 
     bd::BI data_base;
 
@@ -138,12 +134,12 @@ Handlers::to_favorite(http::request<http::string_body> request) {
 http::response<http::string_body>
 Handlers::get_item(const http::request<http::string_body>& request) {
 
-    json jv = json::parse(request.target());
+    json jv = json::parse(R"({"option":2,"user_id":"123qwery","product":{"category":"Dress","parameters":{"brand":"gucci","color":"Black","id":15,"size":2},"price":40000,"url_image":"url_imag","url_product":"url_prod"}})");
 
-    // проверка обновлений
+    // проверка обновлений/заполнение базы
 //    time_t result_hours = time(nullptr) / 3600;
 //    if (result_hours % 3 == 0)
-//    update_bd();
+    update_bd();
     // id пользователя
     std::string user_id;
     jv.at("user_id").get_to(user_id);
@@ -155,7 +151,6 @@ Handlers::get_item(const http::request<http::string_body>& request) {
     std::string str_category;
     jv.at("/product/category"_json_pointer).get_to(str_category);
     bd::Categories category = str_to_category(str_category);
-//    bd::Categories category = bd::Categories::Sneakers;
 
     bd::BI data_base;
     std::vector<bd::Product> need_items;
@@ -164,27 +159,25 @@ Handlers::get_item(const http::request<http::string_body>& request) {
     if (option == 1)  {
         need_items = data_base.get_user_chosen(user_id);
     }
-        // с ценой меньше или равной указанной
+    // с ценой меньше или равной указанной
     else if (option == 2) {
         std::size_t price;
         jv.at("/product/price"_json_pointer).get_to(price);
 
         need_items = data_base.search_down_price(category, price);
     }
-        // по параметрам
+    // по параметрам
     else if (option == 3) {
         bd::Parametrs params;
         jv.at("/product/parameters/size"_json_pointer).get_to(params.size);
         std::string param_color;
         jv.at("/product/parameters/color"_json_pointer).get_to(param_color);
         params.color = str_to_color(param_color);
-//        params.color = bd::Colors::White;
-//        jv.at("/product/parameters/brand"_json_pointer).get_to(params.brand);
 
         need_items = data_base.search_parametrs(category, params);
 
     }
-        // простой поиск по категории
+    // простой поиск по категории
     else
         need_items = data_base.get_products(category);
 
@@ -196,27 +189,14 @@ Handlers::get_item(const http::request<http::string_body>& request) {
     std::string response_user_body = response_value.dump();
 
     response_user_body.pop_back();
-    std::string response_product_body = ",\"product\":";
+    std::string response_product_body = ",\"product\":[";
 
     for (const bd::Product& item: need_items) {
         response_product_body += get_product_body(item) + ",";
     }
-    json resp_value = {
-            {"category", bd::Categories::Sneakers},
-            {"price", 100},
-            {"url_image", "123rerge"},
-            {"url_product", "543trr234"},
-            {"parameters",   {
-                                 {"id", 123},
-                                 {"size", 2},
-                                 {"color", bd::Colors::White},
-                                 {"brand", "gucci"}
-                         }}
-    };
 
-    response_product_body += resp_value.dump(); + ",";
     response_product_body.pop_back();
-    response_product_body += "}}";
+    response_product_body += "]}";
     http::response<http::string_body> response;
     response.body() = response_user_body + response_product_body;
 
@@ -229,6 +209,7 @@ Handlers::get_item(const http::request<http::string_body>& request) {
     return response;
 }
 
+
 // Проверяем обновления
 void Handlers::update_bd() {
 
@@ -238,15 +219,40 @@ void Handlers::update_bd() {
     Crawler crawler = Crawler(json_setting);
 
     // пробегаемся по сайтам и возвращаем найденные объекты
-    json result_jsons = json::array();
-    result_jsons = crawler.crawl(crawler.getSites(), crawler.getParameters(),
-                                 crawler.getChapters());
-    std::cout << result_jsons << std::endl;
+    json result_jsons;
+
     bd::BI data_base;
     bd::Product prod;
+
+    result_jsons = crawler.crawl(crawler.getSites(), crawler.getParameters(),
+                                 std::set<siteSearch::Chapters>{siteSearch::womanOuter});
+    std::cout << result_jsons << std::endl;
     // Формирование запроса к БД из обновления
     for (const auto &res_json: result_jsons) {
         prod = site_json_pars(res_json);
+        prod.category = bd::Categories::Dress;
+        // обновляем БД
+        data_base.set_product(prod);
+    }
+
+    result_jsons = crawler.crawl(crawler.getSites(), crawler.getParameters(),
+                                 std::set<siteSearch::Chapters>{siteSearch::womanDown});
+    std::cout << result_jsons << std::endl;
+    // Формирование запроса к БД из обновления
+    for (const auto &res_json: result_jsons) {
+        prod = site_json_pars(res_json);
+        prod.category = bd::Categories::Skirts;
+        // обновляем БД
+        data_base.set_product(prod);
+    }
+
+    result_jsons = crawler.crawl(crawler.getSites(), crawler.getParameters(),
+                                 std::set<siteSearch::Chapters>{siteSearch::womanShoes});
+    std::cout << result_jsons << std::endl;
+    // Формирование запроса к БД из обновления
+    for (const auto &res_json: result_jsons) {
+        prod = site_json_pars(res_json);
+        prod.category = bd::Categories::Vintage_shoes;
         // обновляем БД
         data_base.set_product(prod);
     }
@@ -280,6 +286,14 @@ bd::Categories Handlers::str_to_category(const std::string& category_string ) {
         return bd::Categories::Shirts;
     if(category_string == "Tshirts")
         return bd::Categories::Tshirts;
+    if(category_string == "Dress")
+        return bd::Categories::Dress;
+    if(category_string == "Shorts")
+        return bd::Categories::Shorts;
+    if(category_string == "Skirts")
+        return bd::Categories::Skirts;
+    if(category_string == "Vintage_shoes")
+        return bd::Categories::Vintage_shoes;
 
     return bd::Categories::Empty;
 }

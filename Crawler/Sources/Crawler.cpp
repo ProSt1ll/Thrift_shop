@@ -1,5 +1,6 @@
 #include "../Headers/Crawler.h"
 
+
 // получение полей из json с настройками
 
 std::set<Site> Crawler::getSitesFromSettings(const json &settings) {
@@ -92,8 +93,9 @@ json Crawler::crawl(const std::set<Site> &sites_, const std::set<Parameters> &pa
     json resultJson = json::array();
     for (const auto &site: sites_) {
         json items = site.crawlChapters(parameters_, chapters_);
-        for (const auto &item: items)
+        for (const auto &item: items) {
             resultJson[resultJson.size()] = item;
+        }
     }
     return resultJson;
 }

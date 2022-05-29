@@ -1,2 +1,0 @@
-/usr/bin/ar qc liblib.a  CMakeFiles/lib.dir/Sources/Clothe.cpp.o CMakeFiles/lib.dir/Sources/Crawler.cpp.o CMakeFiles/lib.dir/Sources/Site.cpp.o
-/usr/bin/ranlib liblib.a

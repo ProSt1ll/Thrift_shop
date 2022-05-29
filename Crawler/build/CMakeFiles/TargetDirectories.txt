@@ -1,5 +1,0 @@
-/home/mike/project/Crawler/build/CMakeFiles/rebuild_cache.dir
-/home/mike/project/Crawler/build/CMakeFiles/edit_cache.dir
-/home/mike/project/Crawler/build/CMakeFiles/tests.dir
-/home/mike/project/Crawler/build/CMakeFiles/main.dir
-/home/mike/project/Crawler/build/CMakeFiles/lib.dir

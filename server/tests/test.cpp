@@ -18,11 +18,11 @@ TEST(HANDLERS_TEST, GET_ITEM) {
     Handlers hand;
 
     http::request<http::string_body> request;
-    request.body() = R"({"option":3,"product_id":42,"user_id":"123qwery","product":{"category":1,"parameters":{"brand":"gucci","color":2,"id":15,"size":2},"price":100,"url_image":"url_imag","url_product":"url_prod"}})";
+    request.body() = R"({"option":2,"user_id":"123qwery","product":{"category":"Dress","parameters":{"color":"Black","size":1},"price":70000}})";
 
     http::response<http::string_body> response;
 
-    EXPECT_NO_THROW(response = hand.to_favorite(request));
+    EXPECT_NO_THROW(response = hand.get_item(request));
 
     json jv = json::parse(response.body());
     std::string user_id;
@@ -31,16 +31,12 @@ TEST(HANDLERS_TEST, GET_ITEM) {
     jv.at("product_id").get_to(product_id);
     int option;
     jv.at("option").get_to(option);
-    bd::Categories category;
-    jv.at("/product/category"_json_pointer).get_to(category);
     std::size_t price;
     jv.at("/product/price"_json_pointer).get_to(price);
     std::size_t id;
     jv.at("/product/parameters/id"_json_pointer).get_to(id);
     std::size_t size;
     jv.at("/product/parameters/size"_json_pointer).get_to(size);
-    int color;
-    jv.at("/product/parameters/color"_json_pointer).get_to(color);
     std::string brand;
     jv.at("/product/parameters/brand"_json_pointer).get_to(brand);
     std::string url_image;
@@ -49,16 +45,12 @@ TEST(HANDLERS_TEST, GET_ITEM) {
     jv.at("/product/url_product"_json_pointer).get_to(url_product);
 
     EXPECT_EQ(user_id, "123qwery");
-    EXPECT_EQ(product_id, 42);
-    EXPECT_EQ(option, 3);
-    EXPECT_EQ(category, 1);
-    EXPECT_EQ(price, 100);
-    EXPECT_EQ(id, 15);
-    EXPECT_EQ(size, 15);
-    EXPECT_EQ(color, 2);
-    EXPECT_EQ(brand, "gucci");
-    EXPECT_EQ(url_image, "url_imag");
-    EXPECT_EQ(url_product, "url_prod");
+    EXPECT_EQ(option, 2);
+    EXPECT_EQ(price, 62000);
+    EXPECT_EQ(id, 1);
+    EXPECT_EQ(size, 1);
+    EXPECT_EQ(url_image, "http://moda.oc-mod.ru/image/cache/catalog/revolution/demo_tovars/Fashion/Wooman/Odegda/Dresses/dress_1-228x228.jpg");
+    EXPECT_EQ(url_product, "http://moda.oc-mod.ru/dress_1 ");
 
     EXPECT_EQ((int)response.result(), 200);
 

@@ -1,16 +1,6 @@
 #include "../include/Handler.h"
 
 // Формируем часть json ответа
-std::string Handlers::get_user_body(std::string user_id,
-                                    int option, std::size_t favorit_product_id) {
-    json response_value = {
-            {"user_id", user_id},
-            {"option", option},
-            {"product_id", favorit_product_id}
-    };
-    return response_value.dump();
-}
-// Формируем часть json ответа
 std::string Handlers::get_product_body(const bd::Product product) {
     json response_value = {
             {"category", product.category},
@@ -134,12 +124,12 @@ Handlers::to_favorite(http::request<http::string_body> request) {
 http::response<http::string_body>
 Handlers::get_item(const http::request<http::string_body>& request) {
 
-    json jv = json::parse(R"({"option":2,"user_id":"123qwery","product":{"category":"Dress","parameters":{"brand":"gucci","color":"Black","id":15,"size":2},"price":40000,"url_image":"url_imag","url_product":"url_prod"}})");
+    json jv = json::parse(request.body());
 
     // проверка обновлений/заполнение базы
-//    time_t result_hours = time(nullptr) / 3600;
-//    if (result_hours % 3 == 0)
-    update_bd();
+    time_t result_hours = time(nullptr) / 3600;
+    if (result_hours % 3 == 0)
+        update_bd();
     // id пользователя
     std::string user_id;
     jv.at("user_id").get_to(user_id);

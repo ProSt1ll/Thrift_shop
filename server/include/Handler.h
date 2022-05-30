@@ -40,9 +40,6 @@ public:
 
 private:
 
-    // Формирование общую часть json
-    std::string get_user_body(std::string user_id,
-                              int option, std::size_t favorit_product_id);
     // Формирование json для каждого товара
     std::string get_product_body(bd::Product product);
     // Настройки сайтов
@@ -61,7 +58,6 @@ private:
 //    json jv = {
 //            {"user_id", "123qwery"},
 //            {"option", 3},
-//            {"product_id", 0},
 //            {"product", {
 //                                {"category", 1},
 //                                {"price", 100},

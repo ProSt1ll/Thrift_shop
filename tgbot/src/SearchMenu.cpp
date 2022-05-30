@@ -1,6 +1,6 @@
 #include "../include/SearchMenu.h"
 
-std::vector<std::string> Category = {"Empty", "Sneakers", "Shirts", "Tshirts"};
+std::vector<std::string> Category = {"Empty", "Sneakers", "Shirts", "Tshirts","Dress","Skirts","Vintage shoes"};
 std::vector<std::string> Color = {"None",
                                   "White",
                                   "Blue",
@@ -18,8 +18,8 @@ nlohmann::json package;
 TgBot::InlineKeyboardMarkup::Ptr size_key(new TgBot::InlineKeyboardMarkup);
 TgBot::InlineKeyboardMarkup::Ptr color_key(new TgBot::InlineKeyboardMarkup);
 
-SearchMenu::SearchMenu(TgBot::Bot *bot, int id, std::function<void(std::string message)> get_mes):t_id(id),t_bot(bot) {
-    package["user_id"]=id;
+SearchMenu::SearchMenu(TgBot::Bot *bot, int id, std::function<void(std::string message,int target)> get_mes):t_id(id),t_bot(bot) {
+    package["user_id"]=std::to_string(id);
 
 
     TgBot::InlineKeyboardButton::Ptr color1_btn(new TgBot::InlineKeyboardButton);
@@ -108,7 +108,7 @@ SearchMenu::SearchMenu(TgBot::Bot *bot, int id, std::function<void(std::string m
                 package["product"]["parameters"]["size"]=bot_size;
                 package["option"]=3;
                 tmp = package.dump();
-                get_mes(tmp);
+                get_mes(tmp,1);
             }
         }
         for (const auto bot_category: Category) {
@@ -127,6 +127,11 @@ void SearchMenu::run() {
     TgBot::InlineKeyboardButton::Ptr category2_btn(new TgBot::InlineKeyboardButton);
     TgBot::InlineKeyboardButton::Ptr category3_btn(new TgBot::InlineKeyboardButton);
     TgBot::InlineKeyboardButton::Ptr category4_btn(new TgBot::InlineKeyboardButton);
+    TgBot::InlineKeyboardButton::Ptr category5_btn(new TgBot::InlineKeyboardButton);
+    TgBot::InlineKeyboardButton::Ptr category6_btn(new TgBot::InlineKeyboardButton);
+    TgBot::InlineKeyboardButton::Ptr category7_btn(new TgBot::InlineKeyboardButton);
+
+
     TgBot::InlineKeyboardButton::Ptr back_btn(new TgBot::InlineKeyboardButton);
 
 
@@ -142,19 +147,53 @@ void SearchMenu::run() {
     category4_btn->text = "Tshirts";
     category4_btn->callbackData = "Tshirts";
 
+    category5_btn->text = "Dress";
+    category5_btn->callbackData = "Dress";
+
+
+    category6_btn->text = "Skirts";
+    category6_btn->callbackData = "Skirts";
+
+
+    category7_btn->text = "Vintage shoes";
+    category7_btn->callbackData = "Vintage_shoes";
+
     back_btn->text = "Back to main menu";
     back_btn->callbackData = "back";
 
     menu.buttons.push_back(category1_btn);
     menu.buttons.push_back(category2_btn);
     menu.buttons.push_back(category3_btn);
-    menu.buttons.push_back(category4_btn);
-    menu.buttons.push_back(back_btn);
+
 
     menu.keyboard->inlineKeyboard.push_back(menu.buttons);
 
     std::string label = "Choose category";
-    menu.display(t_id, label, t_bot);
+
+    t_bot->getApi().sendMessage(t_id,label,false,0,menu.keyboard);
+    menu.buttons.clear();
+    menu.keyboard->inlineKeyboard.clear();
+
+    menu.buttons.push_back(category4_btn);
+    menu.buttons.push_back(category5_btn);
+    menu.buttons.push_back(category6_btn);
+
+
+    menu.keyboard->inlineKeyboard.push_back(menu.buttons);
+
+    std::cout<<"key:"<<menu.keyboard->inlineKeyboard.size()<<std::endl;
+    t_bot->getApi().sendMessage(t_id,".",false,0,menu.keyboard);
+    menu.buttons.clear();
+
+    menu.keyboard->inlineKeyboard.clear();
+
+    menu.buttons.push_back(category7_btn);
+    menu.buttons.push_back(back_btn);
+
+    menu.keyboard->inlineKeyboard.push_back(menu.buttons);
+
+    t_bot->getApi().sendMessage(t_id,".",false,0,menu.keyboard);
+
 }
 
 SearchMenu::~SearchMenu() {

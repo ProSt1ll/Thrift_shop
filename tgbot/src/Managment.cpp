@@ -26,8 +26,8 @@ void Managment::display(std::string url,int id){
 Managment::~Managment() {
 
 }
-void Managment::get_mes(std::string message) {
-    ClientCntrl client(message,[&](std::string message){get_mes_from_serv(message); });
+void Managment::get_mes(std::string message,int target) {
+    ClientCntrl client(message,[&](std::string message){get_mes_from_serv(message); },"/get_item");
 };
 void Managment::get_mes_from_serv(std::string message) {
     if(message[0]=='{') {
@@ -67,6 +67,6 @@ void Managment::run() {
 //    client.connect(ep);
 //    client.write("parts/");
 
-tgbot.run([&](std::string message){get_mes(message); },[&](){run_serv(); });
+tgbot.run([&](std::string message,int target){get_mes(message,target); },[&](){run_serv(); });
 
 }

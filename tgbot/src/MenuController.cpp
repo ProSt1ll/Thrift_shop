@@ -1,11 +1,11 @@
 #include "../include/MenuController.h"
 
-    void MenuController::run(std::function<void (std::string message)> get_mes,std::function<void(void)> start){
+    void MenuController::run(std::function<void (std::string message,int target)> get_mes,std::function<void(void)> start){
         std::vector<std::string>bot_commands ={"start"};
        // io_context.run();
         bot.getEvents().onCommand("start", [this, &get_mes](TgBot::Message::Ptr message) {
             bot.getApi().sendMessage(message->chat->id, "Hello, sweetie");
-            MainMenu Main(&bot,message->chat->id,[&](std::string message){get_mes(message); });
+            MainMenu Main(&bot,message->chat->id,[&](std::string message,int target){get_mes(message,target); });
             Main.run();
         });
         bot.getEvents().onAnyMessage([this, &bot_commands](TgBot::Message::Ptr message) {

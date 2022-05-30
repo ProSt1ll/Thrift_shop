@@ -5,7 +5,7 @@
 class SearchMenu: public Menu{
 public:
     Menu menu;
-    SearchMenu( TgBot::Bot *bot,int id,std::function<void(std::string)> get_mes);
+    SearchMenu( TgBot::Bot *bot,int id,std::function<void(std::string,int target)> get_mes);
     ~SearchMenu();
     void run();
     int t_id;

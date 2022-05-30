@@ -4,7 +4,7 @@
 #define TGBOT_CLIENTCNTRL_H
 class ClientCntrl{
 public:
-    ClientCntrl(std::string some,std::function<void(std::string message)> get_mes);
+    ClientCntrl(std::string some,std::function<void(std::string message)> get_mes,std::string target);
     ~ClientCntrl();
     boost::asio::io_context io_context;
 

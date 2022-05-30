@@ -18,7 +18,7 @@ class MenuController{
 public:
     MenuController(std::string token):bot(token){};
     ~MenuController()= default;
-    void run(std::function<void(std::string message)> get_mes,std::function<void(void)> start);
+    void run(std::function<void(std::string message,int target)> get_mes,std::function<void(void)> start);
     void stop();
     void(*get_msg)(std::string);
     int t_id;

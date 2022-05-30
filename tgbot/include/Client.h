@@ -22,7 +22,7 @@ namespace net = boost::asio;            // from <boost/asio.hpp>
 class Client : public std::enable_shared_from_this<Client>
 {
 public:
-    Client(boost::asio::io_context& io_context,std::string message,std::function<void(std::string message)> get_mes);
+    Client(boost::asio::io_context& io_context,std::string message,std::function<void(std::string message)> get_mes,std::string target);
     void try_read();
     void run();
     void post(nlohmann::json package);
@@ -48,7 +48,7 @@ private:
     beast::flat_buffer buffer_; // (Must persist between reads)
     std::basic_string<char> ip_server;
     std::basic_string<char> port_server;
-    http::request<http::empty_body> request_;
+    http::request<http::string_body> request_;
     http::response<http::string_body> response_;
     std::string to_serv;
     std::function<void(std::string message)> manage;

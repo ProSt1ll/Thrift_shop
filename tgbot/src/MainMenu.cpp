@@ -1,6 +1,6 @@
 #include "../include/MainMenu.h"
 
-MainMenu::MainMenu(TgBot::Bot *bot,int id,std::function<void(std::string message)> get_mes):t_id(id),t_bot(bot) {
+MainMenu::MainMenu(TgBot::Bot *bot,int id,std::function<void(std::string message,int target)> get_mes):t_id(id),t_bot(bot) {
     TgBot::InlineKeyboardButton::Ptr search_btn(new TgBot::InlineKeyboardButton);
     TgBot::InlineKeyboardButton::Ptr favorite_btn(new TgBot::InlineKeyboardButton);
     search_btn->text = "Search menu";
@@ -17,7 +17,7 @@ MainMenu::MainMenu(TgBot::Bot *bot,int id,std::function<void(std::string message
     TgBot::InlineKeyboardMarkup::Ptr tmp_keyboard = menu.keyboard;
     bot->getEvents().onCallbackQuery([get_mes, &tmp_keyboard, id, bot,this](TgBot::CallbackQuery::Ptr query){
         if(query->data == "search"){
-             SearchMenu search(bot,id,[&](std::string message){get_mes(message); });
+             SearchMenu search(bot,id,[&](std::string message,int target){get_mes(message,target); });
             search.run();
         }
 

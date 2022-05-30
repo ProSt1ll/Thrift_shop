@@ -14,17 +14,19 @@ namespace beast = boost::beast;         // from <boost/beast.hpp>
 namespace http = boost::beast::http;    // from <boost/beast/http.hpp>
 namespace net = boost::asio;            // from <boost/asio.hpp>
 
-Client::Client(boost::asio::io_context& io_context,std::string message,std::function<void(std::string message)> get_mes)
+Client::Client(boost::asio::io_context& io_context,std::string message,std::function<void(std::string message)> get_mes,std::string target)
         : resolver_(net::make_strand(io_context)),
           stream_(net::make_strand(io_context)),manage(get_mes) {
-    request_.target(message);
+    request_.target(target);
+    request_.body()=message;
+    request_.set(http::field::content_length, std::to_string(request_.body().size()));
 }
 void Client::set(std::function<void(std::string message)> get_mes){
     manage = get_mes;
 };
 void Client::run() {
     request_.version(10);
-    request_.method(http::verb::get);
+    request_.method(http::verb::post);
     //request_.target(path);
     request_.set(http::field::host, "127.0.0.1");
     request_.set(http::field::user_agent, BOOST_BEAST_VERSION_STRING);
@@ -54,6 +56,7 @@ void Client::handle_resolve(beast::error_code err,
 
 void Client::handle_connect(beast::error_code err, tcp::resolver::results_type::endpoint_type) {
     if (!err) {
+        std::cout << request_<<std::endl;
         http::async_write(stream_, request_,
                           beast::bind_front_handler(
                                   &Client::handle_write_request,
@@ -67,6 +70,7 @@ void Client::handle_connect(beast::error_code err, tcp::resolver::results_type::
 
 void Client::handle_write_request(beast::error_code err,
                                   std::size_t bytes_transferred) {
+    std::cout <<"bytes:"<< bytes_transferred<<std::endl;
     http::async_read(stream_, buffer_, response_,
                      beast::bind_front_handler(
                              &Client::handle_read,

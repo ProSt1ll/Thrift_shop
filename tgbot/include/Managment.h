@@ -51,7 +51,7 @@ public:
 // удаление из отслеживания
     void get_res(nlohmann::json request);
 
-    void get_mes(std::string message);
+    void get_mes(std::string message,int target);
     void get_mes_from_serv(std::string message);
     //boost::asio::io_context io_context;
     TgBot::Bot *bot_mnm;

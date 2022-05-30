@@ -18,7 +18,7 @@ TEST(HANDLERS_TEST, GET_ITEM) {
     Handlers hand;
 
     http::request<http::string_body> request;
-    request.body() = R"({"option":2,"user_id":"123qwery","product":{"category":"Dress","parameters":{"color":"Black","size":1},"price":70000}})";
+    request.body() = R"({"option":2,"user_id":"123qwery","product":{"category":"Dress","parameters":{"color":"Black","size":1}}})";
 
     http::response<http::string_body> response;
 
@@ -54,8 +54,6 @@ TEST(HANDLERS_TEST, GET_ITEM) {
 
     EXPECT_EQ((int)response.result(), 200);
 
-//    request.body() = R"({"option":3,"product_id":42,"user_id":"123qwery","product":{"category":1,"parameters":{"brand":"gucci","color":2,"id":15,"size":2},"price":100,"url_image":"url_imag","url_product":"url_prod"}})";
-//    EXPECT_THROW(response = hand.to_favorite(request), pqxx::unique_violation);
 }
 
 
@@ -63,7 +61,7 @@ TEST(HANDLERS_TEST, TO_FAVORITE) {
     Handlers hand;
 
     http::request<http::string_body> request;
-    request.body() = R"({"option":3,"product_id":42,"user_id":"123qwery","product":{"category":1,"parameters":{"brand":"gucci","color":2,"id":15,"size":2},"price":100,"url_image":"url_imag","url_product":"url_prod"}})";
+    request.body() = R"({"user_id":"123qwery","product":{"category":"Dress","parameters":{"id":2}}})";
 
     http::response<http::string_body> response;
 

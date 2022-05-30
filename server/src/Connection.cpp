@@ -57,7 +57,6 @@ void Connection::handle_read(beast::error_code error,
             res.set(http::field::content_type, "application/json");
             res.body() = ex.what();
         }
-
         std::cout << "Response status: " << std::endl << res.reason()<< std::endl;
         std::cout << "Response body: " << std::endl << res.body() << std::endl;
         std::cout << "======================================================="<< std::endl;

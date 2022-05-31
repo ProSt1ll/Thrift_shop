@@ -35,7 +35,7 @@ void Query_BD::create_all_tables(){
     mysql_query(this->conn, "CREATE TABLE Vintage_shoes (id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(500) UNIQUE NOT NULL, url_image VARCHAR(500), size INT, gender VARCHAR(30), color VARCHAR(30), brand VARCHAR(30));");
     mysql_query(this->conn, "CREATE TABLE Vintage_shoes_urls (id INT PRIMARY KEY AUTO_INCREMENT, product_id int NOT NULL, price INT, url_product VARCHAR(500) UNIQUE, FOREIGN KEY (product_id) REFERENCES Vintage_shoes (id) ON DELETE CASCADE );");
     mysql_query(this->conn, "CREATE TABLE Users (id INT PRIMARY KEY AUTO_INCREMENT, tg_id VARCHAR(255) UNIQUE NOT NULL);");
-    mysql_query(this->conn, "CREATE TABLE Users_chosen (id INT PRIMARY KEY AUTO_INCREMENT, user_id tg_id VARCHAR(255) NOT NULL, id_product INT NOT NULL, category VARCHAR(255) NOT NULL, FOREIGN KEY (user_id) REFERENCES Users (tg_id) ON DELETE CASCADE, CONSTRAINT chosen_unique UNIQUE (user_id, id_product, category));");
+    mysql_query(this->conn, "CREATE TABLE Users_chosen (id INT PRIMARY KEY AUTO_INCREMENT, user_id VARCHAR(255) NOT NULL, id_product INT NOT NULL, category VARCHAR(255) NOT NULL, FOREIGN KEY (user_id) REFERENCES Users (tg_id) ON DELETE CASCADE, CONSTRAINT chosen_unique UNIQUE (user_id, id_product, category));");
 }
 
 void Query_BD::delete_all_tables(){

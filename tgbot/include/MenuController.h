@@ -18,12 +18,12 @@ class MenuController{
 public:
     MenuController(std::string token):bot(token){};
     ~MenuController()= default;
-    void run(std::function<void(std::string message,int target)> get_mes,std::function<void(void)> start);
+    void run(std::function<void(std::string message,int target)> get_mes);
     void stop();
-    void(*get_msg)(std::string);
     int t_id;
+    void show_vector(nlohmann::json items,std::function<void(std::string message,int target)> get_mes);
+    void show_vectorr(nlohmann::json items,std::function<void(std::string message,int target)> get_mes);
     void to_tg(std::string some,int id);
-    void key_favor(int id, int id_product);
     TgBot::Bot bot;
 };
 #endif //TGBOT_MENUCONTROLLER_H

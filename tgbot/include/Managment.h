@@ -46,7 +46,6 @@ public:
 
     void add_favorite(int product_id);
 // добавление в отслеживаемое
-
     void delete_favorite(int product_id);
 // удаление из отслеживания
     void get_res(nlohmann::json request);

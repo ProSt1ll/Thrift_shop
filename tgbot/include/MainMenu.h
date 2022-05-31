@@ -6,10 +6,10 @@ class MainMenu{
 public:
     Menu menu;
     MainMenu(TgBot::Bot *bot,int id,std::function<void(std::string message,int main)> get_mes);
-    void run();
-    void rerun();
+    void run(std::function<void(std::string message,int main)> get_mes);
 
     ~MainMenu();
+    TgBot::InlineKeyboardMarkup::Ptr search_key;
     TgBot::Bot *t_bot;
     std::function<void(std::string message)> func;
     int t_id;

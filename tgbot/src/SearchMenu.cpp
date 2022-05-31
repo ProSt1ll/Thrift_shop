@@ -1,6 +1,5 @@
 #include "../include/SearchMenu.h"
-
-std::vector<std::string> Category = {"Empty", "Sneakers", "Shirts", "Tshirts","Dress","Skirts","Vintage shoes"};
+std::vector<std::string> Category = {"Empty", "Sneakers", "Shirts", "Tshirts","Dress","Skirts","Vintage_shoes"};
 std::vector<std::string> Color = {"None",
                                   "White",
                                   "Blue",
@@ -9,18 +8,20 @@ std::vector<std::string> Color = {"None",
                                   "Yellow",
                                   "Green",
                                   "Black"};
-std::vector<int> Size = {         50,
-                                 52,
-                                 54,
-                                 56
+std::vector<int> Size = {         40,
+                                 44,
+                                 46,
+                                 48
 };
-nlohmann::json package;
-TgBot::InlineKeyboardMarkup::Ptr size_key(new TgBot::InlineKeyboardMarkup);
-TgBot::InlineKeyboardMarkup::Ptr color_key(new TgBot::InlineKeyboardMarkup);
 
-SearchMenu::SearchMenu(TgBot::Bot *bot, int id, std::function<void(std::string message,int target)> get_mes):t_id(id),t_bot(bot) {
-    package["user_id"]=std::to_string(id);
 
+SearchMenu::SearchMenu(TgBot::Bot *bot, int id, std::function<void(std::string message,int target)> get_mes,int type_search):t_id(id),t_bot(bot),type(type_search) {
+    color_key = TgBot::InlineKeyboardMarkup::Ptr(new TgBot::InlineKeyboardMarkup);
+    category_key = TgBot::InlineKeyboardMarkup::Ptr(new TgBot::InlineKeyboardMarkup);
+    size_key = TgBot::InlineKeyboardMarkup::Ptr(new TgBot::InlineKeyboardMarkup);
+
+    menu.buttons.clear();
+    menu.keyboard->inlineKeyboard.clear();
 
     TgBot::InlineKeyboardButton::Ptr color1_btn(new TgBot::InlineKeyboardButton);
     TgBot::InlineKeyboardButton::Ptr color2_btn(new TgBot::InlineKeyboardButton);
@@ -90,36 +91,65 @@ SearchMenu::SearchMenu(TgBot::Bot *bot, int id, std::function<void(std::string m
     size_but.push_back(size4_btn);
 
     size_key->inlineKeyboard.push_back(size_but);
+    nlohmann::json package2;
 
-    //t_id = id;
     t_bot = bot;
-
-
-    bot->getEvents().onCallbackQuery([bot, id, this,get_mes](TgBot::CallbackQuery::Ptr query) {
+    package["user_id"]=std::to_string(id);
+    bot->getEvents().onCallbackQuery([bot, id, this,&package2,get_mes,type_search](TgBot::CallbackQuery::Ptr query) {
             for (const auto bot_color: Color) {
                 if (query->data == bot_color) {
-                    package["product"]["parameters"]["color"]=query->data;
-                    bot->getApi().sendMessage(id,"Choose size",false,0,size_key);
+                    this->package["product"]["parameters"]["color"]=query->data;
+                    bot->getApi().sendMessage(query->message->chat->id,"Choose size",false,0,size_key);
                 }
             }
         for (const auto bot_size: Size) {
             std::string tmp = std::to_string(bot_size);
             if (query->data == tmp) {
+                package["user_id"]=std::to_string(query->message->chat->id);
                 package["product"]["parameters"]["size"]=bot_size;
-                package["option"]=3;
+                package["option"]=2;
                 tmp = package.dump();
                 get_mes(tmp,1);
             }
         }
         for (const auto bot_category: Category) {
             if (query->data == bot_category) {
-                package["product"]["category"]=query->data;
-                bot->getApi().sendMessage(id,"Choose color",false,0,color_key);
-            }
+                package2["user_id"]=std::to_string(query->message->chat->id);
+                package["product"]["category"]=bot_category;
+                if(type_search==2) {
+                    bot->getApi().sendMessage(query->message->chat->id, "Choose color", false, 0, color_key);
+                }
+                else if (type_search == 3){
+                    bot->getApi().sendMessage(query->message->chat->id, "Set Price" );
+                }
+                else if (type_search == 4){
+                    package["user_id"]=std::to_string(query->message->chat->id);
+
+                    package["option"]=4;
+                    package["user_id"]=std::to_string(query->message->chat->id);
+                    get_mes(package.dump(),1);
+                }
+                }
         }
 
     });
 
+    bot->getEvents().onAnyMessage([this,get_mes,type_search](TgBot::Message::Ptr message) {
+        printf("User wrote %s\n", message->text.c_str());
+        std::vector<std::string>bot_commands ={"start"};
+        for (const auto& command : bot_commands) {
+            if ("/" + command == message->text) {
+                return;
+            }
+            if (type_search == 3) {
+                package["user_id"]=std::to_string(message->chat->id);
+                package["option"]=3;
+                package["product"]["price"]=std::stoi(message->text.c_str());
+                get_mes(this->package.dump(),1);
+            }
+        }
+    });
+    this->run();
 }
 
 void SearchMenu::run() {
@@ -193,7 +223,6 @@ void SearchMenu::run() {
     menu.keyboard->inlineKeyboard.push_back(menu.buttons);
 
     t_bot->getApi().sendMessage(t_id,".",false,0,menu.keyboard);
-
 }
 
 SearchMenu::~SearchMenu() {

@@ -56,7 +56,7 @@ void Client::handle_resolve(beast::error_code err,
 
 void Client::handle_connect(beast::error_code err, tcp::resolver::results_type::endpoint_type) {
     if (!err) {
-        std::cout << request_<<std::endl;
+        //std::cout << request_<<std::endl;
         http::async_write(stream_, request_,
                           beast::bind_front_handler(
                                   &Client::handle_write_request,
@@ -84,7 +84,7 @@ void Client::handle_read(beast::error_code err,
     if (!err) {
         // Write the message to standard out
 
-        std::cout << response_ << std::endl;
+        //std::cout << response_ << std::endl;
         manage(response_.body());
         // Gracefully close the socket
        stream_.socket().shutdown(tcp::socket::shutdown_both, err);

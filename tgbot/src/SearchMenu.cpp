@@ -91,14 +91,15 @@ SearchMenu::SearchMenu(TgBot::Bot *bot, int id, std::function<void(std::string m
     size_but.push_back(size4_btn);
 
     size_key->inlineKeyboard.push_back(size_but);
-    nlohmann::json package2;
 
     t_bot = bot;
-    package["user_id"]=std::to_string(id);
-    bot->getEvents().onCallbackQuery([bot, id, this,&package2,get_mes,type_search](TgBot::CallbackQuery::Ptr query) {
-            for (const auto bot_color: Color) {
+    std::string category = "None";
+
+    bot->getEvents().onCallbackQuery([bot, id, *this,get_mes,type_search, &category](TgBot::CallbackQuery::Ptr query) {
+        nlohmann::json package;
+        for (const auto bot_color: Color) {
                 if (query->data == bot_color) {
-                    this->package["product"]["parameters"]["color"]=query->data;
+                    package["product"]["parameters"]["color"] = query->data;
                     bot->getApi().sendMessage(query->message->chat->id,"Choose size",false,0,size_key);
                 }
             }
@@ -114,12 +115,13 @@ SearchMenu::SearchMenu(TgBot::Bot *bot, int id, std::function<void(std::string m
         }
         for (const auto bot_category: Category) {
             if (query->data == bot_category) {
-                package2["user_id"]=std::to_string(query->message->chat->id);
+                package["user_id"]=std::to_string(query->message->chat->id);
                 package["product"]["category"]=bot_category;
                 if(type_search==2) {
                     bot->getApi().sendMessage(query->message->chat->id, "Choose color", false, 0, color_key);
                 }
                 else if (type_search == 3){
+                    category=bot_category;
                     bot->getApi().sendMessage(query->message->chat->id, "Set Price" );
                 }
                 else if (type_search == 4){
@@ -134,7 +136,8 @@ SearchMenu::SearchMenu(TgBot::Bot *bot, int id, std::function<void(std::string m
 
     });
 
-    bot->getEvents().onAnyMessage([this,get_mes,type_search](TgBot::Message::Ptr message) {
+    bot->getEvents().onAnyMessage([this,get_mes,type_search, category](TgBot::Message::Ptr message) {
+        nlohmann::json package;
         printf("User wrote %s\n", message->text.c_str());
         std::vector<std::string>bot_commands ={"start"};
         for (const auto& command : bot_commands) {
@@ -142,10 +145,11 @@ SearchMenu::SearchMenu(TgBot::Bot *bot, int id, std::function<void(std::string m
                 return;
             }
             if (type_search == 3) {
+                package["product"]["category"]=category;
                 package["user_id"]=std::to_string(message->chat->id);
                 package["option"]=3;
                 package["product"]["price"]=std::stoi(message->text.c_str());
-                get_mes(this->package.dump(),1);
+                get_mes(package.dump(),1);
             }
         }
     });

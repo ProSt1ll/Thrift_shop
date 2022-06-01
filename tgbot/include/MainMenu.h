@@ -4,11 +4,14 @@
 #define TGBOT_MAINMENU_H
 class MainMenu{
 public:
-    Menu menu;
+
+
     MainMenu(TgBot::Bot *bot,int id,std::function<void(std::string message,int main)> get_mes);
     void run(std::function<void(std::string message,int main)> get_mes);
 
     ~MainMenu();
+private:
+    Menu menu;
     TgBot::InlineKeyboardMarkup::Ptr search_key;
     TgBot::Bot *t_bot;
     std::function<void(std::string message)> func;

@@ -4,15 +4,16 @@
 
 class SearchMenu: public Menu{
 public:
-    Menu menu;
+
     SearchMenu( TgBot::Bot *bot,int id,std::function<void(std::string,int target)> get_mes,int type_search);
     ~SearchMenu();
+    void run();
+private:
+    Menu menu;
     TgBot::InlineKeyboardMarkup::Ptr color_key;
     TgBot::InlineKeyboardMarkup::Ptr category_key;
     TgBot::InlineKeyboardMarkup::Ptr size_key;
-    nlohmann::json package;
 
-    void run();
     int t_id;
     int type;
     TgBot::Bot *t_bot;

@@ -26,7 +26,6 @@ void Managment::get_mes_from_serv(std::string message) {
                 tgbot.show_vector(res, [&](std::string message,int target){get_mes(message,target); });
 
             } else if (res["option"] == 4) {
-                //tgbot.show_vector(res,1);
                     tgbot.show_vector(res, [&](std::string message,int target){get_mes(message,target); });
 
             } else if (res["option"] == 3) {
@@ -41,10 +40,7 @@ void Managment::get_mes_from_serv(std::string message) {
     // tgbot.to_tg(message, 517318106);
 };
 
-void Managment::run_serv(){
-    io_context.run();
 
-}
 void Managment::run() {
 
 tgbot.run([&](std::string message,int target){get_mes(message,target); });

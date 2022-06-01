@@ -11,6 +11,5 @@ public:
     TgBot::InlineKeyboardMarkup::Ptr keyboard;
     Menu();
     ~Menu();
-    void display(int id, std::string text,TgBot::Bot* bot);
 };
 #endif //TGBOT_MENU_H
